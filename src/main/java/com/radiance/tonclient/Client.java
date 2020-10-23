@@ -15,7 +15,7 @@ public class Client {
 
     public CompletableFuture<String> version() {
         return context.requestJSON("client.version", "{" + String.join(",", new String[]{}) + "}")
-            .thenApply(json -> json.findValue("version").toString());
+            .thenApply(json -> json.findValue("version").asText());
     }
 
 }

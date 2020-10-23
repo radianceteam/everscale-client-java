@@ -55,17 +55,14 @@ void response_handler(uint32_t request_id, tc_string_data_t params_json, uint32_
     }
 }
 
-JNIEXPORT jstring JNICALL Java_com_radiance_tonclient_TONContext_createContext(JNIEnv *env, jclass cls, jstring config) {
+JNIEXPORT jstring JNICALL Java_com_radiance_tonclient_TONContext_createContext(JNIEnv *env, jclass cls, jstring jConfig) {
     env->GetJavaVM(&javaVM);
     thisClass = cls;
     responseHandlerId = env->GetStaticMethodID(cls, "responseHandler", "(ILjava/lang/String;IZ)V");
-    tc_string_data_t cfg = {};
-    cfg.content = "{12}";
-    cfg.len = 0;
-    const char* name = env->GetStringUTFChars(config, NULL);
-    tc_string_handle_t* handle = tc_create_context(cfg);
+    const char* config = env->GetStringUTFChars(jConfig, NULL);
+    tc_string_handle_t* handle = tc_create_context(tc_string(config));
     tc_string_data_t context = tc_read_string(handle);
-    env->ReleaseStringUTFChars(config, name);
+    env->ReleaseStringUTFChars(jConfig, config);
     jstring result;
     result = jni_string(env, context);
     tc_destroy_string(handle);

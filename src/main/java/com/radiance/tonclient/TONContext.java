@@ -2,7 +2,6 @@ package com.radiance.tonclient;
 
 import java.io.*;
 import java.util.*;
-import java.util.regex.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
 import com.fasterxml.jackson.databind.*;
@@ -39,10 +38,22 @@ public class TONContext {
         return tempDll.getAbsolutePath();
     }
 
-    private static Pattern contextResultPattern = Pattern.compile("\\{\"(\\w+)\":(.+)\\}");
-
     private static int requestCount = 0;
     private static HashMap<Integer, CompletableFuture<String>> responses = new HashMap<>();
+
+    static Number toNumber(String value) {
+        if (value.indexOf('.') < 0) {
+            if (value.length() > 6)
+                return Long.valueOf(value);
+            else
+                return Integer.valueOf(value);
+        } else {
+            if (value.length() > 7)
+                return Double.valueOf(value);
+            else
+                return Float.valueOf(value);
+        }
+    }
 
     private static void responseHandler(int id, String params, int type, boolean finished) {
         System.out.println("id=" + id + " params=" + params + " type=" + type + " finished=" + finished);
@@ -52,23 +63,37 @@ public class TONContext {
         }
         if (future == null) {
             System.out.println("ResponseId not found " + id);
-        } else
-            future.complete(params);
+        } else {
+            if (type == 1) {
+                Throwable throwable;
+                try {
+                    JsonNode error = jsonMapper.readTree(params);
+                    throwable = new TONException(Integer.parseInt(error.findValue("code").toString()), error.findValue("message").toString());
+                } catch (Throwable t) {
+                    throwable = t;
+                }
+                future.completeExceptionally(throwable);
+            } else
+                future.complete(params);
+        }
     }
 
-    public static TONContext create(String config) {
+    public static TONContext create(String config) throws TONException {
         String result = createContext(config);
-        Matcher matcher = contextResultPattern.matcher(result);
-
         System.out.println(result);
-        if (matcher.matches()) {
-            return new TONContext(Integer.valueOf(matcher.group(2)));
+        try {
+            JsonNode json = jsonMapper.readTree(result);
+            JsonNode error = json.findValue("error");
+            if (error != null)
+                throw new TONException(Integer.parseInt(error.findValue("code").toString()), error.findValue("message").toString());
+            return new TONContext(Integer.valueOf(json.findValue("result").toString()));
+        } catch (Throwable t) {
+            throw new TONException(t);
         }
-        return null;
     }
 
     private int contextId;
-    private ObjectMapper jsonMapper = new ObjectMapper();
+    private static ObjectMapper jsonMapper = new ObjectMapper();
 
     private TONContext(int contextId) {
         this.contextId = contextId;

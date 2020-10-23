@@ -13,7 +13,7 @@ public class Utils {
 
     public CompletableFuture<String> convertAddress(String _address, String _outputFormat) {
         return context.requestJSON("utils.convert_address", "{" + String.join(",", new String[]{"\"address\":\""+_address+"\"","\"output_format\":\""+_outputFormat+"\""}) + "}")
-            .thenApply(json -> json.findValue("address").toString());
+            .thenApply(json -> json.findValue("address").asText());
     }
 
 }

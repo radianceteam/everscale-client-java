@@ -30,6 +30,7 @@ function getJavaType(f) {
 }
 
 var imports = {'java.util.concurrent.CompletableFuture':true};
+var functionCount = 0;
 
 for (var mod of api.modules) {
     console.log(mod.name, '"' + mod.description + '"');
@@ -43,7 +44,8 @@ for (var mod of api.modules) {
             console.log('    ', t.name,t.struct_fields.map(f=>f.name+':'+(f.type=='Ref'?'->'+f.ref_name:f.type)));
     }
     var body = '';
-    console.log('  functions:');
+    console.log(`  functions(${mod.functions.length}):`);
+    functionCount += mod.functions.length;
     for (var f of mod.functions) {
         var params = f.params.slice(1,2);
         if (params.length > 1)
@@ -77,23 +79,29 @@ for (var mod of api.modules) {
                 body += `            .thenApply(json -> {\n`;
                 body += `                Iterable<JsonNode> it = () -> json.findValue("${javaResult.name}").elements();\n`;
                 body += `                return StreamSupport.stream(it.spliterator(), false)\n`;
-                body += `                    .map(e -> e.toString())\n`;
+                body += `                    .map(e -> e.asText())\n`;
                 body += `                    .toArray(String[]::new);\n`;
                 body += `            });\n`;
                 imports['java.util.stream.StreamSupport'] = true;
                 imports['com.fasterxml.jackson.databind.JsonNode'] = true;
             } else {
-                var conv = javaResult.type;
-                if (conv == 'String')
-                    conv = null;
-                else if (conv == 'Number') {
-                    conv = 'Float';
+                var conv;
+                switch(javaResult.type) {
+                    case 'String':
+                        conv = '';
+                        break;
+                    case 'Number':
+                        conv = 'TONContext.toNumber(';
+                        break;
+                    default:
+                        conv = javaResult.type + '.valueOf(';
                 }
-                body += `            .thenApply(json -> ${conv?conv+'.valueOf(':''}json.findValue("${javaResult.name}").toString()${conv?')':''});\n`;
+                body += `            .thenApply(json -> ${conv}json.findValue("${javaResult.name}").asText()${conv&&')'});\n`;
             }
         }
         body += `    }\n\n`;
     }
+
 
     const className = capitalize(mod.name);
 
@@ -112,3 +120,5 @@ ${body}}
 `);
 
 }
+
+console.log({functionCount});

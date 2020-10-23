@@ -29,7 +29,7 @@ public class Boc {
 
     public CompletableFuture<String> getBlockchainConfig(String _blockBoc) {
         return context.requestJSON("boc.get_blockchain_config", "{" + String.join(",", new String[]{"\"block_boc\":\""+_blockBoc+"\""}) + "}")
-            .thenApply(json -> json.findValue("config_boc").toString());
+            .thenApply(json -> json.findValue("config_boc").asText());
     }
 
 }

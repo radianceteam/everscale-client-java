@@ -17,7 +17,7 @@ public class Abi {
 
     public CompletableFuture<String> attachSignatureToMessageBody(String _abi, String _publicKey, String _message, String _signature) {
         return context.requestJSON("abi.attach_signature_to_message_body", "{" + String.join(",", new String[]{"\"abi\":\""+_abi+"\"","\"public_key\":\""+_publicKey+"\"","\"message\":\""+_message+"\"","\"signature\":\""+_signature+"\""}) + "}")
-            .thenApply(json -> json.findValue("body").toString());
+            .thenApply(json -> json.findValue("body").asText());
     }
 
     public CompletableFuture<String> encodeMessage(String _abi, String _address, String _deploySet, String _callSet, String _signer, Number _processingTryIndex) {

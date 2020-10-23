@@ -13,7 +13,7 @@ public class Processing {
 
     public CompletableFuture<String> sendMessage(String _message, String _abi, Boolean _sendEvents) {
         return context.requestJSON("processing.send_message", "{" + String.join(",", new String[]{"\"message\":\""+_message+"\"","\"abi\":\""+_abi+"\"","\"send_events\":"+_sendEvents}) + "}")
-            .thenApply(json -> json.findValue("shard_block_id").toString());
+            .thenApply(json -> json.findValue("shard_block_id").asText());
     }
 
     public CompletableFuture<String> waitForTransaction(String _abi, String _message, String _shardBlockId, Boolean _sendEvents) {
