@@ -128,6 +128,17 @@ public class TONContext {
             });
     }
 
+    public <T> CompletableFuture<T> requestValue(String functionName, String params, Class<T> valueType) {
+        return request(functionName, params)
+            .thenApply(r -> {
+                try {
+                    return jsonMapper.readValue(r, valueType);
+                } catch (JsonProcessingException ex) {
+                    throw new CompletionException(ex);
+                }
+            });
+    }
+    
     public static void main(String... args) throws Exception {
         TONContext ctx = TONContext.create("{}");
         Crypto crypto = new Crypto(ctx);

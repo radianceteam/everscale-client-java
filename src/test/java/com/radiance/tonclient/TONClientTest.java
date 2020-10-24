@@ -57,6 +57,21 @@ public class TONClientTest {
 
         // tonCrc16
         System.out.println("crypto.tonCrc16('abcdABCD0123'): " + crypto.tonCrc16("abcdABCD0123").get());
+
+
+        // generateRandomSignKeys
+        Crypto.KeyPair keys = crypto.generateRandomSignKeys().get();
+        System.out.println("crypto.generateRandomSignKeys():  public:" + keys.getPublic() + " secret:" + keys.getSecret());
+
+
+        String publicKey = crypto.convertPublicKeyToTonSafeFormat(keys.getPublic()).get();
+        System.out.println("Public key: '" + publicKey + "'");
+
+        String randomBytes = crypto.generateRandomBytes(15).get();
+        assertEquals("length of crypto.generateRandomBytes(15)", 20, randomBytes.length());
+        System.out.println("Random bytes: " + randomBytes);
+
+        //Crypto.ResultOfSign ros = crypto.sign(randomBytes, keys).get();
     }
 
     @AfterClass

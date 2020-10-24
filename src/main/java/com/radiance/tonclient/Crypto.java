@@ -4,15 +4,89 @@ import java.util.concurrent.CompletableFuture;
 import java.util.stream.StreamSupport;
 import com.fasterxml.jackson.databind.JsonNode;
 
+/**
+ *   Crypto functions.
+ */
 public class Crypto {
+
+    public static class KeyPair {
+
+        private String _public;
+        /**
+         *  Public key - 64 symbols hex string
+         */
+        public String getPublic() {
+            return _public;
+        }
+        /**
+         *  Public key - 64 symbols hex string
+         */
+        public void setPublic(String value) {
+            _public = value;
+        }
+
+        private String secret;
+        /**
+         *  Private key - u64 symbols hex string
+         */
+        public String getSecret() {
+            return secret;
+        }
+        /**
+         *  Private key - u64 symbols hex string
+         */
+        public void setSecret(String value) {
+            secret = value;
+        }
+
+    }
+
+    public static class ResultOfSign {
+
+        private String signed;
+        /**
+         *  Signed data combined with signature encoded in `base64`.
+         */
+        public String getSigned() {
+            return signed;
+        }
+        /**
+         *  Signed data combined with signature encoded in `base64`.
+         */
+        public void setSigned(String value) {
+            signed = value;
+        }
+
+        private String signature;
+        /**
+         *  Signature encoded in `hex`.
+         */
+        public String getSignature() {
+            return signature;
+        }
+        /**
+         *  Signature encoded in `hex`.
+         */
+        public void setSignature(String value) {
+            signature = value;
+        }
+
+    }
+
+    
     private TONContext context;
 
     public Crypto(TONContext context) {
         this.context = context;
     }
 
-    public CompletableFuture<String[]> factorize(String _composite) {
-        return context.requestJSON("crypto.factorize", "{" + String.join(",", new String[]{"\"composite\":\""+_composite+"\""}) + "}")
+  /**
+   *  Performs prime factorization – decomposition of a composite number into a product of smaller prime integers (factors). See <a target="_blank" href="https://en.wikipedia.org/wiki/Integer_factorization">https://en.wikipedia.org/wiki/Integer_factorization</a>
+   *
+   * @param composite  Hexadecimal representation of u64 composite number.
+   */
+    public CompletableFuture<String[]> factorize(String composite) {
+        return context.requestJSON("crypto.factorize", "{" + String.join(",", new String[]{"\"composite\":\""+composite+"\""}) + "}")
             .thenApply(json -> {
                 Iterable<JsonNode> it = () -> json.findValue("factors").elements();
                 return StreamSupport.stream(it.spliterator(), false)
@@ -21,147 +95,329 @@ public class Crypto {
             });
     }
 
-    public CompletableFuture<String> modularPower(String _base, String _exponent, String _modulus) {
-        return context.requestJSON("crypto.modular_power", "{" + String.join(",", new String[]{"\"base\":\""+_base+"\"","\"exponent\":\""+_exponent+"\"","\"modulus\":\""+_modulus+"\""}) + "}")
+  /**
+   *  Performs modular exponentiation for big integers (`base`^`exponent` mod `modulus`). See <a target="_blank" href="https://en.wikipedia.org/wiki/Modular_exponentiation">https://en.wikipedia.org/wiki/Modular_exponentiation</a>
+   *
+   * @param base  `base` argument of calculation.
+   * @param exponent  `exponent` argument of calculation.
+   * @param modulus  `modulus` argument of calculation.
+   */
+    public CompletableFuture<String> modularPower(String base, String exponent, String modulus) {
+        return context.requestJSON("crypto.modular_power", "{" + String.join(",", new String[]{"\"base\":\""+base+"\"","\"exponent\":\""+exponent+"\"","\"modulus\":\""+modulus+"\""}) + "}")
             .thenApply(json -> json.findValue("modular_power").asText());
     }
 
-    public CompletableFuture<Number> tonCrc16(String _data) {
-        return context.requestJSON("crypto.ton_crc16", "{" + String.join(",", new String[]{"\"data\":\""+_data+"\""}) + "}")
+  /**
+   *  Calculates CRC16 using TON algorithm.
+   *
+   * @param data  Input data for CRC calculation. Encoded with `base64`.
+   */
+    public CompletableFuture<Number> tonCrc16(String data) {
+        return context.requestJSON("crypto.ton_crc16", "{" + String.join(",", new String[]{"\"data\":\""+data+"\""}) + "}")
             .thenApply(json -> TONContext.toNumber(json.findValue("crc").asText()));
     }
 
-    public CompletableFuture<String> generateRandomBytes(Number _length) {
-        return context.requestJSON("crypto.generate_random_bytes", "{" + String.join(",", new String[]{"\"length\":"+_length}) + "}")
+  /**
+   *  Generates random byte array of the specified length and returns it in `base64` format
+   *
+   * @param length  Size of random byte array.
+   */
+    public CompletableFuture<String> generateRandomBytes(Number length) {
+        return context.requestJSON("crypto.generate_random_bytes", "{" + String.join(",", new String[]{"\"length\":"+length}) + "}")
             .thenApply(json -> json.findValue("bytes").asText());
     }
 
-    public CompletableFuture<String> convertPublicKeyToTonSafeFormat(String _publicKey) {
-        return context.requestJSON("crypto.convert_public_key_to_ton_safe_format", "{" + String.join(",", new String[]{"\"public_key\":\""+_publicKey+"\""}) + "}")
+  /**
+   *  Converts public key to ton safe_format
+   *
+   * @param publicKey  Public key - 64 symbols hex string
+   */
+    public CompletableFuture<String> convertPublicKeyToTonSafeFormat(String publicKey) {
+        return context.requestJSON("crypto.convert_public_key_to_ton_safe_format", "{" + String.join(",", new String[]{"\"public_key\":\""+publicKey+"\""}) + "}")
             .thenApply(json -> json.findValue("ton_public_key").asText());
     }
 
-    public CompletableFuture<String> generateRandomSignKeys() {
-        return context.request("crypto.generate_random_sign_keys", "{" + String.join(",", new String[]{}) + "}");
+  /**
+   *  Generates random ed25519 key pair.
+   *
+   */
+    public CompletableFuture<KeyPair> generateRandomSignKeys() {
+        return context.requestValue("crypto.generate_random_sign_keys", "{" + String.join(",", new String[]{}) + "}", KeyPair.class);
     }
 
-    public CompletableFuture<String> sign(String _unsigned, String _keys) {
-        return context.request("crypto.sign", "{" + String.join(",", new String[]{"\"unsigned\":\""+_unsigned+"\"","\"keys\":\""+_keys+"\""}) + "}");
+  /**
+   *  Signs a data using the provided keys.
+   *
+   * @param unsigned  Data that must be signed encoded in `base64`.
+   * @param keys  Sign keys.
+   */
+    public CompletableFuture<ResultOfSign> sign(String unsigned, String keys) {
+        return context.requestValue("crypto.sign", "{" + String.join(",", new String[]{"\"unsigned\":\""+unsigned+"\"","\"keys\":\""+keys+"\""}) + "}", ResultOfSign.class);
     }
 
-    public CompletableFuture<String> verifySignature(String _signed, String _public) {
-        return context.requestJSON("crypto.verify_signature", "{" + String.join(",", new String[]{"\"signed\":\""+_signed+"\"","\"public\":\""+_public+"\""}) + "}")
+  /**
+   *  Verifies signed data using the provided public key. Raises error if verification is failed.
+   *
+   * @param signed  Signed data that must be verified encoded in `base64`.
+   * @param public  Signer's public key - 64 symbols hex string
+   */
+    public CompletableFuture<String> verifySignature(String signed, String _public) {
+        return context.requestJSON("crypto.verify_signature", "{" + String.join(",", new String[]{"\"signed\":\""+signed+"\"","\"public\":\""+_public+"\""}) + "}")
             .thenApply(json -> json.findValue("unsigned").asText());
     }
 
-    public CompletableFuture<String> sha256(String _data) {
-        return context.requestJSON("crypto.sha256", "{" + String.join(",", new String[]{"\"data\":\""+_data+"\""}) + "}")
+  /**
+   *  Calculates SHA256 hash of the specified data.
+   *
+   * @param data  Input data for hash calculation. Encoded with `base64`.
+   */
+    public CompletableFuture<String> sha256(String data) {
+        return context.requestJSON("crypto.sha256", "{" + String.join(",", new String[]{"\"data\":\""+data+"\""}) + "}")
             .thenApply(json -> json.findValue("hash").asText());
     }
 
-    public CompletableFuture<String> sha512(String _data) {
-        return context.requestJSON("crypto.sha512", "{" + String.join(",", new String[]{"\"data\":\""+_data+"\""}) + "}")
+  /**
+   *  Calculates SHA512 hash of the specified data.
+   *
+   * @param data  Input data for hash calculation. Encoded with `base64`.
+   */
+    public CompletableFuture<String> sha512(String data) {
+        return context.requestJSON("crypto.sha512", "{" + String.join(",", new String[]{"\"data\":\""+data+"\""}) + "}")
             .thenApply(json -> json.findValue("hash").asText());
     }
 
-    public CompletableFuture<String> scrypt(String _password, String _salt, Number _logN, Number _r, Number _p, Number _dkLen) {
-        return context.requestJSON("crypto.scrypt", "{" + String.join(",", new String[]{"\"password\":\""+_password+"\"","\"salt\":\""+_salt+"\"","\"log_n\":"+_logN,"\"r\":"+_r,"\"p\":"+_p,"\"dk_len\":"+_dkLen}) + "}")
+  /**
+   *  Derives key from `password` and `key` using `scrypt` algorithm. See <a target="_blank" href="https://en.wikipedia.org/wiki/Scrypt">https://en.wikipedia.org/wiki/Scrypt</a>.<p> # Arguments - `log_n` - The log2 of the Scrypt parameter `N` - `r` - The Scrypt parameter `r` - `p` - The Scrypt parameter `p` # Conditions - `log_n` must be less than `64` - `r` must be greater than `0` and less than or equal to `4294967295` - `p` must be greater than `0` and less than `4294967295` # Recommended values sufficient for most use-cases - `log_n = 15` (`n = 32768`) - `r = 8` - `p = 1`
+   *
+   * @param password  The password bytes to be hashed.
+ Must be encoded with `base64`.
+   * @param salt  A salt bytes that modifies the hash to protect against Rainbow table attacks.
+ Must be encoded with `base64`.
+   * @param logN  CPU/memory cost parameter
+   * @param r  The block size parameter, which fine-tunes sequential memory read size and performance.
+   * @param p  Parallelization parameter.
+   * @param dkLen  Intended output length in octets of the derived key.
+   */
+    public CompletableFuture<String> scrypt(String password, String salt, Number logN, Number r, Number p, Number dkLen) {
+        return context.requestJSON("crypto.scrypt", "{" + String.join(",", new String[]{"\"password\":\""+password+"\"","\"salt\":\""+salt+"\"","\"log_n\":"+logN,"\"r\":"+r,"\"p\":"+p,"\"dk_len\":"+dkLen}) + "}")
             .thenApply(json -> json.findValue("key").asText());
     }
 
-    public CompletableFuture<String> naclSignKeypairFromSecretKey(String _secret) {
-        return context.request("crypto.nacl_sign_keypair_from_secret_key", "{" + String.join(",", new String[]{"\"secret\":\""+_secret+"\""}) + "}");
+  /**
+   *  Generates a key pair for signing from the secret key
+   *
+   * @param secret  Secret key - unprefixed 0-padded to 64 symbols hex string 
+   */
+    public CompletableFuture<KeyPair> naclSignKeypairFromSecretKey(String secret) {
+        return context.requestValue("crypto.nacl_sign_keypair_from_secret_key", "{" + String.join(",", new String[]{"\"secret\":\""+secret+"\""}) + "}", KeyPair.class);
     }
 
-    public CompletableFuture<String> naclSign(String _unsigned, String _secret) {
-        return context.requestJSON("crypto.nacl_sign", "{" + String.join(",", new String[]{"\"unsigned\":\""+_unsigned+"\"","\"secret\":\""+_secret+"\""}) + "}")
+  /**
+   *  Signs data using the signer's secret key.
+   *
+   * @param unsigned  Data that must be signed encoded in `base64`.
+   * @param secret  Signer's secret key - unprefixed 0-padded to 64 symbols hex string 
+   */
+    public CompletableFuture<String> naclSign(String unsigned, String secret) {
+        return context.requestJSON("crypto.nacl_sign", "{" + String.join(",", new String[]{"\"unsigned\":\""+unsigned+"\"","\"secret\":\""+secret+"\""}) + "}")
             .thenApply(json -> json.findValue("signed").asText());
     }
 
-    public CompletableFuture<String> naclSignOpen(String _signed, String _public) {
-        return context.requestJSON("crypto.nacl_sign_open", "{" + String.join(",", new String[]{"\"signed\":\""+_signed+"\"","\"public\":\""+_public+"\""}) + "}")
+  /**
+   * 
+   *
+   * @param signed  Signed data that must be unsigned. Encoded with `base64`.
+   * @param public  Signer's public key - unprefixed 0-padded to 64 symbols hex string 
+   */
+    public CompletableFuture<String> naclSignOpen(String signed, String _public) {
+        return context.requestJSON("crypto.nacl_sign_open", "{" + String.join(",", new String[]{"\"signed\":\""+signed+"\"","\"public\":\""+_public+"\""}) + "}")
             .thenApply(json -> json.findValue("unsigned").asText());
     }
 
-    public CompletableFuture<String> naclSignDetached(String _unsigned, String _secret) {
-        return context.requestJSON("crypto.nacl_sign_detached", "{" + String.join(",", new String[]{"\"unsigned\":\""+_unsigned+"\"","\"secret\":\""+_secret+"\""}) + "}")
+  /**
+   * 
+   *
+   * @param unsigned  Data that must be signed encoded in `base64`.
+   * @param secret  Signer's secret key - unprefixed 0-padded to 64 symbols hex string 
+   */
+    public CompletableFuture<String> naclSignDetached(String unsigned, String secret) {
+        return context.requestJSON("crypto.nacl_sign_detached", "{" + String.join(",", new String[]{"\"unsigned\":\""+unsigned+"\"","\"secret\":\""+secret+"\""}) + "}")
             .thenApply(json -> json.findValue("signature").asText());
     }
 
-    public CompletableFuture<String> naclBoxKeypair() {
-        return context.request("crypto.nacl_box_keypair", "{" + String.join(",", new String[]{}) + "}");
+  /**
+   * 
+   *
+   */
+    public CompletableFuture<KeyPair> naclBoxKeypair() {
+        return context.requestValue("crypto.nacl_box_keypair", "{" + String.join(",", new String[]{}) + "}", KeyPair.class);
     }
 
-    public CompletableFuture<String> naclBoxKeypairFromSecretKey(String _secret) {
-        return context.request("crypto.nacl_box_keypair_from_secret_key", "{" + String.join(",", new String[]{"\"secret\":\""+_secret+"\""}) + "}");
+  /**
+   *  Generates key pair from a secret key
+   *
+   * @param secret  Secret key - unprefixed 0-padded to 64 symbols hex string 
+   */
+    public CompletableFuture<KeyPair> naclBoxKeypairFromSecretKey(String secret) {
+        return context.requestValue("crypto.nacl_box_keypair_from_secret_key", "{" + String.join(",", new String[]{"\"secret\":\""+secret+"\""}) + "}", KeyPair.class);
     }
 
-    public CompletableFuture<String> naclBox(String _decrypted, String _nonce, String _theirPublic, String _secret) {
-        return context.requestJSON("crypto.nacl_box", "{" + String.join(",", new String[]{"\"decrypted\":\""+_decrypted+"\"","\"nonce\":\""+_nonce+"\"","\"their_public\":\""+_theirPublic+"\"","\"secret\":\""+_secret+"\""}) + "}")
+  /**
+   *  Public key authenticated encryption<p> Encrypt and authenticate a message using the senders secret key, the recievers public key, and a nonce. 
+   *
+   * @param decrypted  Data that must be encrypted encoded in `base64`.
+   * @param nonce  Nonce, encoded in `hex`
+   * @param theirPublic  Receiver's public key - unprefixed 0-padded to 64 symbols hex string 
+   * @param secret  Sender's private key - unprefixed 0-padded to 64 symbols hex string 
+   */
+    public CompletableFuture<String> naclBox(String decrypted, String nonce, String theirPublic, String secret) {
+        return context.requestJSON("crypto.nacl_box", "{" + String.join(",", new String[]{"\"decrypted\":\""+decrypted+"\"","\"nonce\":\""+nonce+"\"","\"their_public\":\""+theirPublic+"\"","\"secret\":\""+secret+"\""}) + "}")
             .thenApply(json -> json.findValue("encrypted").asText());
     }
 
-    public CompletableFuture<String> naclBoxOpen(String _encrypted, String _nonce, String _theirPublic, String _secret) {
-        return context.requestJSON("crypto.nacl_box_open", "{" + String.join(",", new String[]{"\"encrypted\":\""+_encrypted+"\"","\"nonce\":\""+_nonce+"\"","\"their_public\":\""+_theirPublic+"\"","\"secret\":\""+_secret+"\""}) + "}")
+  /**
+   *  Decrypt and verify the cipher text using the recievers secret key, the senders public key, and the nonce.
+   *
+   * @param encrypted  Data that must be decrypted. Encoded with `base64`.
+   * @param theirPublic  Sender's public key - unprefixed 0-padded to 64 symbols hex string 
+   * @param secret  Receiver's private key - unprefixed 0-padded to 64 symbols hex string 
+   */
+    public CompletableFuture<String> naclBoxOpen(String encrypted, String nonce, String theirPublic, String secret) {
+        return context.requestJSON("crypto.nacl_box_open", "{" + String.join(",", new String[]{"\"encrypted\":\""+encrypted+"\"","\"nonce\":\""+nonce+"\"","\"their_public\":\""+theirPublic+"\"","\"secret\":\""+secret+"\""}) + "}")
             .thenApply(json -> json.findValue("decrypted").asText());
     }
 
-    public CompletableFuture<String> naclSecretBox(String _decrypted, String _nonce, String _key) {
-        return context.requestJSON("crypto.nacl_secret_box", "{" + String.join(",", new String[]{"\"decrypted\":\""+_decrypted+"\"","\"nonce\":\""+_nonce+"\"","\"key\":\""+_key+"\""}) + "}")
+  /**
+   *  Encrypt and authenticate message using nonce and secret key.
+   *
+   * @param decrypted  Data that must be encrypted. Encoded with `base64`.
+   * @param nonce  Nonce in `hex`
+   * @param key  Secret key - unprefixed 0-padded to 64 symbols hex string 
+   */
+    public CompletableFuture<String> naclSecretBox(String decrypted, String nonce, String key) {
+        return context.requestJSON("crypto.nacl_secret_box", "{" + String.join(",", new String[]{"\"decrypted\":\""+decrypted+"\"","\"nonce\":\""+nonce+"\"","\"key\":\""+key+"\""}) + "}")
             .thenApply(json -> json.findValue("encrypted").asText());
     }
 
-    public CompletableFuture<String> naclSecretBoxOpen(String _encrypted, String _nonce, String _key) {
-        return context.requestJSON("crypto.nacl_secret_box_open", "{" + String.join(",", new String[]{"\"encrypted\":\""+_encrypted+"\"","\"nonce\":\""+_nonce+"\"","\"key\":\""+_key+"\""}) + "}")
+  /**
+   *  Decrypts and verifies cipher text using `nonce` and secret `key`.
+   *
+   * @param encrypted  Data that must be decrypted. Encoded with `base64`.
+   * @param nonce  Nonce in `hex`
+   * @param key  Public key - unprefixed 0-padded to 64 symbols hex string 
+   */
+    public CompletableFuture<String> naclSecretBoxOpen(String encrypted, String nonce, String key) {
+        return context.requestJSON("crypto.nacl_secret_box_open", "{" + String.join(",", new String[]{"\"encrypted\":\""+encrypted+"\"","\"nonce\":\""+nonce+"\"","\"key\":\""+key+"\""}) + "}")
             .thenApply(json -> json.findValue("decrypted").asText());
     }
 
-    public CompletableFuture<String> mnemonicWords(Number _dictionary) {
-        return context.requestJSON("crypto.mnemonic_words", "{" + String.join(",", new String[]{"\"dictionary\":"+_dictionary}) + "}")
+  /**
+   *  Prints the list of words from the specified dictionary
+   *
+   * @param dictionary  Dictionary identifier
+   */
+    public CompletableFuture<String> mnemonicWords(Number dictionary) {
+        return context.requestJSON("crypto.mnemonic_words", "{" + String.join(",", new String[]{"\"dictionary\":"+dictionary}) + "}")
             .thenApply(json -> json.findValue("words").asText());
     }
 
-    public CompletableFuture<String> mnemonicFromRandom(Number _dictionary, Number _wordCount) {
-        return context.requestJSON("crypto.mnemonic_from_random", "{" + String.join(",", new String[]{"\"dictionary\":"+_dictionary,"\"word_count\":"+_wordCount}) + "}")
+  /**
+   *  Generates a random mnemonic from the specified dictionary and word count
+   *
+   * @param dictionary  Dictionary identifier
+   * @param wordCount  Mnemonic word count
+   */
+    public CompletableFuture<String> mnemonicFromRandom(Number dictionary, Number wordCount) {
+        return context.requestJSON("crypto.mnemonic_from_random", "{" + String.join(",", new String[]{"\"dictionary\":"+dictionary,"\"word_count\":"+wordCount}) + "}")
             .thenApply(json -> json.findValue("phrase").asText());
     }
 
-    public CompletableFuture<String> mnemonicFromEntropy(String _entropy, Number _dictionary, Number _wordCount) {
-        return context.requestJSON("crypto.mnemonic_from_entropy", "{" + String.join(",", new String[]{"\"entropy\":\""+_entropy+"\"","\"dictionary\":"+_dictionary,"\"word_count\":"+_wordCount}) + "}")
+  /**
+   *  Generates mnemonic from pre-generated entropy
+   *
+   * @param entropy  Entropy bytes. Hex encoded.
+   * @param dictionary  Dictionary identifier
+   * @param wordCount  Mnemonic word count
+   */
+    public CompletableFuture<String> mnemonicFromEntropy(String entropy, Number dictionary, Number wordCount) {
+        return context.requestJSON("crypto.mnemonic_from_entropy", "{" + String.join(",", new String[]{"\"entropy\":\""+entropy+"\"","\"dictionary\":"+dictionary,"\"word_count\":"+wordCount}) + "}")
             .thenApply(json -> json.findValue("phrase").asText());
     }
 
-    public CompletableFuture<Boolean> mnemonicVerify(String _phrase, Number _dictionary, Number _wordCount) {
-        return context.requestJSON("crypto.mnemonic_verify", "{" + String.join(",", new String[]{"\"phrase\":\""+_phrase+"\"","\"dictionary\":"+_dictionary,"\"word_count\":"+_wordCount}) + "}")
+  /**
+   *  The phrase supplied will be checked for word length and validated according to the checksum specified in BIP0039.
+   *
+   * @param phrase  Phrase
+   * @param dictionary  Dictionary identifier
+   * @param wordCount  Word count
+   */
+    public CompletableFuture<Boolean> mnemonicVerify(String phrase, Number dictionary, Number wordCount) {
+        return context.requestJSON("crypto.mnemonic_verify", "{" + String.join(",", new String[]{"\"phrase\":\""+phrase+"\"","\"dictionary\":"+dictionary,"\"word_count\":"+wordCount}) + "}")
             .thenApply(json -> Boolean.valueOf(json.findValue("valid").asText()));
     }
 
-    public CompletableFuture<String> mnemonicDeriveSignKeys(String _phrase, String _path, Number _dictionary, Number _wordCount) {
-        return context.request("crypto.mnemonic_derive_sign_keys", "{" + String.join(",", new String[]{"\"phrase\":\""+_phrase+"\"","\"path\":\""+_path+"\"","\"dictionary\":"+_dictionary,"\"word_count\":"+_wordCount}) + "}");
+  /**
+   *  Validates the seed phrase, generates master key and then derives the key pair from the master key and the specified path
+   *
+   * @param phrase  Phrase
+   * @param path  Derivation path, for instance "m/44'/396'/0'/0/0"
+   * @param dictionary  Dictionary identifier
+   * @param wordCount  Word count
+   */
+    public CompletableFuture<KeyPair> mnemonicDeriveSignKeys(String phrase, String path, Number dictionary, Number wordCount) {
+        return context.requestValue("crypto.mnemonic_derive_sign_keys", "{" + String.join(",", new String[]{"\"phrase\":\""+phrase+"\"","\"path\":\""+path+"\"","\"dictionary\":"+dictionary,"\"word_count\":"+wordCount}) + "}", KeyPair.class);
     }
 
-    public CompletableFuture<String> hdkeyXprvFromMnemonic(String _phrase) {
-        return context.requestJSON("crypto.hdkey_xprv_from_mnemonic", "{" + String.join(",", new String[]{"\"phrase\":\""+_phrase+"\""}) + "}")
+  /**
+   *  Generates an extended master private key that will be the root for all the derived keys
+   *
+   * @param phrase  String with seed phrase
+   */
+    public CompletableFuture<String> hdkeyXprvFromMnemonic(String phrase) {
+        return context.requestJSON("crypto.hdkey_xprv_from_mnemonic", "{" + String.join(",", new String[]{"\"phrase\":\""+phrase+"\""}) + "}")
             .thenApply(json -> json.findValue("xprv").asText());
     }
 
-    public CompletableFuture<String> hdkeyDeriveFromXprv(String _xprv, Number _childIndex, Boolean _hardened) {
-        return context.requestJSON("crypto.hdkey_derive_from_xprv", "{" + String.join(",", new String[]{"\"xprv\":\""+_xprv+"\"","\"child_index\":"+_childIndex,"\"hardened\":"+_hardened}) + "}")
+  /**
+   *  Returns extended private key derived from the specified extended private key and child index
+   *
+   * @param xprv  Serialized extended private key
+   * @param childIndex  Child index (see BIP-0032)
+   * @param hardened  Indicates the derivation of hardened/not-hardened key (see BIP-0032)
+   */
+    public CompletableFuture<String> hdkeyDeriveFromXprv(String xprv, Number childIndex, Boolean hardened) {
+        return context.requestJSON("crypto.hdkey_derive_from_xprv", "{" + String.join(",", new String[]{"\"xprv\":\""+xprv+"\"","\"child_index\":"+childIndex,"\"hardened\":"+hardened}) + "}")
             .thenApply(json -> json.findValue("xprv").asText());
     }
 
-    public CompletableFuture<String> hdkeyDeriveFromXprvPath(String _xprv, String _path) {
-        return context.requestJSON("crypto.hdkey_derive_from_xprv_path", "{" + String.join(",", new String[]{"\"xprv\":\""+_xprv+"\"","\"path\":\""+_path+"\""}) + "}")
+  /**
+   *  Derives the exented private key from the specified key and path
+   *
+   * @param xprv  Serialized extended private key
+   * @param path  Derivation path, for instance "m/44'/396'/0'/0/0"
+   */
+    public CompletableFuture<String> hdkeyDeriveFromXprvPath(String xprv, String path) {
+        return context.requestJSON("crypto.hdkey_derive_from_xprv_path", "{" + String.join(",", new String[]{"\"xprv\":\""+xprv+"\"","\"path\":\""+path+"\""}) + "}")
             .thenApply(json -> json.findValue("xprv").asText());
     }
 
-    public CompletableFuture<String> hdkeySecretFromXprv(String _xprv) {
-        return context.requestJSON("crypto.hdkey_secret_from_xprv", "{" + String.join(",", new String[]{"\"xprv\":\""+_xprv+"\""}) + "}")
+  /**
+   *  Extracts the private key from the serialized extended private key
+   *
+   * @param xprv  Serialized extended private key
+   */
+    public CompletableFuture<String> hdkeySecretFromXprv(String xprv) {
+        return context.requestJSON("crypto.hdkey_secret_from_xprv", "{" + String.join(",", new String[]{"\"xprv\":\""+xprv+"\""}) + "}")
             .thenApply(json -> json.findValue("secret").asText());
     }
 
-    public CompletableFuture<String> hdkeyPublicFromXprv(String _xprv) {
-        return context.requestJSON("crypto.hdkey_public_from_xprv", "{" + String.join(",", new String[]{"\"xprv\":\""+_xprv+"\""}) + "}")
+  /**
+   *  Extracts the public key from the serialized extended private key
+   *
+   * @param xprv  Serialized extended private key
+   */
+    public CompletableFuture<String> hdkeyPublicFromXprv(String xprv) {
+        return context.requestJSON("crypto.hdkey_public_from_xprv", "{" + String.join(",", new String[]{"\"xprv\":\""+xprv+"\""}) + "}")
             .thenApply(json -> json.findValue("public").asText());
     }
 
