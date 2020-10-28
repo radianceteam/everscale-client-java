@@ -15,6 +15,8 @@ for(var f of genFiles) {
         fs.unlinkSync(PATH + f);
 }
 
+genFiles = [];
+
 function dereserve(iden) {
     return (reserved.includes(iden)?'_':'') + iden;
 }
