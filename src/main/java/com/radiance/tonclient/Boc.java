@@ -1,16 +1,12 @@
 package com.radiance.tonclient;
 
 import java.util.concurrent.CompletableFuture;
-import java.util.stream.StreamSupport;
-import com.fasterxml.jackson.databind.JsonNode;
 
 /**
  *   BOC manipulation module.
  */
 public class Boc {
 
-
-    
     private TONContext context;
 
     public Boc(TONContext context) {
@@ -23,7 +19,7 @@ public class Boc {
    * @param boc  BOC encoded as base64
    */
     public CompletableFuture<String> parseMessage(String boc) {
-        return context.requestJSON("boc.parse_message", "{" + String.join(",", new String[]{"\"boc\":\""+boc+"\""}) + "}")
+        return context.requestJSON("boc.parse_message", "{\"boc\":\""+boc+"\"}")
             .thenApply(json -> json.findValue("parsed").asText());
     }
 
@@ -33,7 +29,7 @@ public class Boc {
    * @param boc  BOC encoded as base64
    */
     public CompletableFuture<String> parseTransaction(String boc) {
-        return context.requestJSON("boc.parse_transaction", "{" + String.join(",", new String[]{"\"boc\":\""+boc+"\""}) + "}")
+        return context.requestJSON("boc.parse_transaction", "{\"boc\":\""+boc+"\"}")
             .thenApply(json -> json.findValue("parsed").asText());
     }
 
@@ -43,7 +39,7 @@ public class Boc {
    * @param boc  BOC encoded as base64
    */
     public CompletableFuture<String> parseAccount(String boc) {
-        return context.requestJSON("boc.parse_account", "{" + String.join(",", new String[]{"\"boc\":\""+boc+"\""}) + "}")
+        return context.requestJSON("boc.parse_account", "{\"boc\":\""+boc+"\"}")
             .thenApply(json -> json.findValue("parsed").asText());
     }
 
@@ -53,7 +49,7 @@ public class Boc {
    * @param boc  BOC encoded as base64
    */
     public CompletableFuture<String> parseBlock(String boc) {
-        return context.requestJSON("boc.parse_block", "{" + String.join(",", new String[]{"\"boc\":\""+boc+"\""}) + "}")
+        return context.requestJSON("boc.parse_block", "{\"boc\":\""+boc+"\"}")
             .thenApply(json -> json.findValue("parsed").asText());
     }
 
@@ -63,7 +59,7 @@ public class Boc {
    * @param blockBoc  Key block BOC encoded as base64
    */
     public CompletableFuture<String> getBlockchainConfig(String blockBoc) {
-        return context.requestJSON("boc.get_blockchain_config", "{" + String.join(",", new String[]{"\"block_boc\":\""+blockBoc+"\""}) + "}")
+        return context.requestJSON("boc.get_blockchain_config", "{\"block_boc\":\""+blockBoc+"\"}")
             .thenApply(json -> json.findValue("config_boc").asText());
     }
 

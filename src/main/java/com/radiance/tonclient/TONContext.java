@@ -9,6 +9,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 
 public class TONContext {
     // natives
+    private static native String loadLibrary(String path);
     private static native String createContext(String config);
     private static native void destroyContext(int context);
     private static native void request(int context, String functionName, String params, int requestId);
@@ -16,26 +17,33 @@ public class TONContext {
 
     static {
         try {
-            System.load(createTempDll("/tonclient.dll"));
+            switch(System.getProperty("os.name")) {
+                case "Linux":
+                    System.load(createTempFile("/libton_client_binding.so"));
+                    loadLibrary(createTempFile("/libton_client.so"));
+                    break;
+                default:    // Windows
+                    System.load(createTempFile("/tonclient.dll"));
+            }
         } catch(IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private static String createTempDll(String fileName) throws IOException {
-        InputStream inputStream = TONContext.class.getResourceAsStream(fileName);
+    private static String createTempFile(String resource) throws IOException {
+        InputStream inputStream = TONContext.class.getResourceAsStream(resource);
         if (inputStream == null)
-            throw new IOException("Cannot find resource '" + fileName + "'");
-        File tempDll = File.createTempFile("TONLibrary", ".dll");
-        FileOutputStream outputStream = new FileOutputStream(tempDll);
+            throw new IOException("Cannot find resource '" + resource + "'");
+        File tempFile = File.createTempFile("TONLibrary", ".dll");
+        FileOutputStream outputStream = new FileOutputStream(tempFile);
         byte[] array = new byte[8192];
         for (int i = inputStream.read(array); i != -1; i = inputStream.read(array)) {
             outputStream.write(array, 0, i);
         }
         inputStream.close();
         outputStream.close();
-        tempDll.deleteOnExit();
-        return tempDll.getAbsolutePath();
+        tempFile.deleteOnExit();
+        return tempFile.getAbsolutePath();
     }
 
     private static int requestCount = 0;
@@ -56,7 +64,7 @@ public class TONContext {
     }
 
     private static void responseHandler(int id, String params, int type, boolean finished) {
-        System.out.println("id=" + id + " params=" + params + " type=" + type + " finished=" + finished);
+        //System.out.println("id=" + id + " params=" + params + " type=" + type + " finished=" + finished);
         CompletableFuture<String> future;
         synchronized (responses) {
             future = responses.remove(id);

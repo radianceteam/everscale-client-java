@@ -17,9 +17,10 @@ public class TONClientTest {
     private static TONContext context;
 
     @BeforeClass
-    public static void init() throws TONException {
-        context = TONContext.create("{}");
+    public static void init() throws Exception {
+        context = TONContext.create("{\"network\": {\"server_address\": \"net.ton.dev\"}}");
     }
+
 
     @Test
     public void clientTest() throws Exception {
@@ -58,21 +59,86 @@ public class TONClientTest {
         // tonCrc16
         System.out.println("crypto.tonCrc16('abcdABCD0123'): " + crypto.tonCrc16("abcdABCD0123").get());
 
-
         // generateRandomSignKeys
-        Crypto.KeyPair keys = crypto.generateRandomSignKeys().get();
+        KeyPair keys = crypto.generateRandomSignKeys().get();
         System.out.println("crypto.generateRandomSignKeys():  public:" + keys.getPublic() + " secret:" + keys.getSecret());
 
+        // convertPublicKeyToTonSafeFormat
+        String safePublic = crypto.convertPublicKeyToTonSafeFormat(keys.getPublic()).get();
+        System.out.println("Safe public key: '" + safePublic + "'");
 
-        String publicKey = crypto.convertPublicKeyToTonSafeFormat(keys.getPublic()).get();
-        System.out.println("Public key: '" + publicKey + "'");
-
+        // generateRandomBytes
         String randomBytes = crypto.generateRandomBytes(15).get();
         assertEquals("length of crypto.generateRandomBytes(15)", 20, randomBytes.length());
         System.out.println("Random bytes: " + randomBytes);
 
-        //Crypto.ResultOfSign ros = crypto.sign(randomBytes, keys).get();
+        // sign
+        ResultOfSign ros = crypto.sign(randomBytes, keys).get();
+        System.out.println("crypto.sign: " + ros);
+
+        // verifySignature
+        String verified = crypto.verifySignature(ros.getSigned(), keys.getPublic()).get();
+        System.out.println("crypto.verifySignature: " + verified);
+
+        try {
+            crypto.verifySignature(randomBytes, keys.getPublic()).get();
+            fail("Verified wrong data");
+        } catch (ExecutionException e) {    // expected exception
+            System.out.println(e.getCause());
+        }
+
+        // mnemonicWords
+        crypto.mnemonicWords(1).get();
+
+        // hdkeyXprvFromMnemonic
+        String xPrivate = crypto.hdkeyXprvFromMnemonic("the quick brown fox jumps over the lazy dog", 1, 10).get();
+        System.out.println("Extended private key: " + xPrivate);
+
+        // hdkeyPublicFromXprv
+        String publicKey = crypto.hdkeyPublicFromXprv(xPrivate).get();
+        System.out.println("Public key: " + publicKey);
+
+        try {
+            crypto.hdkeyPublicFromXprv(randomBytes).get();
+            fail("Extraction from random data must fail");
+        } catch(ExecutionException e) {     // expected exception
+            System.out.println(e.getCause());
+        }
+
+        // hdkeySecretFromXprv
+        String secretKey = crypto.hdkeySecretFromXprv(xPrivate).get();
+        System.out.println("Secret key: " + secretKey);
+
+        try {
+            crypto.hdkeySecretFromXprv(randomBytes).get();
+            fail("Extraction from random data must fail");
+        } catch(ExecutionException e) {     // expected exception
+            System.out.println(e.getCause());
+        }
     }
+/*
+    
+    @Test
+    public void abiTest() throws Exception {
+        Abi abi = new Abi(context);
+        ResultOfAttachSignature roas = abi.attachSignature("\"Serialized\":{}","","","").get();
+        System.out.println("ResultOfAttachSignature: " + roas);
+    }
+*/
+
+    @Test
+    public void subscription() throws Exception {
+        Net net = new Net(context);
+        //net.waitForCollection("accounts");
+        //Number handle = net.subscribeCollection("account", null, null).get();
+        String params = "{\"collection\": \"transactions\", \"result\": \"id account_addr\"}";
+        //String params = "{\"collection\": \"transactions\"}";
+        System.out.println("Params: " + params);
+        String response = context.request("net.subscribe_collection", params).get();
+        System.out.println("Response: " + response);
+        Thread.sleep(5000);
+    }
+
 
     @AfterClass
     public static void destroy() {

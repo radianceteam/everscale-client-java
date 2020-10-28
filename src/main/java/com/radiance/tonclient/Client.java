@@ -7,8 +7,6 @@ import java.util.concurrent.CompletableFuture;
  */
 public class Client {
 
-
-    
     private TONContext context;
 
     public Client(TONContext context) {
@@ -20,7 +18,7 @@ public class Client {
    *
    */
     public CompletableFuture<String> getApiReference() {
-        return context.requestJSON("client.get_api_reference", "{" + String.join(",", new String[]{}) + "}")
+        return context.requestJSON("client.get_api_reference", "{}")
             .thenApply(json -> json.findValue("api").asText());
     }
 
@@ -29,7 +27,7 @@ public class Client {
    *
    */
     public CompletableFuture<String> version() {
-        return context.requestJSON("client.version", "{" + String.join(",", new String[]{}) + "}")
+        return context.requestJSON("client.version", "{}")
             .thenApply(json -> json.findValue("version").asText());
     }
 
@@ -38,7 +36,7 @@ public class Client {
    *
    */
     public CompletableFuture<String> buildInfo() {
-        return context.requestJSON("client.build_info", "{" + String.join(",", new String[]{}) + "}")
+        return context.requestJSON("client.build_info", "{}")
             .thenApply(json -> json.findValue("build_info").asText());
     }
 
