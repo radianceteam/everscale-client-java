@@ -1,10 +1,28 @@
 package com.radiance.tonclient;
 
+import java.util.stream.*;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
- *   The ABI function header.<p> Includes several hidden function parameters that contract uses for security and replay protection reasons.<p> The actual set of header fields depends on the contract's ABI.
+ *  
  */
 public class FunctionHeader {
+    public FunctionHeader() {
+    }
 
+    public FunctionHeader(Number expire, Long time, String pubkey) {
+
+        this.expire = expire;
+
+        this.time = time;
+
+        this.pubkey = pubkey;
+
+    }
+
+
+
+    @JsonProperty("expire")
     private Number expire;
     /**
      *  Message expiration time in seconds.
@@ -19,6 +37,7 @@ public class FunctionHeader {
         expire = value;
     }
 
+    @JsonProperty("time")
     private Long time;
     /**
      *  Message creation time in milliseconds.
@@ -33,6 +52,7 @@ public class FunctionHeader {
         time = value;
     }
 
+    @JsonProperty("pubkey")
     private String pubkey;
     /**
      *  Public key used to sign message. Encoded with `hex`.
@@ -50,6 +70,6 @@ public class FunctionHeader {
 
     @Override
     public String toString() {
-        return "{\"expire\":"+expire+",\"time\":"+time+",\"pubkey\":\""+pubkey+"\"}";
+        return "{"+Stream.of((expire==null?null:("\"expire\":"+expire)),(time==null?null:("\"time\":"+time)),(pubkey==null?null:("\"pubkey\":\""+pubkey+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
     }
 }

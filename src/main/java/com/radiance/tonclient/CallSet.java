@@ -1,10 +1,28 @@
 package com.radiance.tonclient;
 
+import java.util.stream.*;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  *  
  */
 public class CallSet {
+    public CallSet() {
+    }
 
+    public CallSet(String functionName, FunctionHeader header, Object input) {
+
+        this.functionName = functionName;
+
+        this.header = header;
+
+        this.input = input;
+
+    }
+
+
+
+    @JsonProperty("function_name")
     private String functionName;
     /**
      *  Function name that is being called.
@@ -19,6 +37,7 @@ public class CallSet {
         functionName = value;
     }
 
+    @JsonProperty("header")
     private FunctionHeader header;
     /**
      *  Function header.<p> If an application omits some header parameters required by the contract's ABI, the library will set the default values for them.
@@ -33,23 +52,24 @@ public class CallSet {
         header = value;
     }
 
-    private String input;
+    @JsonProperty("input")
+    private Object input;
     /**
      *  Function input parameters according to ABI.
      */
-    public String getInput() {
+    public Object getInput() {
         return input;
     }
     /**
      *  Function input parameters according to ABI.
      */
-    public void setInput(String value) {
+    public void setInput(Object value) {
         input = value;
     }
 
 
     @Override
     public String toString() {
-        return "{\"function_name\":\""+functionName+"\",\"header\":"+header+",\"input\":\""+input+"\"}";
+        return "{"+Stream.of((functionName==null?null:("\"function_name\":\""+functionName+"\"")),(header==null?null:("\"header\":"+header)),(input==null?null:("\"input\":"+input))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
     }
 }

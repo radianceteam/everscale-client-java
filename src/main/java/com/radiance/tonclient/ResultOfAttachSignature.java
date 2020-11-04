@@ -1,10 +1,26 @@
 package com.radiance.tonclient;
 
+import java.util.stream.*;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  *  
  */
 public class ResultOfAttachSignature {
+    public ResultOfAttachSignature() {
+    }
 
+    public ResultOfAttachSignature(String message, String messageId) {
+
+        this.message = message;
+
+        this.messageId = messageId;
+
+    }
+
+
+
+    @JsonProperty("message")
     private String message;
     /**
      *  Signed message BOC
@@ -19,6 +35,7 @@ public class ResultOfAttachSignature {
         message = value;
     }
 
+    @JsonProperty("message_id")
     private String messageId;
     /**
      *  Message ID
@@ -36,6 +53,6 @@ public class ResultOfAttachSignature {
 
     @Override
     public String toString() {
-        return "{\"message\":\""+message+"\",\"message_id\":\""+messageId+"\"}";
+        return "{"+Stream.of((message==null?null:("\"message\":\""+message+"\"")),(messageId==null?null:("\"message_id\":\""+messageId+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
     }
 }

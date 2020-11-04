@@ -1,10 +1,26 @@
 package com.radiance.tonclient;
 
+import java.util.stream.*;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  *  
  */
 public class ResultOfSign {
+    public ResultOfSign() {
+    }
 
+    public ResultOfSign(String signed, String signature) {
+
+        this.signed = signed;
+
+        this.signature = signature;
+
+    }
+
+
+
+    @JsonProperty("signed")
     private String signed;
     /**
      *  Signed data combined with signature encoded in `base64`.
@@ -19,6 +35,7 @@ public class ResultOfSign {
         signed = value;
     }
 
+    @JsonProperty("signature")
     private String signature;
     /**
      *  Signature encoded in `hex`.
@@ -36,6 +53,6 @@ public class ResultOfSign {
 
     @Override
     public String toString() {
-        return "{\"signed\":\""+signed+"\",\"signature\":\""+signature+"\"}";
+        return "{"+Stream.of((signed==null?null:("\"signed\":\""+signed+"\"")),(signature==null?null:("\"signature\":\""+signature+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
     }
 }

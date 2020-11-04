@@ -1,24 +1,45 @@
 package com.radiance.tonclient;
 
+import java.util.stream.*;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  *  
  */
 public class DecodedMessageBody {
+    public DecodedMessageBody() {
+    }
 
-    private MessageBodyType bodyType;
+    public DecodedMessageBody(Object bodyType, String name, Object value, FunctionHeader header) {
+
+        this.bodyType = bodyType;
+
+        this.name = name;
+
+        this.value = value;
+
+        this.header = header;
+
+    }
+
+
+
+    @JsonProperty("body_type")
+    private Object bodyType;
     /**
      *  Type of the message body content.
      */
-    public MessageBodyType getBodyType() {
+    public Object getBodyType() {
         return bodyType;
     }
     /**
      *  Type of the message body content.
      */
-    public void setBodyType(MessageBodyType value) {
+    public void setBodyType(Object value) {
         bodyType = value;
     }
 
+    @JsonProperty("name")
     private String name;
     /**
      *  Function or event name.
@@ -33,20 +54,22 @@ public class DecodedMessageBody {
         name = value;
     }
 
-    private String value;
+    @JsonProperty("value")
+    private Object value;
     /**
      *  Parameters or result value.
      */
-    public String getValue() {
+    public Object getValue() {
         return value;
     }
     /**
      *  Parameters or result value.
      */
-    public void setValue(String value) {
+    public void setValue(Object value) {
         value = value;
     }
 
+    @JsonProperty("header")
     private FunctionHeader header;
     /**
      *  Function header.
@@ -64,6 +87,6 @@ public class DecodedMessageBody {
 
     @Override
     public String toString() {
-        return "{\"body_type\":"+bodyType+",\"name\":\""+name+"\",\"value\":\""+value+"\",\"header\":"+header+"}";
+        return "{"+Stream.of((bodyType==null?null:("\"body_type\":"+bodyType)),(name==null?null:("\"name\":\""+name+"\"")),(value==null?null:("\"value\":"+value)),(header==null?null:("\"header\":"+header))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
     }
 }

@@ -1,10 +1,28 @@
 package com.radiance.tonclient;
 
+import java.util.stream.*;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  *  
  */
 public class DeploySet {
+    public DeploySet() {
+    }
 
+    public DeploySet(String tvc, Number workchainId, Object initialData) {
+
+        this.tvc = tvc;
+
+        this.workchainId = workchainId;
+
+        this.initialData = initialData;
+
+    }
+
+
+
+    @JsonProperty("tvc")
     private String tvc;
     /**
      *  Content of TVC file encoded in `base64`.
@@ -19,6 +37,7 @@ public class DeploySet {
         tvc = value;
     }
 
+    @JsonProperty("workchain_id")
     private Number workchainId;
     /**
      *  Target workchain for destination address. Default is `0`.
@@ -33,23 +52,24 @@ public class DeploySet {
         workchainId = value;
     }
 
-    private String initialData;
+    @JsonProperty("initial_data")
+    private Object initialData;
     /**
      *  List of initial values for contract's public variables.
      */
-    public String getInitialData() {
+    public Object getInitialData() {
         return initialData;
     }
     /**
      *  List of initial values for contract's public variables.
      */
-    public void setInitialData(String value) {
+    public void setInitialData(Object value) {
         initialData = value;
     }
 
 
     @Override
     public String toString() {
-        return "{\"tvc\":\""+tvc+"\",\"workchain_id\":"+workchainId+",\"initial_data\":\""+initialData+"\"}";
+        return "{"+Stream.of((tvc==null?null:("\"tvc\":\""+tvc+"\"")),(workchainId==null?null:("\"workchain_id\":"+workchainId)),(initialData==null?null:("\"initial_data\":"+initialData))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
     }
 }

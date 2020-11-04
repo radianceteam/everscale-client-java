@@ -4,10 +4,29 @@ import java.io.*;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
+import java.util.function.Consumer;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 public class TONContext {
+    private class Callback<T> {
+        Consumer<T> consumer;
+        Class<T> clazz;
+
+        Callback(Consumer<T> consumer, Class<T> clazz) {
+            this.consumer = consumer;
+            this.clazz = clazz;
+        }
+
+        void invoke(String value) {
+            try {
+                consumer.accept(jsonMapper.readValue(value, clazz));
+            } catch (JsonProcessingException e) {
+                e.printStackTrace(System.out);
+            }
+        }
+    }
+
     // natives
     private static native String loadLibrary(String path);
     private static native String createContext(String config);
@@ -30,11 +49,11 @@ public class TONContext {
         }
     }
 
-    private static String createTempFile(String resource) throws IOException {
-        InputStream inputStream = TONContext.class.getResourceAsStream(resource);
+    private static String createTempFile(String resourceName) throws IOException {
+        InputStream inputStream = TONContext.class.getResourceAsStream(resourceName);
         if (inputStream == null)
-            throw new IOException("Cannot find resource '" + resource + "'");
-        File tempFile = File.createTempFile("TONLibrary", ".dll");
+            throw new IOException("Cannot find resource '" + resourceName + "'");
+        File tempFile = File.createTempFile("TONLibrary", resourceName.substring(resourceName.lastIndexOf('.')));
         FileOutputStream outputStream = new FileOutputStream(tempFile);
         byte[] array = new byte[8192];
         for (int i = inputStream.read(array); i != -1; i = inputStream.read(array)) {
@@ -48,6 +67,7 @@ public class TONContext {
 
     private static int requestCount = 0;
     private static HashMap<Integer, CompletableFuture<String>> responses = new HashMap<>();
+    private static HashMap<Integer, Callback<?>> callbacks = new HashMap<>();
 
     static Number toNumber(String value) {
         if (value.indexOf('.') < 0) {
@@ -64,15 +84,23 @@ public class TONContext {
     }
 
     private static void responseHandler(int id, String params, int type, boolean finished) {
-        //System.out.println("id=" + id + " params=" + params + " type=" + type + " finished=" + finished);
+        //System.out.println("<= id=" + id + " params=" + params + " type=" + type + " finished=" + finished);
         CompletableFuture<String> future;
+        Callback<?> callback;
+
         synchronized (responses) {
-            future = responses.remove(id);
+            future = finished?responses.remove(id):responses.get(id);
+            callback = finished?callbacks.remove(id):callbacks.get(id);
         }
-        if (future == null) {
-            System.out.println("ResponseId not found " + id);
-        } else {
-            if (type == 1) {
+        switch (type) {
+            case 0:
+                if (future == null) {
+                    System.out.println("ResponseId not found " + id);
+                } else {
+                    future.complete(params);
+                }
+                break;
+            case 1:
                 Throwable throwable;
                 try {
                     JsonNode error = jsonMapper.readTree(params);
@@ -81,8 +109,13 @@ public class TONContext {
                     throwable = t;
                 }
                 future.completeExceptionally(throwable);
-            } else
-                future.complete(params);
+                break;
+            case 100:
+                if (callback == null) {
+                    System.out.println("Callback not found " + id);
+                } else {
+                    callback.invoke(params);
+                }
         }
     }
 
@@ -100,6 +133,10 @@ public class TONContext {
         }
     }
 
+    static <T> T convertValue(JsonNode json, Class<T> valueType) {
+        return jsonMapper.convertValue(json, valueType);
+    }
+
     private int contextId;
     private static ObjectMapper jsonMapper = new ObjectMapper();
 
@@ -115,18 +152,29 @@ public class TONContext {
     }
 
     public CompletableFuture<String> request(String functionName, String params) {
+        return requestCallback(functionName, params, null, null);
+    }
+
+    public <T> CompletableFuture<String> requestCallback(String functionName, String params, Consumer<T> consumer, Class<T> clazz) {
         CompletableFuture<String> future;
 
         synchronized (responses) {
             future = new CompletableFuture<>();
             responses.put(++requestCount, future);
+            if (consumer != null)
+                callbacks.put(requestCount, new Callback<T>(consumer,clazz));
             request(contextId, functionName, params, requestCount);
+            //System.out.println("=> id=" + requestCount + " " +functionName + " " + params);
         }
         return future;
     }
 
     public CompletableFuture<JsonNode> requestJSON(String functionName, String params) {
-        return request(functionName, params)
+        return requestJSONCallback(functionName, params, null, null);
+    }
+
+    public <T> CompletableFuture<JsonNode> requestJSONCallback(String functionName, String params, Consumer<T> consumer, Class<T> clazz) {
+        return requestCallback(functionName, params, consumer, clazz)
             .thenApply(r -> {
                 try {
                     return jsonMapper.readTree(r);
@@ -137,7 +185,11 @@ public class TONContext {
     }
 
     public <T> CompletableFuture<T> requestValue(String functionName, String params, Class<T> valueType) {
-        return request(functionName, params)
+        return requestValueCallback(functionName, params, valueType, null, null);
+    }
+
+    public <V,C> CompletableFuture<V> requestValueCallback(String functionName, String params, Class<V> valueType, Consumer<C> consumer, Class<C> clazz) {
+        return requestCallback(functionName, params, consumer, clazz)
             .thenApply(r -> {
                 try {
                     return jsonMapper.readValue(r, valueType);
@@ -146,10 +198,10 @@ public class TONContext {
                 }
             });
     }
-    
+
     public static void main(String... args) throws Exception {
         TONContext ctx = TONContext.create("{}");
-        Crypto crypto = new Crypto(ctx);
+        CryptoModule crypto = new CryptoModule(ctx);
 
         System.out.println(Arrays.asList(crypto.factorize("EE").get()));
         //ctx.request("client.get_api_reference", "{}");

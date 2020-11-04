@@ -1,10 +1,26 @@
 package com.radiance.tonclient;
 
+import java.util.stream.*;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  *  
  */
 public class ResultOfEncodeAccount {
+    public ResultOfEncodeAccount() {
+    }
 
+    public ResultOfEncodeAccount(String account, String id) {
+
+        this.account = account;
+
+        this.id = id;
+
+    }
+
+
+
+    @JsonProperty("account")
     private String account;
     /**
      *  Account BOC encoded in `base64`.
@@ -19,6 +35,7 @@ public class ResultOfEncodeAccount {
         account = value;
     }
 
+    @JsonProperty("id")
     private String id;
     /**
      *  Account ID  encoded in `hex`.
@@ -36,6 +53,6 @@ public class ResultOfEncodeAccount {
 
     @Override
     public String toString() {
-        return "{\"account\":\""+account+"\",\"id\":\""+id+"\"}";
+        return "{"+Stream.of((account==null?null:("\"account\":\""+account+"\"")),(id==null?null:("\"id\":\""+id+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
     }
 }

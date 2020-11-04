@@ -1,10 +1,30 @@
 package com.radiance.tonclient;
 
+import java.util.stream.*;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  *  
  */
 public class ResultOfEncodeMessage {
+    public ResultOfEncodeMessage() {
+    }
 
+    public ResultOfEncodeMessage(String message, String dataToSign, String address, String messageId) {
+
+        this.message = message;
+
+        this.dataToSign = dataToSign;
+
+        this.address = address;
+
+        this.messageId = messageId;
+
+    }
+
+
+
+    @JsonProperty("message")
     private String message;
     /**
      *  Message BOC encoded with `base64`.
@@ -19,6 +39,7 @@ public class ResultOfEncodeMessage {
         message = value;
     }
 
+    @JsonProperty("data_to_sign")
     private String dataToSign;
     /**
      *  Optional data to be signed encoded in `base64`.<p> Returned in case of `Signer::External`. Can be used for external message signing. Is this case you need to use this data to create signature and then produce signed message using `abi.attach_signature`.
@@ -33,6 +54,7 @@ public class ResultOfEncodeMessage {
         dataToSign = value;
     }
 
+    @JsonProperty("address")
     private String address;
     /**
      *  Destination address.
@@ -47,6 +69,7 @@ public class ResultOfEncodeMessage {
         address = value;
     }
 
+    @JsonProperty("message_id")
     private String messageId;
     /**
      *  Message id.
@@ -64,6 +87,6 @@ public class ResultOfEncodeMessage {
 
     @Override
     public String toString() {
-        return "{\"message\":\""+message+"\",\"data_to_sign\":\""+dataToSign+"\",\"address\":\""+address+"\",\"message_id\":\""+messageId+"\"}";
+        return "{"+Stream.of((message==null?null:("\"message\":\""+message+"\"")),(dataToSign==null?null:("\"data_to_sign\":\""+dataToSign+"\"")),(address==null?null:("\"address\":\""+address+"\"")),(messageId==null?null:("\"message_id\":\""+messageId+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
     }
 }

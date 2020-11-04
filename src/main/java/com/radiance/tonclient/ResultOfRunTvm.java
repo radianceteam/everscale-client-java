@@ -1,38 +1,58 @@
 package com.radiance.tonclient;
 
+import java.util.stream.*;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  *  
  */
 public class ResultOfRunTvm {
+    public ResultOfRunTvm() {
+    }
 
-    private String outMessages;
+    public ResultOfRunTvm(String[] outMessages, Object decoded, String account) {
+
+        this.outMessages = outMessages;
+
+        this.decoded = decoded;
+
+        this.account = account;
+
+    }
+
+
+
+    @JsonProperty("out_messages")
+    private String[] outMessages;
     /**
      *  List of output messages' BOCs. Encoded as `base64`
      */
-    public String getOutMessages() {
+    public String[] getOutMessages() {
         return outMessages;
     }
     /**
      *  List of output messages' BOCs. Encoded as `base64`
      */
-    public void setOutMessages(String value) {
+    public void setOutMessages(String[] value) {
         outMessages = value;
     }
 
-    private DecodedOutput decoded;
+    @JsonProperty("decoded")
+    private Object decoded;
     /**
      *  Optional decoded message bodies according to the optional `abi` parameter.
      */
-    public DecodedOutput getDecoded() {
+    public Object getDecoded() {
         return decoded;
     }
     /**
      *  Optional decoded message bodies according to the optional `abi` parameter.
      */
-    public void setDecoded(DecodedOutput value) {
+    public void setDecoded(Object value) {
         decoded = value;
     }
 
+    @JsonProperty("account")
     private String account;
     /**
      *  Updated account state BOC. Encoded as `base64`. Attention! Only data in account state is updated.
@@ -50,6 +70,6 @@ public class ResultOfRunTvm {
 
     @Override
     public String toString() {
-        return "{\"out_messages\":\""+outMessages+"\",\"decoded\":"+decoded+",\"account\":\""+account+"\"}";
+        return "{"+Stream.of((outMessages==null?null:("\"out_messages\":\""+outMessages+"\"")),(decoded==null?null:("\"decoded\":"+decoded)),(account==null?null:("\"account\":\""+account+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
     }
 }

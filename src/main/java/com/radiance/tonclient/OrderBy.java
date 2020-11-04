@@ -1,10 +1,26 @@
 package com.radiance.tonclient;
 
+import java.util.stream.*;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  *  
  */
 public class OrderBy {
+    public OrderBy() {
+    }
 
+    public OrderBy(String path, SortDirection direction) {
+
+        this.path = path;
+
+        this.direction = direction;
+
+    }
+
+
+
+    @JsonProperty("path")
     private String path;
     /**
      * 
@@ -19,6 +35,7 @@ public class OrderBy {
         path = value;
     }
 
+    @JsonProperty("direction")
     private SortDirection direction;
     /**
      * 
@@ -36,6 +53,6 @@ public class OrderBy {
 
     @Override
     public String toString() {
-        return "{\"path\":\""+path+"\",\"direction\":"+direction+"}";
+        return "{"+Stream.of((path==null?null:("\"path\":\""+path+"\"")),(direction==null?null:("\"direction\":"+direction))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
     }
 }

@@ -1,69 +1,92 @@
 package com.radiance.tonclient;
 
+import java.util.stream.*;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  *  
  */
 public class ResultOfProcessMessage {
+    public ResultOfProcessMessage() {
+    }
 
-    private String transaction;
+    public ResultOfProcessMessage(Object transaction, String[] outMessages, Object decoded, Object fees) {
+
+        this.transaction = transaction;
+
+        this.outMessages = outMessages;
+
+        this.decoded = decoded;
+
+        this.fees = fees;
+
+    }
+
+
+
+    @JsonProperty("transaction")
+    private Object transaction;
     /**
      *  Parsed transaction.<p> In addition to the regular transaction fields there is a `boc` field encoded with `base64` which contains source transaction BOC.
      */
-    public String getTransaction() {
+    public Object getTransaction() {
         return transaction;
     }
     /**
      *  Parsed transaction.<p> In addition to the regular transaction fields there is a `boc` field encoded with `base64` which contains source transaction BOC.
      */
-    public void setTransaction(String value) {
+    public void setTransaction(Object value) {
         transaction = value;
     }
 
-    private String outMessages;
+    @JsonProperty("out_messages")
+    private String[] outMessages;
     /**
      *  List of output messages' BOCs. Encoded as `base64`
      */
-    public String getOutMessages() {
+    public String[] getOutMessages() {
         return outMessages;
     }
     /**
      *  List of output messages' BOCs. Encoded as `base64`
      */
-    public void setOutMessages(String value) {
+    public void setOutMessages(String[] value) {
         outMessages = value;
     }
 
-    private DecodedOutput decoded;
+    @JsonProperty("decoded")
+    private Object decoded;
     /**
      *  Optional decoded message bodies according to the optional `abi` parameter.
      */
-    public DecodedOutput getDecoded() {
+    public Object getDecoded() {
         return decoded;
     }
     /**
      *  Optional decoded message bodies according to the optional `abi` parameter.
      */
-    public void setDecoded(DecodedOutput value) {
+    public void setDecoded(Object value) {
         decoded = value;
     }
 
-    private String fees;
+    @JsonProperty("fees")
+    private Object fees;
     /**
      *  Transaction fees
      */
-    public String getFees() {
+    public Object getFees() {
         return fees;
     }
     /**
      *  Transaction fees
      */
-    public void setFees(String value) {
+    public void setFees(Object value) {
         fees = value;
     }
 
 
     @Override
     public String toString() {
-        return "{\"transaction\":\""+transaction+"\",\"out_messages\":\""+outMessages+"\",\"decoded\":"+decoded+",\"fees\":\""+fees+"\"}";
+        return "{"+Stream.of((transaction==null?null:("\"transaction\":"+transaction)),(outMessages==null?null:("\"out_messages\":\""+outMessages+"\"")),(decoded==null?null:("\"decoded\":"+decoded)),(fees==null?null:("\"fees\":"+fees))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
     }
 }
