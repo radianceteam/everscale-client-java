@@ -36,7 +36,6 @@ public class TONContext {
 
     static {
         try {
-System.out.println("OS Name: " + System.getProperty("os.name"));
             switch(System.getProperty("os.name")) {
                 case "Linux":
                     System.load(createTempFile("/libton_client_binding.so"));
@@ -51,7 +50,6 @@ System.out.println("OS Name: " + System.getProperty("os.name"));
     }
 
     private static String createTempFile(String resourceName) throws IOException {
-System.out.println("Resource: " + resourceName);
         InputStream inputStream = TONContext.class.getResourceAsStream(resourceName);
         if (inputStream == null)
             throw new IOException("Cannot find resource '" + resourceName + "'");

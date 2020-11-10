@@ -27,13 +27,13 @@ public class DecodedMessageBody {
     @JsonProperty("body_type")
     private Object bodyType;
     /**
-     *  Type of the message body content.
+     * Type of the message body content.
      */
     public Object getBodyType() {
         return bodyType;
     }
     /**
-     *  Type of the message body content.
+     * Type of the message body content.
      */
     public void setBodyType(Object value) {
         bodyType = value;
@@ -42,13 +42,13 @@ public class DecodedMessageBody {
     @JsonProperty("name")
     private String name;
     /**
-     *  Function or event name.
+     * Function or event name.
      */
     public String getName() {
         return name;
     }
     /**
-     *  Function or event name.
+     * Function or event name.
      */
     public void setName(String value) {
         name = value;
@@ -57,13 +57,13 @@ public class DecodedMessageBody {
     @JsonProperty("value")
     private Object value;
     /**
-     *  Parameters or result value.
+     * Parameters or result value.
      */
     public Object getValue() {
         return value;
     }
     /**
-     *  Parameters or result value.
+     * Parameters or result value.
      */
     public void setValue(Object value) {
         value = value;
@@ -72,13 +72,13 @@ public class DecodedMessageBody {
     @JsonProperty("header")
     private FunctionHeader header;
     /**
-     *  Function header.
+     * Function header.
      */
     public FunctionHeader getHeader() {
         return header;
     }
     /**
-     *  Function header.
+     * Function header.
      */
     public void setHeader(FunctionHeader value) {
         header = value;

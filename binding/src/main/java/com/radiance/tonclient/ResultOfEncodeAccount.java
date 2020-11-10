@@ -23,13 +23,13 @@ public class ResultOfEncodeAccount {
     @JsonProperty("account")
     private String account;
     /**
-     *  Account BOC encoded in `base64`.
+     * Account BOC encoded in `base64`.
      */
     public String getAccount() {
         return account;
     }
     /**
-     *  Account BOC encoded in `base64`.
+     * Account BOC encoded in `base64`.
      */
     public void setAccount(String value) {
         account = value;
@@ -38,13 +38,13 @@ public class ResultOfEncodeAccount {
     @JsonProperty("id")
     private String id;
     /**
-     *  Account ID  encoded in `hex`.
+     * Account ID  encoded in `hex`.
      */
     public String getId() {
         return id;
     }
     /**
-     *  Account ID  encoded in `hex`.
+     * Account ID  encoded in `hex`.
      */
     public void setId(String value) {
         id = value;

@@ -4,6 +4,7 @@ import org.junit.*;
 import java.nio.file.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.Base64;
+import java.util.Scanner;
 
 public abstract class TestBase {
     protected static TONContext context;
@@ -11,10 +12,18 @@ public abstract class TestBase {
     protected static AbiModule abiModule;
     protected static ProcessingModule processing;
     protected static NetModule net;
+    protected static BocModule boc;
+    protected static TvmModule tvm;
 
-    protected static Abi eventsAbi, giverWalletAbi, walletAbi, multisigWalletAbi, giverAbi;
-    protected static String eventsTvc;
+    protected static Abi eventsAbi, giverWalletAbi, walletAbi, multisigWalletAbi, giverAbi, subscriptionAbi;
+    protected static String eventsTvc, subscriptionTvc;
 
+    private static Abi abiFromResource(String name) {
+        Scanner s = new Scanner(TestBase.class.getResourceAsStream(name)).useDelimiter("\\A");
+        String data = s.hasNext() ? s.next() : "";
+        s.close();
+        return new Abi.Serialized(data);
+    }
 
     @BeforeClass
     public static void init() throws Exception {
@@ -24,13 +33,17 @@ public abstract class TestBase {
         abiModule = new AbiModule(context);
         processing = new ProcessingModule(context);
         net = new NetModule(context);
+        boc = new BocModule(context);
+        tvm = new TvmModule(context);
 
-        eventsAbi = new Abi.Serialized(TestBase.class.getResourceAsStream("/Events.abi.json"));
+        eventsAbi = abiFromResource("/Events.abi.json");
         eventsTvc = new String(Base64.getEncoder().encode(Files.readAllBytes(Paths.get(TestBase.class.getResource("/Events.tvc").toURI()))));
-        giverWalletAbi = new Abi.Serialized(TestBase.class.getResourceAsStream("/GiverWallet.abi.json"));
-        walletAbi = new Abi.Serialized(TestBase.class.getResourceAsStream("/Wallet.abi.json"));
-        multisigWalletAbi = new Abi.Serialized(TestBase.class.getResourceAsStream("/SetcodeMultisigWallet.abi.json"));
-        giverAbi = new Abi.Serialized(TestBase.class.getResourceAsStream("/Giver.abi.json"));
+        giverWalletAbi = abiFromResource("/GiverWallet.abi.json");
+        walletAbi = abiFromResource("/Wallet.abi.json");
+        multisigWalletAbi = abiFromResource("/SetcodeMultisigWallet.abi.json");
+        giverAbi = abiFromResource("/Giver.abi.json");
+        subscriptionAbi = abiFromResource("/Subscription.abi.json");
+        subscriptionTvc = new String(Base64.getEncoder().encode(Files.readAllBytes(Paths.get(TestBase.class.getResource("/Subscription.tvc").toURI()))));
     }
 
     @AfterClass
@@ -90,5 +103,17 @@ public abstract class TestBase {
             null,
             false,
             null); //event -> System.out.println("Event: " + event));
+    }
+
+    protected CompletableFuture<String> deployWithGiver(Abi abi, DeploySet deploySet, CallSet callSet, Signer signer) {
+        String[] address = new String[1];
+
+        return abiModule.encodeMessage(abi, null, deploySet, callSet, signer, null)
+            .thenCompose(encoded -> {
+                address[0] = encoded.getAddress();
+                return getGramsFromGiver(encoded.getAddress());
+            }).thenCompose(processed -> {
+                return processing.processMessage(abi, null, deploySet, callSet, signer, null, false, null);
+            }).thenApply(processed -> address[0]);
     }
 }

@@ -25,13 +25,13 @@ public class ResultOfRunTvm {
     @JsonProperty("out_messages")
     private String[] outMessages;
     /**
-     *  List of output messages' BOCs. Encoded as `base64`
+     * List of output messages' BOCs. Encoded as `base64`
      */
     public String[] getOutMessages() {
         return outMessages;
     }
     /**
-     *  List of output messages' BOCs. Encoded as `base64`
+     * List of output messages' BOCs. Encoded as `base64`
      */
     public void setOutMessages(String[] value) {
         outMessages = value;
@@ -40,13 +40,13 @@ public class ResultOfRunTvm {
     @JsonProperty("decoded")
     private Object decoded;
     /**
-     *  Optional decoded message bodies according to the optional `abi` parameter.
+     * Optional decoded message bodies according to the optional `abi` parameter.
      */
     public Object getDecoded() {
         return decoded;
     }
     /**
-     *  Optional decoded message bodies according to the optional `abi` parameter.
+     * Optional decoded message bodies according to the optional `abi` parameter.
      */
     public void setDecoded(Object value) {
         decoded = value;
@@ -55,13 +55,13 @@ public class ResultOfRunTvm {
     @JsonProperty("account")
     private String account;
     /**
-     *  Updated account state BOC. Encoded as `base64`. Attention! Only data in account state is updated.
+     * Updated account state BOC. Encoded as `base64`. Attention! Only data in account state is updated.
      */
     public String getAccount() {
         return account;
     }
     /**
-     *  Updated account state BOC. Encoded as `base64`. Attention! Only data in account state is updated.
+     * Updated account state BOC. Encoded as `base64`. Attention! Only data in account state is updated.
      */
     public void setAccount(String value) {
         account = value;

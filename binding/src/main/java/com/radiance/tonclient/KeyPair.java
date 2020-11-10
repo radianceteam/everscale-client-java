@@ -23,13 +23,13 @@ public class KeyPair {
     @JsonProperty("public")
     private String _public;
     /**
-     *  Public key - 64 symbols hex string
+     * Public key - 64 symbols hex string
      */
     public String getPublic() {
         return _public;
     }
     /**
-     *  Public key - 64 symbols hex string
+     * Public key - 64 symbols hex string
      */
     public void setPublic(String value) {
         _public = value;
@@ -38,13 +38,13 @@ public class KeyPair {
     @JsonProperty("secret")
     private String secret;
     /**
-     *  Private key - u64 symbols hex string
+     * Private key - u64 symbols hex string
      */
     public String getSecret() {
         return secret;
     }
     /**
-     *  Private key - u64 symbols hex string
+     * Private key - u64 symbols hex string
      */
     public void setSecret(String value) {
         secret = value;

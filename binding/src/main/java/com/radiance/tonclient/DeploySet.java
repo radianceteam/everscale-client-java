@@ -25,13 +25,13 @@ public class DeploySet {
     @JsonProperty("tvc")
     private String tvc;
     /**
-     *  Content of TVC file encoded in `base64`.
+     * Content of TVC file encoded in `base64`.
      */
     public String getTvc() {
         return tvc;
     }
     /**
-     *  Content of TVC file encoded in `base64`.
+     * Content of TVC file encoded in `base64`.
      */
     public void setTvc(String value) {
         tvc = value;
@@ -40,13 +40,13 @@ public class DeploySet {
     @JsonProperty("workchain_id")
     private Number workchainId;
     /**
-     *  Target workchain for destination address. Default is `0`.
+     * Target workchain for destination address. Default is `0`.
      */
     public Number getWorkchainId() {
         return workchainId;
     }
     /**
-     *  Target workchain for destination address. Default is `0`.
+     * Target workchain for destination address. Default is `0`.
      */
     public void setWorkchainId(Number value) {
         workchainId = value;
@@ -55,13 +55,13 @@ public class DeploySet {
     @JsonProperty("initial_data")
     private Object initialData;
     /**
-     *  List of initial values for contract's public variables.
+     * List of initial values for contract's public variables.
      */
     public Object getInitialData() {
         return initialData;
     }
     /**
-     *  List of initial values for contract's public variables.
+     * List of initial values for contract's public variables.
      */
     public void setInitialData(Object value) {
         initialData = value;

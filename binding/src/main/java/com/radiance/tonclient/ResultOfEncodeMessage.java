@@ -27,13 +27,13 @@ public class ResultOfEncodeMessage {
     @JsonProperty("message")
     private String message;
     /**
-     *  Message BOC encoded with `base64`.
+     * Message BOC encoded with `base64`.
      */
     public String getMessage() {
         return message;
     }
     /**
-     *  Message BOC encoded with `base64`.
+     * Message BOC encoded with `base64`.
      */
     public void setMessage(String value) {
         message = value;
@@ -42,13 +42,13 @@ public class ResultOfEncodeMessage {
     @JsonProperty("data_to_sign")
     private String dataToSign;
     /**
-     *  Optional data to be signed encoded in `base64`.<p> Returned in case of `Signer::External`. Can be used for external message signing. Is this case you need to use this data to create signature and then produce signed message using `abi.attach_signature`.
+     * Optional data to be signed encoded in `base64`.<p> Returned in case of `Signer::External`. Can be used for external message signing. Is this case you need to use this data to create signature and then produce signed message using `abi.attach_signature`.
      */
     public String getDataToSign() {
         return dataToSign;
     }
     /**
-     *  Optional data to be signed encoded in `base64`.<p> Returned in case of `Signer::External`. Can be used for external message signing. Is this case you need to use this data to create signature and then produce signed message using `abi.attach_signature`.
+     * Optional data to be signed encoded in `base64`.<p> Returned in case of `Signer::External`. Can be used for external message signing. Is this case you need to use this data to create signature and then produce signed message using `abi.attach_signature`.
      */
     public void setDataToSign(String value) {
         dataToSign = value;
@@ -57,13 +57,13 @@ public class ResultOfEncodeMessage {
     @JsonProperty("address")
     private String address;
     /**
-     *  Destination address.
+     * Destination address.
      */
     public String getAddress() {
         return address;
     }
     /**
-     *  Destination address.
+     * Destination address.
      */
     public void setAddress(String value) {
         address = value;
@@ -72,13 +72,13 @@ public class ResultOfEncodeMessage {
     @JsonProperty("message_id")
     private String messageId;
     /**
-     *  Message id.
+     * Message id.
      */
     public String getMessageId() {
         return messageId;
     }
     /**
-     *  Message id.
+     * Message id.
      */
     public void setMessageId(String value) {
         messageId = value;

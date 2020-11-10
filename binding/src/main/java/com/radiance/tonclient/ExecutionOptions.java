@@ -27,13 +27,13 @@ public class ExecutionOptions {
     @JsonProperty("blockchain_config")
     private String blockchainConfig;
     /**
-     *  boc with config
+     * boc with config
      */
     public String getBlockchainConfig() {
         return blockchainConfig;
     }
     /**
-     *  boc with config
+     * boc with config
      */
     public void setBlockchainConfig(String value) {
         blockchainConfig = value;
@@ -42,13 +42,13 @@ public class ExecutionOptions {
     @JsonProperty("block_time")
     private Number blockTime;
     /**
-     *  time that is used as transaction time
+     * time that is used as transaction time
      */
     public Number getBlockTime() {
         return blockTime;
     }
     /**
-     *  time that is used as transaction time
+     * time that is used as transaction time
      */
     public void setBlockTime(Number value) {
         blockTime = value;
@@ -57,13 +57,13 @@ public class ExecutionOptions {
     @JsonProperty("block_lt")
     private Long blockLt;
     /**
-     *  block logical time
+     * block logical time
      */
     public Long getBlockLt() {
         return blockLt;
     }
     /**
-     *  block logical time
+     * block logical time
      */
     public void setBlockLt(Long value) {
         blockLt = value;
@@ -72,13 +72,13 @@ public class ExecutionOptions {
     @JsonProperty("transaction_lt")
     private Long transactionLt;
     /**
-     *  transaction logical time
+     * transaction logical time
      */
     public Long getTransactionLt() {
         return transactionLt;
     }
     /**
-     *  transaction logical time
+     * transaction logical time
      */
     public void setTransactionLt(Long value) {
         transactionLt = value;

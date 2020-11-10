@@ -23,13 +23,13 @@ public class ResultOfAttachSignature {
     @JsonProperty("message")
     private String message;
     /**
-     *  Signed message BOC
+     * Signed message BOC
      */
     public String getMessage() {
         return message;
     }
     /**
-     *  Signed message BOC
+     * Signed message BOC
      */
     public void setMessage(String value) {
         message = value;
@@ -38,13 +38,13 @@ public class ResultOfAttachSignature {
     @JsonProperty("message_id")
     private String messageId;
     /**
-     *  Message ID
+     * Message ID
      */
     public String getMessageId() {
         return messageId;
     }
     /**
-     *  Message ID
+     * Message ID
      */
     public void setMessageId(String value) {
         messageId = value;

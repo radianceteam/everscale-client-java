@@ -85,7 +85,7 @@
                 <executions>
                     <execution>
                         <id>copy</id>
-                        <phase>compile</phase>
+                        <phase>generate-resources</phase>
                         <goals>
                             <goal>copy</goal>
                         </goals>

@@ -25,13 +25,13 @@ public class CallSet {
     @JsonProperty("function_name")
     private String functionName;
     /**
-     *  Function name that is being called.
+     * Function name that is being called.
      */
     public String getFunctionName() {
         return functionName;
     }
     /**
-     *  Function name that is being called.
+     * Function name that is being called.
      */
     public void setFunctionName(String value) {
         functionName = value;
@@ -40,13 +40,13 @@ public class CallSet {
     @JsonProperty("header")
     private FunctionHeader header;
     /**
-     *  Function header.<p> If an application omits some header parameters required by the contract's ABI, the library will set the default values for them.
+     * Function header.<p> If an application omits some header parameters required by the contract's ABI, the library will set the default values for them.
      */
     public FunctionHeader getHeader() {
         return header;
     }
     /**
-     *  Function header.<p> If an application omits some header parameters required by the contract's ABI, the library will set the default values for them.
+     * Function header.<p> If an application omits some header parameters required by the contract's ABI, the library will set the default values for them.
      */
     public void setHeader(FunctionHeader value) {
         header = value;
@@ -55,13 +55,13 @@ public class CallSet {
     @JsonProperty("input")
     private Object input;
     /**
-     *  Function input parameters according to ABI.
+     * Function input parameters according to ABI.
      */
     public Object getInput() {
         return input;
     }
     /**
-     *  Function input parameters according to ABI.
+     * Function input parameters according to ABI.
      */
     public void setInput(Object value) {
         input = value;

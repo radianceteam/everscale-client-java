@@ -25,13 +25,13 @@ public class FunctionHeader {
     @JsonProperty("expire")
     private Number expire;
     /**
-     *  Message expiration time in seconds.
+     * Message expiration time in seconds.
      */
     public Number getExpire() {
         return expire;
     }
     /**
-     *  Message expiration time in seconds.
+     * Message expiration time in seconds.
      */
     public void setExpire(Number value) {
         expire = value;
@@ -40,13 +40,13 @@ public class FunctionHeader {
     @JsonProperty("time")
     private Long time;
     /**
-     *  Message creation time in milliseconds.
+     * Message creation time in milliseconds.
      */
     public Long getTime() {
         return time;
     }
     /**
-     *  Message creation time in milliseconds.
+     * Message creation time in milliseconds.
      */
     public void setTime(Long value) {
         time = value;
@@ -55,13 +55,13 @@ public class FunctionHeader {
     @JsonProperty("pubkey")
     private String pubkey;
     /**
-     *  Public key used to sign message. Encoded with `hex`.
+     * Public key used to sign message. Encoded with `hex`.
      */
     public String getPubkey() {
         return pubkey;
     }
     /**
-     *  Public key used to sign message. Encoded with `hex`.
+     * Public key used to sign message. Encoded with `hex`.
      */
     public void setPubkey(String value) {
         pubkey = value;

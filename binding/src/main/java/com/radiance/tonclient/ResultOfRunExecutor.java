@@ -29,13 +29,13 @@ public class ResultOfRunExecutor {
     @JsonProperty("transaction")
     private Object transaction;
     /**
-     *  Parsed transaction.<p> In addition to the regular transaction fields there is a `boc` field encoded with `base64` which contains source transaction BOC.
+     * Parsed transaction.<p> In addition to the regular transaction fields there is a `boc` field encoded with `base64` which contains source transaction BOC.
      */
     public Object getTransaction() {
         return transaction;
     }
     /**
-     *  Parsed transaction.<p> In addition to the regular transaction fields there is a `boc` field encoded with `base64` which contains source transaction BOC.
+     * Parsed transaction.<p> In addition to the regular transaction fields there is a `boc` field encoded with `base64` which contains source transaction BOC.
      */
     public void setTransaction(Object value) {
         transaction = value;
@@ -44,13 +44,13 @@ public class ResultOfRunExecutor {
     @JsonProperty("out_messages")
     private String[] outMessages;
     /**
-     *  List of output messages' BOCs. Encoded as `base64`
+     * List of output messages' BOCs. Encoded as `base64`
      */
     public String[] getOutMessages() {
         return outMessages;
     }
     /**
-     *  List of output messages' BOCs. Encoded as `base64`
+     * List of output messages' BOCs. Encoded as `base64`
      */
     public void setOutMessages(String[] value) {
         outMessages = value;
@@ -59,13 +59,13 @@ public class ResultOfRunExecutor {
     @JsonProperty("decoded")
     private Object decoded;
     /**
-     *  Optional decoded message bodies according to the optional `abi` parameter.
+     * Optional decoded message bodies according to the optional `abi` parameter.
      */
     public Object getDecoded() {
         return decoded;
     }
     /**
-     *  Optional decoded message bodies according to the optional `abi` parameter.
+     * Optional decoded message bodies according to the optional `abi` parameter.
      */
     public void setDecoded(Object value) {
         decoded = value;
@@ -74,13 +74,13 @@ public class ResultOfRunExecutor {
     @JsonProperty("account")
     private String account;
     /**
-     *  Updated account state BOC. Encoded as `base64`
+     * Updated account state BOC. Encoded as `base64`
      */
     public String getAccount() {
         return account;
     }
     /**
-     *  Updated account state BOC. Encoded as `base64`
+     * Updated account state BOC. Encoded as `base64`
      */
     public void setAccount(String value) {
         account = value;
@@ -89,13 +89,13 @@ public class ResultOfRunExecutor {
     @JsonProperty("fees")
     private Object fees;
     /**
-     *  Transaction fees
+     * Transaction fees
      */
     public Object getFees() {
         return fees;
     }
     /**
-     *  Transaction fees
+     * Transaction fees
      */
     public void setFees(Object value) {
         fees = value;
