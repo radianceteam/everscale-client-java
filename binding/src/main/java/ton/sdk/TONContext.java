@@ -42,7 +42,7 @@ public class TONContext {
                     System.load(createTempFile("/libton_client_jni.so"));
                     break;
                 default:    // Windows
-                    System.load(createTempFile("/tonclient.dll"));
+                    System.load(createTempFile("/ton_client_jni.dll"));
             }
         } catch(IOException e) {
             throw new RuntimeException(e);

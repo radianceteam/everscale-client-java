@@ -13,17 +13,8 @@
 ```
     $ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 ```
-- Use the following commands to install node (see also https://nodejs.org/en/download/ ):
-```
-    # Using Ubuntu
-    $ curl -sL https://deb.nodesource.com/setup_15.x | sudo -E bash -
-    $ sudo apt-get install -y nodejs
-
-    # Using Debian, as root
-    $ curl -sL https://deb.nodesource.com/setup_15.x | bash -
-    $ apt-get install -y nodejs
-```
-- Install Docker Engine following instructions from https://docs.docker.com/engine/install/
+- To run test, Docker Engine is required. If the Engine isn't installed the tests will be skipped.
+Follow installation instructions from https://docs.docker.com/engine/install/
 
 ### Build:
 - To build, enter the following command:
