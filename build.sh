@@ -3,11 +3,12 @@
 tondir=target/TON-SDK
 
 projectdir=`pwd`
-[ -d "$tondir" ] || git clone https://github.com/tonlabs/TON-SDK.git $tondir
-cd $tondir/ton_client/client
+[ -d "$tondir" ] || git clone --single-branch --branch platform-jni https://github.com/radianceteam/TON-SDK.git $tondir
+cd $tondir/ton_client/platforms/ton-client-jni
+git pull
+cargo build --release || exit
 
-node build.js || exit
-cp build/* $projectdir/binding/src/main/resources
+cp ../../../target/release/*.so $projectdir/binding/src/main/resources
 cd $projectdir
 
 if [[ "$(docker images -q tonlabs/local-node 2> /dev/null)" == "" ]]; then

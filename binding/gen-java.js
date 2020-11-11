@@ -56,7 +56,6 @@ function setTypeExported(field) {
 }
 
 function stringifyFields(fields, type) {
-console.log({type});
     let totLen = fields.length + (type?1:0);
     let stream = totLen > 1?'Stream.of(':'';
     return `"{${totLen?`"+${stream}${(type?[`"\\"type\\":\\"${type}\\""`]:[]).concat(fields.map(f=> {
@@ -132,7 +131,7 @@ api.modules.forEach(m => m.types.forEach(t => {
 }));
 
 api.modules.forEach(mod => {
-    let imports = {'java.util.concurrent.CompletableFuture':true,'java.util.stream.*':true};
+    let imports = {'java.util.concurrent.CompletableFuture':true,'java.util.stream.*':true,'ton.sdk.TONContext':true};
     let body = '';
 
     mod.functions.forEach(f => {

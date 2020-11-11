@@ -5,6 +5,7 @@ import java.nio.file.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.Base64;
 import java.util.Scanner;
+import ton.sdk.TONContext;
 
 public abstract class TestBase {
     protected static TONContext context;

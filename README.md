@@ -1,7 +1,5 @@
-# tonsdk-java
-
 # Java library for TON Client
---------------------------------------
+
 ### Prerequisites:
 - Use the following command to install Java JDK:
 ```

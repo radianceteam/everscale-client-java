@@ -2,6 +2,7 @@ package com.radiance.tonclient;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.*;
+import ton.sdk.TONContext;
 
 /**
  *  BOC manipulation module.
