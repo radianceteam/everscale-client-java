@@ -8,7 +8,8 @@ cd $tondir/ton_client/platforms/ton-client-jni
 git pull
 cargo build --release || exit
 
-cp ../../../target/release/*.so $projectdir/binding/src/main/resources
+resdir=$projectdir/binding/src/main/resources
+mkdir -p $resdir && cp ../../../target/release/*.so $resdir
 cd $projectdir
 
 if [[ "$(docker images -q tonlabs/local-node 2> /dev/null)" == "" ]]; then

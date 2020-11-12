@@ -1,5 +1,19 @@
 # Java library for TON Client
 
+The Library is a binding for [TONOS Client](https://github.com/tonlabs/TON-SDK) written in Java
+that act as a bridge between TONOS Client and a Java application. The library includes original
+TONOS Library with incorporated support of [Java Native Interface (JNI)](https://en.wikipedia.org/wiki/Java_Native_Interface)
+which allows direct access to TONOS Client from Java Virtual Machine.
+
+### Code Generation
+
+The most of the library source code is generated from `api.json` by script `./binding/gen-java.js`.
+To use the script you must have [Node.js](https://nodejs.org/en/) installed.
+
+### How to use the library
+
+For usages exaples see [test sources](binding/src/test/java/com/radiance/tonclient/)
+
 ### Prerequisites:
 - Use the following command to install Java JDK:
 ```
