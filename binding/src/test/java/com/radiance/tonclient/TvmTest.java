@@ -112,7 +112,7 @@ public class TvmTest extends TestBase {
             );
 
             assertTrue("Positive transaction fee",
-                ((Integer)((Map)result.getFees()).get("total_account_fees")) > 0);
+                result.getFees().getTotalAccountFees() > 0);
 
             return account;
         });
@@ -187,7 +187,7 @@ public class TvmTest extends TestBase {
             null,   // executionOptions
             subscriptionAbi
         ).get();
-        Map output = (Map)((Map)r.getDecoded()).get("output");
+        Map output = (Map)r.getDecoded().getOutput();
         for (Object e : output.entrySet()) {
             System.out.println("output: " + e);
             //System.out.println("pubkey: " + ((Map)v).get("pubkey"));

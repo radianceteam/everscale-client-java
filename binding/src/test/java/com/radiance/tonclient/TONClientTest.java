@@ -23,6 +23,8 @@ public class TONClientTest extends TestBase {
         String version = client.version().get();
         System.out.println("client.version: " + version);
         assertTrue("Version pattern doesn't match", versionPattern.matcher(version).matches());
+
+        client.buildInfo().get();
     }
 
     @Test
