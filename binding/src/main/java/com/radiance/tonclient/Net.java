@@ -3,21 +3,82 @@ package com.radiance.tonclient;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.*;
 import ton.sdk.TONContext;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.function.Consumer;
 
 /**
  *  Network access.
  */
-public class NetModule {
+public class Net {
 
+    /**
+     *  
+     */
+    public static class OrderBy  {
+        public OrderBy() {
+        }
+
+        public OrderBy(String path, SortDirection direction) {
+
+            this.path = path;
+
+            this.direction = direction;
+
+        }
+
+
+
+        @JsonProperty("path")
+        private String path;
+        /**
+         * 
+         */
+        public String getPath() {
+            return path;
+        }
+        /**
+         * 
+         */
+        public void setPath(String value) {
+            path = value;
+        }
+
+        @JsonProperty("direction")
+        private SortDirection direction;
+        /**
+         * 
+         */
+        public SortDirection getDirection() {
+            return direction;
+        }
+        /**
+         * 
+         */
+        public void setDirection(SortDirection value) {
+            direction = value;
+        }
+
+
+        @Override
+        public String toString() {
+            return "{"+Stream.of((path==null?null:("\"path\":\""+path+"\"")),(direction==null?null:("\"direction\":"+direction))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
+        }
+    }
+
+    /**
+     *  
+     */
+    public enum SortDirection {
+    ASC,DESC
+    }
     private TONContext context;
 
-    public NetModule(TONContext context) {
+    public Net(TONContext context) {
         this.context = context;
     }
 
    /**
-    * Queries collection data<p> Queries data that satisfies the `filter` conditions, limits the number of returned records and orders them. The projection fields are limited to  `result` fields
+    * Queries collection data<p> Queries data that satisfies the `filter` conditions, limits the number of returned records and orders them. The projection fields are limited to `result` fields
     *
     * @param collection Collection name (accounts, blocks, transactions, messages, block_signatures)
     * @param filter Collection filter
@@ -32,7 +93,7 @@ public class NetModule {
     }
 
    /**
-    * Returns an object that fulfills the conditions or waits for its appearance<p> Triggers only once. If object that satisfies the `filter` conditions already exists - returns it immediately. If not - waits for insert/update of data withing the specified `timeout`, and returns it. The projection fields are limited to  `result` fields
+    * Returns an object that fulfills the conditions or waits for its appearance<p> Triggers only once. If object that satisfies the `filter` conditions already exists - returns it immediately. If not - waits for insert/update of data within the specified `timeout`, and returns it. The projection fields are limited to `result` fields
     *
     * @param collection Collection name (accounts, blocks, transactions, messages, block_signatures)
     * @param filter Collection filter
@@ -56,7 +117,7 @@ public class NetModule {
     }
 
    /**
-    * Creates a subscription<p> Triggers for each insert/update of data that satisfies the `filter` conditions. The projection fields are limited to  `result` fields.
+    * Creates a subscription<p> Triggers for each insert/update of data that satisfies the `filter` conditions. The projection fields are limited to `result` fields.
     *
     * @param collection Collection name (accounts, blocks, transactions, messages, block_signatures)
     * @param filter Collection filter

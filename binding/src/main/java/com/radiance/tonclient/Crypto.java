@@ -3,15 +3,122 @@ package com.radiance.tonclient;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.*;
 import ton.sdk.TONContext;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  *  Crypto functions.
  */
-public class CryptoModule {
+public class Crypto {
 
+    /**
+     *  
+     */
+    public static class KeyPair  {
+        public KeyPair() {
+        }
+
+        public KeyPair(String _public, String secret) {
+
+            this._public = _public;
+
+            this.secret = secret;
+
+        }
+
+
+
+        @JsonProperty("public")
+        private String _public;
+        /**
+         * Public key - 64 symbols hex string
+         */
+        public String getPublic() {
+            return _public;
+        }
+        /**
+         * Public key - 64 symbols hex string
+         */
+        public void setPublic(String value) {
+            _public = value;
+        }
+
+        @JsonProperty("secret")
+        private String secret;
+        /**
+         * Private key - u64 symbols hex string
+         */
+        public String getSecret() {
+            return secret;
+        }
+        /**
+         * Private key - u64 symbols hex string
+         */
+        public void setSecret(String value) {
+            secret = value;
+        }
+
+
+        @Override
+        public String toString() {
+            return "{"+Stream.of((_public==null?null:("\"public\":\""+_public+"\"")),(secret==null?null:("\"secret\":\""+secret+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
+        }
+    }
+    /**
+     *  
+     */
+    public static class ResultOfSign  {
+        public ResultOfSign() {
+        }
+
+        public ResultOfSign(String signed, String signature) {
+
+            this.signed = signed;
+
+            this.signature = signature;
+
+        }
+
+
+
+        @JsonProperty("signed")
+        private String signed;
+        /**
+         * Signed data combined with signature encoded in `base64`.
+         */
+        public String getSigned() {
+            return signed;
+        }
+        /**
+         * Signed data combined with signature encoded in `base64`.
+         */
+        public void setSigned(String value) {
+            signed = value;
+        }
+
+        @JsonProperty("signature")
+        private String signature;
+        /**
+         * Signature encoded in `hex`.
+         */
+        public String getSignature() {
+            return signature;
+        }
+        /**
+         * Signature encoded in `hex`.
+         */
+        public void setSignature(String value) {
+            signature = value;
+        }
+
+
+        @Override
+        public String toString() {
+            return "{"+Stream.of((signed==null?null:("\"signed\":\""+signed+"\"")),(signature==null?null:("\"signature\":\""+signature+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
+        }
+    }
     private TONContext context;
 
-    public CryptoModule(TONContext context) {
+    public Crypto(TONContext context) {
         this.context = context;
     }
 
@@ -130,7 +237,7 @@ public class CryptoModule {
     * Derives key from `password` and `key` using `scrypt` algorithm. See <a target="_blank" href="https://en.wikipedia.org/wiki/Scrypt">https://en.wikipedia.org/wiki/Scrypt</a>.<p> # Arguments - `log_n` - The log2 of the Scrypt parameter `N` - `r` - The Scrypt parameter `r` - `p` - The Scrypt parameter `p` # Conditions - `log_n` must be less than `64` - `r` must be greater than `0` and less than or equal to `4294967295` - `p` must be greater than `0` and less than `4294967295` # Recommended values sufficient for most use-cases - `log_n = 15` (`n = 32768`) - `r = 8` - `p = 1`
     *
     * @param password The password bytes to be hashed. Must be encoded with `base64`.
-    * @param salt A salt bytes that modifies the hash to protect against Rainbow table attacks. Must be encoded with `base64`.
+    * @param salt Salt bytes that modify the hash to protect against Rainbow table attacks. Must be encoded with `base64`.
     * @param logN CPU/memory cost parameter
     * @param r The block size parameter, which fine-tunes sequential memory read size and performance.
     * @param p Parallelization parameter.
@@ -303,7 +410,7 @@ public class CryptoModule {
     * @param phrase Phrase
     * @param dictionary Dictionary identifier
     * @param wordCount Word count
-    * @return  Flag indicating the mnemonic is valid or not
+    * @return  Flag indicating if the mnemonic is valid or not
     */
     public CompletableFuture<Boolean> mnemonicVerify(String phrase, Number dictionary, Number wordCount) {
         return context.requestJSON("crypto.mnemonic_verify", "{"+Stream.of((phrase==null?null:("\"phrase\":\""+phrase+"\"")),(dictionary==null?null:("\"dictionary\":"+dictionary)),(wordCount==null?null:("\"word_count\":"+wordCount))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
@@ -381,6 +488,19 @@ public class CryptoModule {
     public CompletableFuture<String> hdkeyPublicFromXprv(String xprv) {
         return context.requestJSON("crypto.hdkey_public_from_xprv", "{"+(xprv==null?"":("\"xprv\":\""+xprv+"\""))+"}")
             .thenApply(json -> TONContext.convertValue(json.findValue("public"), String.class));
+    }
+
+   /**
+    * Performs symmetric `chacha20` encryption.
+    *
+    * @param data Source data to be encrypted or decrypted. Must be encoded with `base64`.
+    * @param key 256-bit key. Must be encoded with `hex`.
+    * @param nonce 96-bit nonce. Must be encoded with `hex`.
+    * @return  Encrypted/decrypted data. Encoded with `base64`.
+    */
+    public CompletableFuture<String> chacha20(String data, String key, String nonce) {
+        return context.requestJSON("crypto.chacha20", "{"+Stream.of((data==null?null:("\"data\":\""+data+"\"")),(key==null?null:("\"key\":\""+key+"\"")),(nonce==null?null:("\"nonce\":\""+nonce+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
+            .thenApply(json -> TONContext.convertValue(json.findValue("data"), String.class));
     }
 
 }

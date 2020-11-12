@@ -3,15 +3,16 @@ package com.radiance.tonclient;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.*;
 import ton.sdk.TONContext;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  *  BOC manipulation module.
  */
-public class BocModule {
+public class Boc {
 
     private TONContext context;
 
-    public BocModule(TONContext context) {
+    public Boc(TONContext context) {
         this.context = context;
     }
 
@@ -60,6 +61,19 @@ public class BocModule {
     }
 
    /**
+    * Parses shardstate boc into a JSON <p> JSON structure is compatible with GraphQL API shardstate object
+    *
+    * @param boc BOC encoded as base64
+    * @param id Shardstate identificator
+    * @param workchainId Workchain shardstate belongs to
+    * @return  JSON containing parsed BOC
+    */
+    public CompletableFuture<Object> parseShardstate(String boc, String id, Number workchainId) {
+        return context.requestJSON("boc.parse_shardstate", "{"+Stream.of((boc==null?null:("\"boc\":\""+boc+"\"")),(id==null?null:("\"id\":\""+id+"\"")),(workchainId==null?null:("\"workchain_id\":"+workchainId))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
+            .thenApply(json -> TONContext.convertValue(json.findValue("parsed"), Object.class));
+    }
+
+   /**
     * 
     *
     * @param blockBoc Key block BOC encoded as base64
@@ -68,6 +82,17 @@ public class BocModule {
     public CompletableFuture<String> getBlockchainConfig(String blockBoc) {
         return context.requestJSON("boc.get_blockchain_config", "{"+(blockBoc==null?"":("\"block_boc\":\""+blockBoc+"\""))+"}")
             .thenApply(json -> TONContext.convertValue(json.findValue("config_boc"), String.class));
+    }
+
+   /**
+    * Calculates BOC root hash
+    *
+    * @param boc BOC encoded as base64
+    * @return  BOC root hash encoded with hex
+    */
+    public CompletableFuture<String> getBocHash(String boc) {
+        return context.requestJSON("boc.get_boc_hash", "{"+(boc==null?"":("\"boc\":\""+boc+"\""))+"}")
+            .thenApply(json -> TONContext.convertValue(json.findValue("hash"), String.class));
     }
 
 }

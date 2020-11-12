@@ -205,7 +205,7 @@ public class TONContext {
 
     public static void main(String... args) throws Exception {
         TONContext ctx = TONContext.create("{}");
-        CryptoModule crypto = new CryptoModule(ctx);
+        Crypto crypto = new Crypto(ctx);
 
         System.out.println(Arrays.asList(crypto.factorize("EE").get()));
         //ctx.request("client.get_api_reference", "{}");
