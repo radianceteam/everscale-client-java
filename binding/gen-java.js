@@ -42,7 +42,7 @@ function htmlize(s) {
 
 function isFlattable(typeName) {
     let type = types[typeName];
-    return type && type.isStruct && typeName.startsWith('ParamsOf');
+    return type && type.isStruct && typeName.indexOf('.ParamsOf') > 0;
 }
 
 function trimClassName(cName, mName) {
@@ -105,9 +105,8 @@ api.modules.forEach(m => m.types.forEach(t => {
             type.isStruct = true;
             break;
         case 'EnumOfConsts':
-            type.fields = t.enum_consts.map(f => ({name:f.name, desc: f.desc/*, getType:(mName)=>{console.log('==',mName,t.name);return capitalize(t.name)}*/}));
+            type.fields = t.enum_consts.map(f => ({name:f.name, desc: f.description/*, getType:(mName)=>{console.log('==',mName,t.name);return capitalize(t.name)}*/}));
             type.isEnum = true;
-            //type.isExported = true;
             break;
         case 'EnumOfTypes':
             console.log(t.name);
@@ -129,7 +128,7 @@ api.modules.forEach(mod => {
         let rType = types[rName];
         let rField = {getType:()=>'Void'};
         if (rType&&rType.fields.length > 1) {
-            rType.isExported = true;
+            setTypeExported({type:rName})
             rField = {getType:(mName) => trimClassName(rName, mName)}
         } else if (rType) {
             const f = rType.fields[0];
@@ -148,7 +147,7 @@ api.modules.forEach(mod => {
         body += params.map(p => `    * @param ${p.name} ${htmlize(p.desc)}\n`).join('');
         let rDesc = rField.desc || (((type)=>{return type&&type.desc})(types[rField.getType()]));
         if (rDesc)
-            body += `    * @return ${rDesc}\n`;
+            body += `    * @return ${htmlize(rDesc)}\n`;
         body += `    */\n`;
         body += `    public CompletableFuture<${rField.getType(mod.name)}> ${camelize(f.name)}(${params.map(p=>p.type+' '+p.name).join(', ')}${event?`, Consumer<${event}> consumer`:''}) {\n`
         body += `        return context.requestJSON${event?'Callback':''}("${mod.name}.${f.name}", ${stringifyFields(fields)}${event?`, consumer, ${event}.class`:''})\n`;
@@ -189,21 +188,6 @@ ${body}}
 
 });
 
-/*
-Object.entries(types).filter(([n,t])=>t.isExported).forEach(([cName,t]) => {
-    let genFunc;
-    if (t.isEnum)
-        genFunc = getEnumSource;
-    else if(t.isEnumOfTypes) {
-        genFunc = getEnumOfTypesSource;
-    } else
-        genFunc = getStructSource;
-    if (genFunc) {
-        genFiles.push(cName + '.java');
-        fs.writeFileSync(PATH + cName + '.java', `package ${packageName};\n` + genFunc(cName,t));
-    }
-});
-*/
 function getStructSource(cName, t, sClass) {
     
     return `
@@ -254,11 +238,17 @@ function getEnumSource(cName, t) {
      *  ${htmlize(t.desc||'')}
      */
     public enum ${cName} {
-    ${t.fields.filter(f=>f.name).map(f=> f.name).join(',')}
+        ${t.fields.filter(f=>f.name).map(f=> `
+        /**
+         * ${htmlize(f.desc)}
+         */
+        ${f.name}`).join(',\n')}
     }`
 }
 
 function getEnumOfTypesSource(cName, t) {
+    if (capitalize(currMod.name) == cName)
+        cName = cName.toUpperCase();
     return `
     public static abstract class ${cName} {
 ${t.variants.map(v => {

@@ -192,11 +192,132 @@ public class Tvm {
     /**
      *  
      */
+    public static class TransactionFees  {
+        public TransactionFees() {
+        }
+
+        public TransactionFees(Long inMsgFwdFee, Long storageFee, Long gasFee, Long outMsgsFwdFee, Long totalAccountFees, Long totalOutput) {
+
+            this.inMsgFwdFee = inMsgFwdFee;
+
+            this.storageFee = storageFee;
+
+            this.gasFee = gasFee;
+
+            this.outMsgsFwdFee = outMsgsFwdFee;
+
+            this.totalAccountFees = totalAccountFees;
+
+            this.totalOutput = totalOutput;
+
+        }
+
+
+
+        @JsonProperty("in_msg_fwd_fee")
+        private Long inMsgFwdFee;
+        /**
+         * 
+         */
+        public Long getInMsgFwdFee() {
+            return inMsgFwdFee;
+        }
+        /**
+         * 
+         */
+        public void setInMsgFwdFee(Long value) {
+            inMsgFwdFee = value;
+        }
+
+        @JsonProperty("storage_fee")
+        private Long storageFee;
+        /**
+         * 
+         */
+        public Long getStorageFee() {
+            return storageFee;
+        }
+        /**
+         * 
+         */
+        public void setStorageFee(Long value) {
+            storageFee = value;
+        }
+
+        @JsonProperty("gas_fee")
+        private Long gasFee;
+        /**
+         * 
+         */
+        public Long getGasFee() {
+            return gasFee;
+        }
+        /**
+         * 
+         */
+        public void setGasFee(Long value) {
+            gasFee = value;
+        }
+
+        @JsonProperty("out_msgs_fwd_fee")
+        private Long outMsgsFwdFee;
+        /**
+         * 
+         */
+        public Long getOutMsgsFwdFee() {
+            return outMsgsFwdFee;
+        }
+        /**
+         * 
+         */
+        public void setOutMsgsFwdFee(Long value) {
+            outMsgsFwdFee = value;
+        }
+
+        @JsonProperty("total_account_fees")
+        private Long totalAccountFees;
+        /**
+         * 
+         */
+        public Long getTotalAccountFees() {
+            return totalAccountFees;
+        }
+        /**
+         * 
+         */
+        public void setTotalAccountFees(Long value) {
+            totalAccountFees = value;
+        }
+
+        @JsonProperty("total_output")
+        private Long totalOutput;
+        /**
+         * 
+         */
+        public Long getTotalOutput() {
+            return totalOutput;
+        }
+        /**
+         * 
+         */
+        public void setTotalOutput(Long value) {
+            totalOutput = value;
+        }
+
+
+        @Override
+        public String toString() {
+            return "{"+Stream.of((inMsgFwdFee==null?null:("\"in_msg_fwd_fee\":"+inMsgFwdFee)),(storageFee==null?null:("\"storage_fee\":"+storageFee)),(gasFee==null?null:("\"gas_fee\":"+gasFee)),(outMsgsFwdFee==null?null:("\"out_msgs_fwd_fee\":"+outMsgsFwdFee)),(totalAccountFees==null?null:("\"total_account_fees\":"+totalAccountFees)),(totalOutput==null?null:("\"total_output\":"+totalOutput))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
+        }
+    }
+    /**
+     *  
+     */
     public static class ResultOfRunExecutor  {
         public ResultOfRunExecutor() {
         }
 
-        public ResultOfRunExecutor(Object transaction, String[] outMessages, Object decoded, String account, Object fees) {
+        public ResultOfRunExecutor(Object transaction, String[] outMessages, Processing.DecodedOutput decoded, String account, TransactionFees fees) {
 
             this.transaction = transaction;
 
@@ -243,17 +364,17 @@ public class Tvm {
         }
 
         @JsonProperty("decoded")
-        private Object decoded;
+        private Processing.DecodedOutput decoded;
         /**
          * Optional decoded message bodies according to the optional `abi` parameter.
          */
-        public Object getDecoded() {
+        public Processing.DecodedOutput getDecoded() {
             return decoded;
         }
         /**
          * Optional decoded message bodies according to the optional `abi` parameter.
          */
-        public void setDecoded(Object value) {
+        public void setDecoded(Processing.DecodedOutput value) {
             decoded = value;
         }
 
@@ -273,17 +394,17 @@ public class Tvm {
         }
 
         @JsonProperty("fees")
-        private Object fees;
+        private TransactionFees fees;
         /**
          * Transaction fees
          */
-        public Object getFees() {
+        public TransactionFees getFees() {
             return fees;
         }
         /**
          * Transaction fees
          */
-        public void setFees(Object value) {
+        public void setFees(TransactionFees value) {
             fees = value;
         }
 
@@ -300,7 +421,7 @@ public class Tvm {
         public ResultOfRunTvm() {
         }
 
-        public ResultOfRunTvm(String[] outMessages, Object decoded, String account) {
+        public ResultOfRunTvm(String[] outMessages, Processing.DecodedOutput decoded, String account) {
 
             this.outMessages = outMessages;
 
@@ -328,17 +449,17 @@ public class Tvm {
         }
 
         @JsonProperty("decoded")
-        private Object decoded;
+        private Processing.DecodedOutput decoded;
         /**
          * Optional decoded message bodies according to the optional `abi` parameter.
          */
-        public Object getDecoded() {
+        public Processing.DecodedOutput getDecoded() {
             return decoded;
         }
         /**
          * Optional decoded message bodies according to the optional `abi` parameter.
          */
-        public void setDecoded(Object value) {
+        public void setDecoded(Processing.DecodedOutput value) {
             decoded = value;
         }
 
@@ -403,7 +524,7 @@ public class Tvm {
     * @param functionName Function name
     * @param input Input parameters
     * @param executionOptions 
-    * @return  Values returned by getmethod on stack
+    * @return Values returned by getmethod on stack
     */
     public CompletableFuture<Object> runGet(String account, String functionName, Object input, ExecutionOptions executionOptions) {
         return context.requestJSON("tvm.run_get", "{"+Stream.of((account==null?null:("\"account\":\""+account+"\"")),(functionName==null?null:("\"function_name\":\""+functionName+"\"")),(input==null?null:("\"input\":"+input)),(executionOptions==null?null:("\"execution_options\":"+executionOptions))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")

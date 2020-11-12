@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class TvmTest extends TestBase {
     private interface MessageRunner {
-        String runMessage(ResultOfEncodeMessage encoded, Abi abi, String account) throws Exception;
+        String runMessage(Abi.ResultOfEncodeMessage encoded, Abi.ABI abi, String account) throws Exception;
     };
 
     private static final String ELECTOR_ADDRESS = "-1:3333333333333333333333333333333333333333333333333333333333333333";
@@ -18,8 +18,8 @@ public class TvmTest extends TestBase {
 
     @Test
     public void executeGet() throws Exception {
-        ResultOfEncodeAccount roea = abiModule.encodeAccount(
-            new StateInitSource.StateInit(
+        Abi.ResultOfEncodeAccount roea = abiModule.encodeAccount(
+            new Abi.StateInitSource.StateInit(
                 ELECTOR_CODE,
                 ELECTOR_DATA,
                 null    // library
@@ -79,7 +79,7 @@ public class TvmTest extends TestBase {
 
             tvm.runExecutor(
                 encoded.getMessage(),
-                new AccountForExecutor.Account(
+                new Tvm.AccountForExecutor.Account(
                     account,
                     true    // unlimitedBalance
                 ),
@@ -95,9 +95,9 @@ public class TvmTest extends TestBase {
             );
 
             // check standard run
-            ResultOfRunExecutor result = tvm.runExecutor(
+            Tvm.ResultOfRunExecutor result = tvm.runExecutor(
                 encoded.getMessage(),
-                new AccountForExecutor.Account(
+                new Tvm.AccountForExecutor.Account(
                     account,
                     null    // unlimitedBalance
                 ),
@@ -133,13 +133,13 @@ public class TvmTest extends TestBase {
     private void testRunMessage(MessageRunner runner) throws Exception {
         final String walletAddress = "0:2222222222222222222222222222222222222222222222222222222222222222";
         final String subscriptionId = "\"0x1111111111111111111111111111111111111111111111111111111111111111\"";
-        KeyPair keys = crypto.generateRandomSignKeys().get();
-        Signer signer = new Signer.Keys(keys);
+        Crypto.KeyPair keys = crypto.generateRandomSignKeys().get();
+        Abi.Signer signer = new Abi.Signer.Keys(keys);
 
         String address = deployWithGiver(
             subscriptionAbi,
-            new DeploySet(subscriptionTvc, null, null),
-            new CallSet("constructor", null, "{\"wallet\":\"" + walletAddress+ "\"}"),
+            new Abi.DeploySet(subscriptionTvc, null, null),
+            new Abi.CallSet("constructor", null, "{\"wallet\":\"" + walletAddress+ "\"}"),
             signer
         ).get();
         System.out.println("Address: " + address);
@@ -154,11 +154,11 @@ public class TvmTest extends TestBase {
         String account = (String)((Map)result).get("boc");
 
         // create subscription
-        ResultOfEncodeMessage encoded = abiModule.encodeMessage(
+        Abi.ResultOfEncodeMessage encoded = abiModule.encodeMessage(
             subscriptionAbi,
             address,
             null,   // deploySet
-            new CallSet("subscribe", null, "{" + 
+            new Abi.CallSet("subscribe", null, "{" + 
                 "\"subscriptionId\": " + subscriptionId + "," +
                 "\"pubkey\": \"0x2222222222222222222222222222222222222222222222222222222222222222\"," +
                 "\"to\": \"0:3333333333333333333333333333333333333333333333333333333333333333\"," +
@@ -176,12 +176,12 @@ public class TvmTest extends TestBase {
             subscriptionAbi,
             address,
             null,   // deploySet
-            new CallSet("getSubscription", null, "{\"subscriptionId\": " + subscriptionId + "}"),
+            new Abi.CallSet("getSubscription", null, "{\"subscriptionId\": " + subscriptionId + "}"),
             signer,
             null    // processingTryIndex
         ).get();
 
-        ResultOfRunTvm r = tvm.runTvm(
+        Tvm.ResultOfRunTvm r = tvm.runTvm(
             encoded.getMessage(),
             account,
             null,   // executionOptions

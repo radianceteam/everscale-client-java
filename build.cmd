@@ -11,7 +11,9 @@ git pull
 
 cargo build --release
 IF ERRORLEVEL 1 ( EXIT )
-copy ..\..\..\target\release\*.dll %PROJECT_DIR%\binding\src\main\resources
+SET RESOURCES_DIR=%PROJECT_DIR%\binding\src\main\resources
+IF NOT EXIST %RESOURCES_DIR% ( md %RESOURCES_DIR% )
+copy ..\..\..\target\release\*.dll %RESOURCES_DIR%
 cd %PROJECT_DIR%
 
 docker version

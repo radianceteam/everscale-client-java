@@ -130,7 +130,7 @@ public class Utils {
     *
     * @param address Account address in any TON format.
     * @param outputFormat Specify the format to convert to.
-    * @return  Address in the specified format
+    * @return Address in the specified format
     */
     public CompletableFuture<String> convertAddress(String address, AddressStringFormat outputFormat) {
         return context.requestJSON("utils.convert_address", "{"+Stream.of((address==null?null:("\"address\":\""+address+"\"")),(outputFormat==null?null:("\"output_format\":"+outputFormat))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")

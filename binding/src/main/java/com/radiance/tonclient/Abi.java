@@ -15,7 +15,7 @@ public class Abi {
     /**
      *  
      */
-    public static class Contract extends Abi  {
+    public static class Contract extends ABI  {
         public Contract() {
         }
 
@@ -52,7 +52,7 @@ public class Abi {
     /**
      *  
      */
-    public static class Json extends Abi  {
+    public static class Json extends ABI  {
         public Json() {
         }
 
@@ -89,7 +89,7 @@ public class Abi {
     /**
      *  
      */
-    public static class Handle extends Abi  {
+    public static class Handle extends ABI  {
         public Handle() {
         }
 
@@ -126,7 +126,7 @@ public class Abi {
     /**
      *  
      */
-    public static class Serialized extends Abi  {
+    public static class Serialized extends ABI  {
         public Serialized() {
         }
 
@@ -501,6 +501,32 @@ public class Abi {
         }
     }
 }
+
+    /**
+     *  
+     */
+    public enum MessageBodyType {
+        
+        /**
+         * Message contains the input of the ABI function.
+         */
+        Input,
+
+        /**
+         * Message contains the output of the ABI function.
+         */
+        Output,
+
+        /**
+         * Message contains the input of the imported ABI function.<p> Occurs when contract sends an internal message to other contract.
+         */
+        InternalOutput,
+
+        /**
+         * Message contains the input of the ABI event.
+         */
+        Event
+    }
     public static abstract class StateInitSource {
 
     /**
@@ -882,7 +908,7 @@ public class Abi {
         public DecodedMessageBody() {
         }
 
-        public DecodedMessageBody(Object bodyType, String name, Object value, FunctionHeader header) {
+        public DecodedMessageBody(MessageBodyType bodyType, String name, Object value, FunctionHeader header) {
 
             this.bodyType = bodyType;
 
@@ -897,17 +923,17 @@ public class Abi {
 
 
         @JsonProperty("body_type")
-        private Object bodyType;
+        private MessageBodyType bodyType;
         /**
          * Type of the message body content.
          */
-        public Object getBodyType() {
+        public MessageBodyType getBodyType() {
             return bodyType;
         }
         /**
          * Type of the message body content.
          */
-        public void setBodyType(Object value) {
+        public void setBodyType(MessageBodyType value) {
             bodyType = value;
         }
 

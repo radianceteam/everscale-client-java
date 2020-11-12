@@ -69,7 +69,16 @@ public class Net {
      *  
      */
     public enum SortDirection {
-    ASC,DESC
+        
+        /**
+         * 
+         */
+        ASC,
+
+        /**
+         * 
+         */
+        DESC
     }
     private TONContext context;
 
@@ -85,7 +94,7 @@ public class Net {
     * @param result Projection (result) string
     * @param order Sorting order
     * @param limit Number of documents to return
-    * @return  Objects that match the provided criteria
+    * @return Objects that match the provided criteria
     */
     public CompletableFuture<Object[]> queryCollection(String collection, Object filter, String result, OrderBy[] order, Number limit) {
         return context.requestJSON("net.query_collection", "{"+Stream.of((collection==null?null:("\"collection\":\""+collection+"\"")),(filter==null?null:("\"filter\":"+filter)),(result==null?null:("\"result\":\""+result+"\"")),(order==null?null:("\"order\":"+order)),(limit==null?null:("\"limit\":"+limit))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
@@ -99,7 +108,7 @@ public class Net {
     * @param filter Collection filter
     * @param result Projection (result) string
     * @param timeout Query timeout
-    * @return  First found object that matches the provided criteria
+    * @return First found object that matches the provided criteria
     */
     public CompletableFuture<Object> waitForCollection(String collection, Object filter, String result, Number timeout) {
         return context.requestJSON("net.wait_for_collection", "{"+Stream.of((collection==null?null:("\"collection\":\""+collection+"\"")),(filter==null?null:("\"filter\":"+filter)),(result==null?null:("\"result\":\""+result+"\"")),(timeout==null?null:("\"timeout\":"+timeout))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
@@ -122,7 +131,7 @@ public class Net {
     * @param collection Collection name (accounts, blocks, transactions, messages, block_signatures)
     * @param filter Collection filter
     * @param result Projection (result) string
-    * @return  Subscription handle. Must be closed with `unsubscribe`
+    * @return Subscription handle. Must be closed with `unsubscribe`
     */
     public CompletableFuture<Number> subscribeCollection(String collection, Object filter, String result, Consumer<SubscribeCollectionEvent> consumer) {
         return context.requestJSONCallback("net.subscribe_collection", "{"+Stream.of((collection==null?null:("\"collection\":\""+collection+"\"")),(filter==null?null:("\"filter\":"+filter)),(result==null?null:("\"result\":\""+result+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}", consumer, SubscribeCollectionEvent.class)

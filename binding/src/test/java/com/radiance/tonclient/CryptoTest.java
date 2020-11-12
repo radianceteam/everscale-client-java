@@ -66,7 +66,7 @@ public class CryptoTest extends TestBase {
     @Test
     public void keys() throws Exception {
         // generateRandomSignKeys
-        KeyPair keys = crypto.generateRandomSignKeys().get();
+        Crypto.KeyPair keys = crypto.generateRandomSignKeys().get();
         System.out.println("crypto.generateRandomSignKeys():  public:" + keys.getPublic() + " secret:" + keys.getSecret());
 
         // convertPublicKeyToTonSafeFormat
@@ -79,7 +79,7 @@ public class CryptoTest extends TestBase {
         System.out.println("Random bytes: " + randomBytes);
 
         // sign
-        ResultOfSign ros = crypto.sign(randomBytes, keys).get();
+        Crypto.ResultOfSign ros = crypto.sign(randomBytes, keys).get();
         System.out.println("crypto.sign: " + ros);
 
         // verifySignature
@@ -166,7 +166,7 @@ public class CryptoTest extends TestBase {
         );
 
         // Box
-        KeyPair keys = crypto.naclBoxKeypair().get();
+        Crypto.KeyPair keys = crypto.naclBoxKeypair().get();
         assertEquals(64, keys.getPublic().length());
         assertEquals(64, keys.getSecret().length());
         assertNotEquals(keys.getPublic(), keys.getSecret());

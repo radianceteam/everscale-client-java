@@ -6,7 +6,7 @@ public class ContractTest extends TestBase {
 
     @Test
     public void test1() throws Exception {
-        KeyPair keyPair = crypto.generateRandomSignKeys().get();
+        Crypto.KeyPair keyPair = crypto.generateRandomSignKeys().get();
         System.out.println(keyPair);
     }
 

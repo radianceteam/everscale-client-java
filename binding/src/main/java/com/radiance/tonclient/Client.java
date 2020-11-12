@@ -13,11 +13,64 @@ public class Client {
     /**
      *  
      */
+    public static class BuildInfoDependency  {
+        public BuildInfoDependency() {
+        }
+
+        public BuildInfoDependency(String name, String gitCommit) {
+
+            this.name = name;
+
+            this.gitCommit = gitCommit;
+
+        }
+
+
+
+        @JsonProperty("name")
+        private String name;
+        /**
+         * Dependency name. Usually it is a crate name.
+         */
+        public String getName() {
+            return name;
+        }
+        /**
+         * Dependency name. Usually it is a crate name.
+         */
+        public void setName(String value) {
+            name = value;
+        }
+
+        @JsonProperty("git_commit")
+        private String gitCommit;
+        /**
+         * Git commit hash of the related repository.
+         */
+        public String getGitCommit() {
+            return gitCommit;
+        }
+        /**
+         * Git commit hash of the related repository.
+         */
+        public void setGitCommit(String value) {
+            gitCommit = value;
+        }
+
+
+        @Override
+        public String toString() {
+            return "{"+Stream.of((name==null?null:("\"name\":\""+name+"\"")),(gitCommit==null?null:("\"git_commit\":\""+gitCommit+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
+        }
+    }
+    /**
+     *  
+     */
     public static class ResultOfBuildInfo  {
         public ResultOfBuildInfo() {
         }
 
-        public ResultOfBuildInfo(Number buildNumber, Object[] dependencies) {
+        public ResultOfBuildInfo(Number buildNumber, BuildInfoDependency[] dependencies) {
 
             this.buildNumber = buildNumber;
 
@@ -43,17 +96,17 @@ public class Client {
         }
 
         @JsonProperty("dependencies")
-        private Object[] dependencies;
+        private BuildInfoDependency[] dependencies;
         /**
          * Fingerprint of the most important dependencies.
          */
-        public Object[] getDependencies() {
+        public BuildInfoDependency[] getDependencies() {
             return dependencies;
         }
         /**
          * Fingerprint of the most important dependencies.
          */
-        public void setDependencies(Object[] value) {
+        public void setDependencies(BuildInfoDependency[] value) {
             dependencies = value;
         }
 
@@ -81,7 +134,7 @@ public class Client {
    /**
     * Returns Core Library version
     *
-    * @return  Core Library version
+    * @return Core Library version
     */
     public CompletableFuture<String> version() {
         return context.requestJSON("client.version", "{}")
