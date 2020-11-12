@@ -19,10 +19,12 @@ public class TONClientTest extends TestBase {
 
     @Test
     public void clientTest() throws Exception {
-        ClientModule client = new ClientModule(context);
+        Client client = new Client(context);
         String version = client.version().get();
         System.out.println("client.version: " + version);
         assertTrue("Version pattern doesn't match", versionPattern.matcher(version).matches());
+
+        client.buildInfo().get();
     }
 
     @Test

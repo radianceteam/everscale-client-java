@@ -9,6 +9,7 @@ const reserved = ['public','private','protected','void','int','long','float','do
 const PATH = './' + ('src.main.java.'+packageName).split('.').join('/') +'/';
 
 let types = {};
+let currMod;
 
 var genFiles = require('./gen-files.json');
 for(var f of genFiles) {
@@ -41,7 +42,15 @@ function htmlize(s) {
 
 function isFlattable(typeName) {
     let type = types[typeName];
-    return type && type.isStruct && typeName.startsWith('ParamsOf');
+    return type && type.isStruct && typeName.indexOf('.ParamsOf') > 0;
+}
+
+function trimClassName(cName, mName) {
+    //console.log('==',cName,currMod.name);
+    let arr = cName.split('.');
+    if (arr.length == 2 && arr[0] == arr[1].toLowerCase())
+        cName = arr[0] + '.' + arr[1].toUpperCase();
+    return cName.startsWith(currMod.name+'.')?cName.split('.').pop():capitalize(cName);
 }
 
 function setTypeExported(field) {
@@ -68,7 +77,7 @@ function stringifyFields(fields, type) {
 }
 
 function fieldMapper(f) {
-    let field = {name: f.name||'value', desc: f.description, getType:() => ((!field.isRef)||(field.type in types&&types[field.type].isExported)?field.type:'Object') + (field.isArray?'[]':'')};
+    let field = {name: f.name||'value', desc: f.description, getType:(mName) => ((!field.isRef)||(field.type in types&&types[field.type].isExported)?trimClassName(field.type, mName):'Object') + (field.isArray?'[]':'')};
     while (true) {
         if (f.type == 'Optional') {
             f = f.optional_inner;
@@ -93,61 +102,36 @@ api.modules.forEach(m => m.types.forEach(t => {
     switch (t.type) {
         case 'Struct':
             type.fields = t.struct_fields.map(fieldMapper);
-/*
-                let field = {name: f.name, desc: f.description, getType:() => ((!field.isRef)||(field.type in types&&types[field.type].isExported)?field.type:'Object') + (field.isArray?'[]':'')};
-                while (true) {
-                    if (f.type == 'Optional') {
-                        f = f.optional_inner;
-                        field.isOptional = true;
-                    } else if (f.type == 'Array') {
-                        f = f.array_item;
-                        field.isArray = true;
-                    } else {
-                        if (f.type == 'Ref') {
-                            field.type = f.ref_name;
-                            field.isRef = true;
-                        } else
-                            field.type = f.type == 'BigInt'?'Long':f.type;
-                        break;
-                    }
-                }
-                return field;
-            });
-*/            type.isStruct = true;
+            type.isStruct = true;
             break;
         case 'EnumOfConsts':
-            type.fields = t.enum_consts.map(f => ({name:f.name, desc: f.desc, getType:()=>t.name}));
+            type.fields = t.enum_consts.map(f => ({name:f.name, desc: f.description/*, getType:(mName)=>{console.log('==',mName,t.name);return capitalize(t.name)}*/}));
             type.isEnum = true;
-            //type.isExported = true;
             break;
         case 'EnumOfTypes':
             console.log(t.name);
-            type.variants = t.enum_types.map(v => ({name:v.name, desc:v.description, fields:v.struct_fields.map(fieldMapper)}));
+            type.variants = t.enum_types.map(v => ({name:v.name, desc:v.description, get fields() { return v.struct_fields.map(fieldMapper)}}));
             type.isEnumOfTypes = true;
         default:
             //console.log(t.type,t.name);
     }
-    types[t.name] = type;
+    types[m.name + '.' + t.name] = type;
 }));
 
 api.modules.forEach(mod => {
-    let imports = {'java.util.concurrent.CompletableFuture':true,'java.util.stream.*':true,'ton.sdk.TONContext':true};
+    currMod = mod;
+    let imports = {'java.util.concurrent.CompletableFuture':true,'java.util.stream.*':true,'ton.sdk.TONContext':true,'com.fasterxml.jackson.annotation.JsonProperty':true};
     let body = '';
 
     mod.functions.forEach(f => {
         let rName = f.result.generic_args[0].ref_name;
         let rType = types[rName];
         let rField = {getType:()=>'Void'};
-        //let rTypeName = 'Void';
-        //let rFieldName = '';
         if (rType&&rType.fields.length > 1) {
-            rType.isExported = true;
-            //rTypeName = rName;
-            rField = {getType:()=>rName}
+            setTypeExported({type:rName})
+            rField = {getType:(mName) => trimClassName(rName, mName)}
         } else if (rType) {
             const f = rType.fields[0];
-            //rTypeName = f.getType();
-            //rFieldName = `.findValue("${f.name}")`;
             rField = f;
         }
 
@@ -163,15 +147,15 @@ api.modules.forEach(mod => {
         body += params.map(p => `    * @param ${p.name} ${htmlize(p.desc)}\n`).join('');
         let rDesc = rField.desc || (((type)=>{return type&&type.desc})(types[rField.getType()]));
         if (rDesc)
-            body += `    * @return ${rDesc}\n`;
+            body += `    * @return ${htmlize(rDesc)}\n`;
         body += `    */\n`;
-        body += `    public CompletableFuture<${rField.getType()}> ${camelize(f.name)}(${params.map(p=>p.type+' '+p.name).join(', ')}${event?`, Consumer<${event}> consumer`:''}) {\n`
+        body += `    public CompletableFuture<${rField.getType(mod.name)}> ${camelize(f.name)}(${params.map(p=>p.type+' '+p.name).join(', ')}${event?`, Consumer<${event}> consumer`:''}) {\n`
         body += `        return context.requestJSON${event?'Callback':''}("${mod.name}.${f.name}", ${stringifyFields(fields)}${event?`, consumer, ${event}.class`:''})\n`;
-        body += `            .thenApply(json -> TONContext.convertValue(json${rField.name?`.findValue("${rField.name}")`:''}, ${rField.getType()}.class));\n`;
+        body += `            .thenApply(json -> TONContext.convertValue(json${rField.name?`.findValue("${rField.name}")`:''}, ${rField.getType(mod.name)}.class));\n`;
         body += `    }\n\n`;
     });
 
-    const className = capitalize(mod.name) + 'Module';
+    const className = capitalize(mod.name);
     genFiles.push(className + '.java');
 
     fs.writeFileSync(PATH + className + '.java', `package ${packageName};
@@ -182,7 +166,17 @@ ${Object.keys(imports).map(i=>`import ${i};`).join('\n')}
  *  ${htmlize(mod.description||'')}
  */
 public class ${className} {
-
+${Object.entries(types).filter(([n,t])=>t.isExported&&n.startsWith(mod.name+'.')).map(([cName,t]) => {
+    let genFunc;
+    if (t.isEnum)
+        genFunc = getEnumSource;
+    else if(t.isEnumOfTypes) {
+        genFunc = getEnumOfTypesSource;
+    } else
+        genFunc = getStructSource;
+    if (genFunc)
+        return genFunc(cName.split('.').pop(),t);
+}).join('')}
     private TONContext context;
 
     public ${className}(TONContext context) {
@@ -194,88 +188,73 @@ ${body}}
 
 });
 
-
-Object.entries(types).filter(([n,t])=>t.isExported).forEach(([cName,t]) => {
-    let genFunc;
-    if (t.isEnum)
-        genFunc = getEnumSource;
-    else if(t.isEnumOfTypes) {
-        genFunc = getEnumOfTypesSource;
-    } else
-        genFunc = getStructSource;
-    if (genFunc) {
-        genFiles.push(cName + '.java');
-        fs.writeFileSync(PATH + cName + '.java', `package ${packageName};\n` + genFunc(cName,t));
-    }
-});
-
 function getStructSource(cName, t, sClass) {
     
-    return (!sClass?`
-import java.util.stream.*;
-import com.fasterxml.jackson.annotation.JsonProperty;
-`:'')+`
-/**
- *  ${htmlize(t.desc||'')}
- */
-public ${sClass?'static ':''}class ${cName} ${sClass?`extends ${sClass} `:''}{
-    public ${cName}() {
-    }
+    return `
+    /**
+     *  ${htmlize(t.desc||'')}
+     */
+    public static class ${cName} ${sClass?`extends ${sClass} `:''} {
+        public ${cName}() {
+        }
 ${t.fields.filter(f=>f.name).length?`
-    public ${cName}(${t.fields.filter(f=>f.name).map(f=>`${f.getType()} ${camelize(f.name)}`).join(', ')}) {
+        public ${cName}(${t.fields.filter(f=>f.name).map(f=>`${f.getType()} ${camelize(f.name)}`).join(', ')}) {
 ${t.fields.map(f=>`
-        this.${camelize(f.name)} = ${camelize(f.name)};
+            this.${camelize(f.name)} = ${camelize(f.name)};
 `).join('')}
-    }
+        }
 `:''}
 
 ${t.fields.filter(f=>f.name).map(f=> {
     var arr = f.isArray?'[]':'';
     return `
-    @JsonProperty("${f.name}")
-    private ${f.getType()} ${camelize(f.name)};
-    /**
-     * ${htmlize(f.desc||'')}
-     */
-    public ${f.getType()} ${camelize('get_'+f.name)}() {
-        return ${camelize(f.name)};
-    }
-    /**
-     * ${htmlize(f.desc||'')}
-     */
-    public void ${camelize('set_'+f.name)}(${f.getType()} value) {
-        ${camelize(f.name)} = value;
-    }
+        @JsonProperty("${f.name}")
+        private ${f.getType()} ${camelize(f.name)};
+        /**
+         * ${htmlize(f.desc||'')}
+         */
+        public ${f.getType()} ${camelize('get_'+f.name)}() {
+            return ${camelize(f.name)};
+        }
+        /**
+         * ${htmlize(f.desc||'')}
+         */
+        public void ${camelize('set_'+f.name)}(${f.getType()} value) {
+            ${camelize(f.name)} = value;
+        }
 `}).join('')}
 
-    @Override
-    public String toString() {
-        return ${stringifyFields(t.fields.filter(f=>f.name), sClass&&cName)};
-    }
-}`
+        @Override
+        public String toString() {
+            return ${stringifyFields(t.fields.filter(f=>f.name), sClass&&cName)};
+        }
+    }`
 }
 
 function getEnumSource(cName, t) {
     return `
 
-/**
- *  ${htmlize(t.desc||'')}
- */
-public enum ${cName} {
-    ${t.fields.filter(f=>f.name).map(f=> f.name).join(',')}
-}`
+    /**
+     *  ${htmlize(t.desc||'')}
+     */
+    public enum ${cName} {
+        ${t.fields.filter(f=>f.name).map(f=> `
+        /**
+         * ${htmlize(f.desc)}
+         */
+        ${f.name}`).join(',\n')}
+    }`
 }
 
 function getEnumOfTypesSource(cName, t) {
+    if (capitalize(currMod.name) == cName)
+        cName = cName.toUpperCase();
     return `
-import java.util.stream.*;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-public abstract class ${cName} {
+    public static abstract class ${cName} {
 ${t.variants.map(v => {
-    
+
     return (v.fields.length?'':`
-    public static final ${v.name} ${v.name} = new ${v.name}();
+        public static final ${v.name} ${v.name} = new ${v.name}();
 `) + getStructSource(v.name,v,cName);
 }).join('\n')}
 }`;

@@ -12,19 +12,19 @@ public class ProcessingTest extends TestBase {
 
     @Test
     public void testWaitMessage() throws Exception {
-        KeyPair keys = crypto.generateRandomSignKeys().get();
-        Abi abi = eventsAbi;
+        Crypto.KeyPair keys = crypto.generateRandomSignKeys().get();
+        Abi.ABI abi = eventsAbi;
         String tvc = eventsTvc;
 
-        ResultOfEncodeMessage encoded = abiModule.encodeMessage(
+        Abi.ResultOfEncodeMessage encoded = abiModule.encodeMessage(
             abi,
             null,
-            new DeploySet(tvc, null, null),
-            new CallSet(
+            new Abi.DeploySet(tvc, null, null),
+            new Abi.CallSet(
                 "constructor",
-                new FunctionHeader(Integer.MAX_VALUE, null, keys.getPublic()),
+                new Abi.FunctionHeader(Integer.MAX_VALUE, null, keys.getPublic()),
                 null),
-            new Signer.Keys(keys),
+            new Abi.Signer.Keys(keys),
             null).get();
 
         getGramsFromGiver(encoded.getAddress()).get();
