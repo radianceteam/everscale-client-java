@@ -9,7 +9,10 @@ git pull
 cargo build --release || exit
 
 resdir=$projectdir/binding/src/main/resources
-mkdir -p $resdir && cp ../../../target/release/*.so $resdir
+mkdir -p $resdir || exit
+cp ../../../target/release/*.so $resdir
+cp ../../../target/release/*.dylib $resdir
+
 cd $projectdir
 
 if [[ "$(docker images -q tonlabs/local-node 2> /dev/null)" == "" ]]; then

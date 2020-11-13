@@ -37,13 +37,17 @@ public class TONContext {
 
     static {
         try {
-            switch(System.getProperty("os.name")) {
-                case "Linux":
-                    System.load(createTempFile("/libton_client_jni.so"));
-                    break;
-                default:    // Windows
-                    System.load(createTempFile("/ton_client_jni.dll"));
-            }
+            String osName = System.getProperty("os.name");
+            System.out.println("OS name: '" + osName + "'");
+            osName = osName.toLowerCase();
+            String libPath;
+            if (osName.indexOf("mac") >= 0 || osName.indexOf("darwin") >= 0)
+                libPath = "/libton_client_jni.dylib";
+            else if (osName.indexOf("win") >= 0)
+                libPath = "/libton_client_jni.so";
+            else    // Linux
+                libPath = "/libton_client_jni.so";
+            System.load(createTempFile(libPath));
         } catch(IOException e) {
             throw new RuntimeException(e);
         }
