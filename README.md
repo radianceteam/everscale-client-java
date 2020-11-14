@@ -58,7 +58,7 @@ Follow installation instructions from https://docs.docker.com/engine/install/
 Once the build succeed you will have the library installed to your local maven repository.
 To use it in your projects, add the dependency to `pom.xml`
 
-```
+```xml
     ...
     <dependency>
       <groupId>com.radiance.tonclient</groupId>
@@ -70,7 +70,7 @@ To use it in your projects, add the dependency to `pom.xml`
 
 Example of usage:
 
-```
+```java
     // At the beginning TON Context must be created
     // Configuration parameters are passed as a json string
     TONContext context = TONContext.create("{\"network\":{\"server_address\":\"https://net.ton.dev/graphql\"}}");
