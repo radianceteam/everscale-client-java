@@ -63,7 +63,7 @@ To use it in your projects, add the dependency to `pom.xml`
     <dependency>
       <groupId>com.radiance.tonclient</groupId>
       <artifactId>ton-client-binding</artifactId>
-      <version>1.0-SNAPSHOT</version>
+      <version>1.1</version>
     </dependency>
     ...
 ```
@@ -101,4 +101,4 @@ Example of usage:
 
 ### See also
 - More usage examples [test sources](binding/src/test/java/com/radiance/tonclient/)
-- [Java API Docs](apidocs/index.html)
+- [Java API Docs](apidocs/)
