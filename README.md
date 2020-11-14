@@ -42,11 +42,6 @@ Follow installation instructions from https://docs.docker.com/engine/install/
 ```
 - If succeed, you can find "ton-client-binding-1.0-SNAPSHOT-jar-with-dependencies.jar" file located under ${Project_basedir}/binding/target
 
-### Run
-- To run, go to "binding" directory and enter the following command:
-```
-    $ mvn exec:java
-```
 
 ### Clean
 - To clean the generated files, enter the following command:

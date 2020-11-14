@@ -44,7 +44,7 @@ public class TONContext {
             if (osName.indexOf("mac") >= 0 || osName.indexOf("darwin") >= 0)
                 libPath = "/libton_client_jni.dylib";
             else if (osName.indexOf("win") >= 0)
-                libPath = "/libton_client_jni.so";
+                libPath = "/ton_client_jni.dll";
             else    // Linux
                 libPath = "/libton_client_jni.so";
             System.load(createTempFile(libPath));
