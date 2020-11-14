@@ -2,7 +2,6 @@ package com.radiance.tonclient;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.*;
-import ton.sdk.TONContext;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.function.Consumer;
 
@@ -15,7 +14,23 @@ public class Net {
      *  
      */
     public static class OrderBy  {
+
+        public OrderBy(String path, SortDirection direction) {
+
+            this.path = path;
+
+            this.direction = direction;
+
+        }
+        public OrderBy(String path) {
+
+            this.path = path;
+
+        }
         public OrderBy() {
+
+        }
+/*        public OrderBy() {
         }
 
         public OrderBy(String path, SortDirection direction) {
@@ -25,7 +40,7 @@ public class Net {
             this.direction = direction;
 
         }
-
+*/
 
 
         @JsonProperty("path")
@@ -40,7 +55,7 @@ public class Net {
          * 
          */
         public void setPath(String value) {
-            path = value;
+            this.path = value;
         }
 
         @JsonProperty("direction")
@@ -55,7 +70,7 @@ public class Net {
          * 
          */
         public void setDirection(SortDirection value) {
-            direction = value;
+            this.direction = value;
         }
 
 

@@ -109,7 +109,6 @@ api.modules.forEach(m => m.types.forEach(t => {
             type.isEnum = true;
             break;
         case 'EnumOfTypes':
-            console.log(t.name);
             type.variants = t.enum_types.map(v => ({name:v.name, desc:v.description, get fields() { return v.struct_fields.map(fieldMapper)}}));
             type.isEnumOfTypes = true;
         default:
@@ -118,9 +117,11 @@ api.modules.forEach(m => m.types.forEach(t => {
     types[m.name + '.' + t.name] = type;
 }));
 
+setTypeExported({type:'client.ClientConfig'});
+
 api.modules.forEach(mod => {
     currMod = mod;
-    let imports = {'java.util.concurrent.CompletableFuture':true,'java.util.stream.*':true,'ton.sdk.TONContext':true,'com.fasterxml.jackson.annotation.JsonProperty':true};
+    let imports = {'java.util.concurrent.CompletableFuture':true,'java.util.stream.*':true,'com.fasterxml.jackson.annotation.JsonProperty':true};
     let body = '';
 
     mod.functions.forEach(f => {
@@ -189,13 +190,24 @@ ${body}}
 });
 
 function getStructSource(cName, t, sClass) {
-    
+    //console.log(cName,t.fields);
+    var args = t.fields.filter(f=>f.name);
+    var constr = '';
+    do {
+        constr += `
+        public ${cName}(${args.map(f=>`${f.getType()} ${camelize(f.name)}`).join(', ')}) {
+${args.map(f=>`
+            this.${camelize(f.name)} = ${camelize(f.name)};
+`).join('')}
+        }`;
+    } while(args.pop());
     return `
     /**
      *  ${htmlize(t.desc||'')}
      */
     public static class ${cName} ${sClass?`extends ${sClass} `:''} {
-        public ${cName}() {
+${constr}
+/*        public ${cName}() {
         }
 ${t.fields.filter(f=>f.name).length?`
         public ${cName}(${t.fields.filter(f=>f.name).map(f=>`${f.getType()} ${camelize(f.name)}`).join(', ')}) {
@@ -203,7 +215,7 @@ ${t.fields.map(f=>`
             this.${camelize(f.name)} = ${camelize(f.name)};
 `).join('')}
         }
-`:''}
+`:''}*/
 
 ${t.fields.filter(f=>f.name).map(f=> {
     var arr = f.isArray?'[]':'';
@@ -220,7 +232,7 @@ ${t.fields.filter(f=>f.name).map(f=> {
          * ${htmlize(f.desc||'')}
          */
         public void ${camelize('set_'+f.name)}(${f.getType()} value) {
-            ${camelize(f.name)} = value;
+            this.${camelize(f.name)} = value;
         }
 `}).join('')}
 
@@ -262,4 +274,4 @@ ${t.variants.map(v => {
 
 fs.writeFileSync('./gen-files.json', JSON.stringify(genFiles));
 
-//Object.entries(types).filter(([n,t])=>t.isExported).forEach(([n,t])=>console.log(n));
+//Object.entries(types).filter(([n,t])=>true/*t.isExported*/).forEach(([n,t])=>console.log(n,t.isExported));

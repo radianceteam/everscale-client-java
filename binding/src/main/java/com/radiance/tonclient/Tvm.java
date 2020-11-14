@@ -2,7 +2,6 @@ package com.radiance.tonclient;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.*;
-import ton.sdk.TONContext;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -14,7 +13,43 @@ public class Tvm {
      *  
      */
     public static class ExecutionOptions  {
+
+        public ExecutionOptions(String blockchainConfig, Number blockTime, Long blockLt, Long transactionLt) {
+
+            this.blockchainConfig = blockchainConfig;
+
+            this.blockTime = blockTime;
+
+            this.blockLt = blockLt;
+
+            this.transactionLt = transactionLt;
+
+        }
+        public ExecutionOptions(String blockchainConfig, Number blockTime, Long blockLt) {
+
+            this.blockchainConfig = blockchainConfig;
+
+            this.blockTime = blockTime;
+
+            this.blockLt = blockLt;
+
+        }
+        public ExecutionOptions(String blockchainConfig, Number blockTime) {
+
+            this.blockchainConfig = blockchainConfig;
+
+            this.blockTime = blockTime;
+
+        }
+        public ExecutionOptions(String blockchainConfig) {
+
+            this.blockchainConfig = blockchainConfig;
+
+        }
         public ExecutionOptions() {
+
+        }
+/*        public ExecutionOptions() {
         }
 
         public ExecutionOptions(String blockchainConfig, Number blockTime, Long blockLt, Long transactionLt) {
@@ -28,7 +63,7 @@ public class Tvm {
             this.transactionLt = transactionLt;
 
         }
-
+*/
 
 
         @JsonProperty("blockchain_config")
@@ -43,7 +78,7 @@ public class Tvm {
          * boc with config
          */
         public void setBlockchainConfig(String value) {
-            blockchainConfig = value;
+            this.blockchainConfig = value;
         }
 
         @JsonProperty("block_time")
@@ -58,7 +93,7 @@ public class Tvm {
          * time that is used as transaction time
          */
         public void setBlockTime(Number value) {
-            blockTime = value;
+            this.blockTime = value;
         }
 
         @JsonProperty("block_lt")
@@ -73,7 +108,7 @@ public class Tvm {
          * block logical time
          */
         public void setBlockLt(Long value) {
-            blockLt = value;
+            this.blockLt = value;
         }
 
         @JsonProperty("transaction_lt")
@@ -88,7 +123,7 @@ public class Tvm {
          * transaction logical time
          */
         public void setTransactionLt(Long value) {
-            transactionLt = value;
+            this.transactionLt = value;
         }
 
 
@@ -105,9 +140,13 @@ public class Tvm {
      *  Non-existing account to run a creation internal message. Should be used with `skip_transaction_check = true` if the message has no deploy data since transactions on the uninitialized account are always aborted
      */
     public static class None extends AccountForExecutor  {
-        public None() {
-        }
 
+        public None() {
+
+        }
+/*        public None() {
+        }
+*/
 
 
 
@@ -123,9 +162,13 @@ public class Tvm {
      *  Emulate uninitialized account to run deploy message
      */
     public static class Uninit extends AccountForExecutor  {
-        public Uninit() {
-        }
 
+        public Uninit() {
+
+        }
+/*        public Uninit() {
+        }
+*/
 
 
 
@@ -139,7 +182,23 @@ public class Tvm {
      *  Account state to run message
      */
     public static class Account extends AccountForExecutor  {
+
+        public Account(String boc, Boolean unlimitedBalance) {
+
+            this.boc = boc;
+
+            this.unlimitedBalance = unlimitedBalance;
+
+        }
+        public Account(String boc) {
+
+            this.boc = boc;
+
+        }
         public Account() {
+
+        }
+/*        public Account() {
         }
 
         public Account(String boc, Boolean unlimitedBalance) {
@@ -149,7 +208,7 @@ public class Tvm {
             this.unlimitedBalance = unlimitedBalance;
 
         }
-
+*/
 
 
         @JsonProperty("boc")
@@ -164,7 +223,7 @@ public class Tvm {
          * Account BOC. Encoded as base64.
          */
         public void setBoc(String value) {
-            boc = value;
+            this.boc = value;
         }
 
         @JsonProperty("unlimited_balance")
@@ -179,7 +238,7 @@ public class Tvm {
          * Flag for running account with the unlimited balance. Can be used to calculate transaction fees without balance check
          */
         public void setUnlimitedBalance(Boolean value) {
-            unlimitedBalance = value;
+            this.unlimitedBalance = value;
         }
 
 
@@ -193,7 +252,71 @@ public class Tvm {
      *  
      */
     public static class TransactionFees  {
+
+        public TransactionFees(Long inMsgFwdFee, Long storageFee, Long gasFee, Long outMsgsFwdFee, Long totalAccountFees, Long totalOutput) {
+
+            this.inMsgFwdFee = inMsgFwdFee;
+
+            this.storageFee = storageFee;
+
+            this.gasFee = gasFee;
+
+            this.outMsgsFwdFee = outMsgsFwdFee;
+
+            this.totalAccountFees = totalAccountFees;
+
+            this.totalOutput = totalOutput;
+
+        }
+        public TransactionFees(Long inMsgFwdFee, Long storageFee, Long gasFee, Long outMsgsFwdFee, Long totalAccountFees) {
+
+            this.inMsgFwdFee = inMsgFwdFee;
+
+            this.storageFee = storageFee;
+
+            this.gasFee = gasFee;
+
+            this.outMsgsFwdFee = outMsgsFwdFee;
+
+            this.totalAccountFees = totalAccountFees;
+
+        }
+        public TransactionFees(Long inMsgFwdFee, Long storageFee, Long gasFee, Long outMsgsFwdFee) {
+
+            this.inMsgFwdFee = inMsgFwdFee;
+
+            this.storageFee = storageFee;
+
+            this.gasFee = gasFee;
+
+            this.outMsgsFwdFee = outMsgsFwdFee;
+
+        }
+        public TransactionFees(Long inMsgFwdFee, Long storageFee, Long gasFee) {
+
+            this.inMsgFwdFee = inMsgFwdFee;
+
+            this.storageFee = storageFee;
+
+            this.gasFee = gasFee;
+
+        }
+        public TransactionFees(Long inMsgFwdFee, Long storageFee) {
+
+            this.inMsgFwdFee = inMsgFwdFee;
+
+            this.storageFee = storageFee;
+
+        }
+        public TransactionFees(Long inMsgFwdFee) {
+
+            this.inMsgFwdFee = inMsgFwdFee;
+
+        }
         public TransactionFees() {
+
+        }
+/*        public TransactionFees() {
         }
 
         public TransactionFees(Long inMsgFwdFee, Long storageFee, Long gasFee, Long outMsgsFwdFee, Long totalAccountFees, Long totalOutput) {
@@ -211,7 +334,7 @@ public class Tvm {
             this.totalOutput = totalOutput;
 
         }
-
+*/
 
 
         @JsonProperty("in_msg_fwd_fee")
@@ -226,7 +349,7 @@ public class Tvm {
          * 
          */
         public void setInMsgFwdFee(Long value) {
-            inMsgFwdFee = value;
+            this.inMsgFwdFee = value;
         }
 
         @JsonProperty("storage_fee")
@@ -241,7 +364,7 @@ public class Tvm {
          * 
          */
         public void setStorageFee(Long value) {
-            storageFee = value;
+            this.storageFee = value;
         }
 
         @JsonProperty("gas_fee")
@@ -256,7 +379,7 @@ public class Tvm {
          * 
          */
         public void setGasFee(Long value) {
-            gasFee = value;
+            this.gasFee = value;
         }
 
         @JsonProperty("out_msgs_fwd_fee")
@@ -271,7 +394,7 @@ public class Tvm {
          * 
          */
         public void setOutMsgsFwdFee(Long value) {
-            outMsgsFwdFee = value;
+            this.outMsgsFwdFee = value;
         }
 
         @JsonProperty("total_account_fees")
@@ -286,7 +409,7 @@ public class Tvm {
          * 
          */
         public void setTotalAccountFees(Long value) {
-            totalAccountFees = value;
+            this.totalAccountFees = value;
         }
 
         @JsonProperty("total_output")
@@ -301,7 +424,7 @@ public class Tvm {
          * 
          */
         public void setTotalOutput(Long value) {
-            totalOutput = value;
+            this.totalOutput = value;
         }
 
 
@@ -314,7 +437,56 @@ public class Tvm {
      *  
      */
     public static class ResultOfRunExecutor  {
+
+        public ResultOfRunExecutor(Object transaction, String[] outMessages, Processing.DecodedOutput decoded, String account, TransactionFees fees) {
+
+            this.transaction = transaction;
+
+            this.outMessages = outMessages;
+
+            this.decoded = decoded;
+
+            this.account = account;
+
+            this.fees = fees;
+
+        }
+        public ResultOfRunExecutor(Object transaction, String[] outMessages, Processing.DecodedOutput decoded, String account) {
+
+            this.transaction = transaction;
+
+            this.outMessages = outMessages;
+
+            this.decoded = decoded;
+
+            this.account = account;
+
+        }
+        public ResultOfRunExecutor(Object transaction, String[] outMessages, Processing.DecodedOutput decoded) {
+
+            this.transaction = transaction;
+
+            this.outMessages = outMessages;
+
+            this.decoded = decoded;
+
+        }
+        public ResultOfRunExecutor(Object transaction, String[] outMessages) {
+
+            this.transaction = transaction;
+
+            this.outMessages = outMessages;
+
+        }
+        public ResultOfRunExecutor(Object transaction) {
+
+            this.transaction = transaction;
+
+        }
         public ResultOfRunExecutor() {
+
+        }
+/*        public ResultOfRunExecutor() {
         }
 
         public ResultOfRunExecutor(Object transaction, String[] outMessages, Processing.DecodedOutput decoded, String account, TransactionFees fees) {
@@ -330,7 +502,7 @@ public class Tvm {
             this.fees = fees;
 
         }
-
+*/
 
 
         @JsonProperty("transaction")
@@ -345,7 +517,7 @@ public class Tvm {
          * Parsed transaction.<p> In addition to the regular transaction fields there is a `boc` field encoded with `base64` which contains source transaction BOC.
          */
         public void setTransaction(Object value) {
-            transaction = value;
+            this.transaction = value;
         }
 
         @JsonProperty("out_messages")
@@ -360,7 +532,7 @@ public class Tvm {
          * List of output messages' BOCs. Encoded as `base64`
          */
         public void setOutMessages(String[] value) {
-            outMessages = value;
+            this.outMessages = value;
         }
 
         @JsonProperty("decoded")
@@ -375,7 +547,7 @@ public class Tvm {
          * Optional decoded message bodies according to the optional `abi` parameter.
          */
         public void setDecoded(Processing.DecodedOutput value) {
-            decoded = value;
+            this.decoded = value;
         }
 
         @JsonProperty("account")
@@ -390,7 +562,7 @@ public class Tvm {
          * Updated account state BOC. Encoded as `base64`
          */
         public void setAccount(String value) {
-            account = value;
+            this.account = value;
         }
 
         @JsonProperty("fees")
@@ -405,7 +577,7 @@ public class Tvm {
          * Transaction fees
          */
         public void setFees(TransactionFees value) {
-            fees = value;
+            this.fees = value;
         }
 
 
@@ -418,7 +590,32 @@ public class Tvm {
      *  
      */
     public static class ResultOfRunTvm  {
+
+        public ResultOfRunTvm(String[] outMessages, Processing.DecodedOutput decoded, String account) {
+
+            this.outMessages = outMessages;
+
+            this.decoded = decoded;
+
+            this.account = account;
+
+        }
+        public ResultOfRunTvm(String[] outMessages, Processing.DecodedOutput decoded) {
+
+            this.outMessages = outMessages;
+
+            this.decoded = decoded;
+
+        }
+        public ResultOfRunTvm(String[] outMessages) {
+
+            this.outMessages = outMessages;
+
+        }
         public ResultOfRunTvm() {
+
+        }
+/*        public ResultOfRunTvm() {
         }
 
         public ResultOfRunTvm(String[] outMessages, Processing.DecodedOutput decoded, String account) {
@@ -430,7 +627,7 @@ public class Tvm {
             this.account = account;
 
         }
-
+*/
 
 
         @JsonProperty("out_messages")
@@ -445,7 +642,7 @@ public class Tvm {
          * List of output messages' BOCs. Encoded as `base64`
          */
         public void setOutMessages(String[] value) {
-            outMessages = value;
+            this.outMessages = value;
         }
 
         @JsonProperty("decoded")
@@ -460,7 +657,7 @@ public class Tvm {
          * Optional decoded message bodies according to the optional `abi` parameter.
          */
         public void setDecoded(Processing.DecodedOutput value) {
-            decoded = value;
+            this.decoded = value;
         }
 
         @JsonProperty("account")
@@ -475,7 +672,7 @@ public class Tvm {
          * Updated account state BOC. Encoded as `base64`. Attention! Only data in account state is updated.
          */
         public void setAccount(String value) {
-            account = value;
+            this.account = value;
         }
 
 

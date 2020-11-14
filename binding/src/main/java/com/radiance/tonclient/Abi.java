@@ -2,7 +2,6 @@ package com.radiance.tonclient;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.*;
-import ton.sdk.TONContext;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -16,7 +15,16 @@ public class Abi {
      *  
      */
     public static class Contract extends ABI  {
+
+        public Contract(Object value) {
+
+            this.value = value;
+
+        }
         public Contract() {
+
+        }
+/*        public Contract() {
         }
 
         public Contract(Object value) {
@@ -24,7 +32,7 @@ public class Abi {
             this.value = value;
 
         }
-
+*/
 
 
         @JsonProperty("value")
@@ -39,7 +47,7 @@ public class Abi {
          * 
          */
         public void setValue(Object value) {
-            value = value;
+            this.value = value;
         }
 
 
@@ -53,7 +61,16 @@ public class Abi {
      *  
      */
     public static class Json extends ABI  {
+
+        public Json(String value) {
+
+            this.value = value;
+
+        }
         public Json() {
+
+        }
+/*        public Json() {
         }
 
         public Json(String value) {
@@ -61,7 +78,7 @@ public class Abi {
             this.value = value;
 
         }
-
+*/
 
 
         @JsonProperty("value")
@@ -76,7 +93,7 @@ public class Abi {
          * 
          */
         public void setValue(String value) {
-            value = value;
+            this.value = value;
         }
 
 
@@ -90,7 +107,16 @@ public class Abi {
      *  
      */
     public static class Handle extends ABI  {
+
+        public Handle(Object value) {
+
+            this.value = value;
+
+        }
         public Handle() {
+
+        }
+/*        public Handle() {
         }
 
         public Handle(Object value) {
@@ -98,7 +124,7 @@ public class Abi {
             this.value = value;
 
         }
-
+*/
 
 
         @JsonProperty("value")
@@ -113,7 +139,7 @@ public class Abi {
          * 
          */
         public void setValue(Object value) {
-            value = value;
+            this.value = value;
         }
 
 
@@ -127,7 +153,16 @@ public class Abi {
      *  
      */
     public static class Serialized extends ABI  {
+
+        public Serialized(Object value) {
+
+            this.value = value;
+
+        }
         public Serialized() {
+
+        }
+/*        public Serialized() {
         }
 
         public Serialized(Object value) {
@@ -135,7 +170,7 @@ public class Abi {
             this.value = value;
 
         }
-
+*/
 
 
         @JsonProperty("value")
@@ -150,7 +185,7 @@ public class Abi {
          * 
          */
         public void setValue(Object value) {
-            value = value;
+            this.value = value;
         }
 
 
@@ -164,7 +199,32 @@ public class Abi {
      *  
      */
     public static class FunctionHeader  {
+
+        public FunctionHeader(Number expire, Long time, String pubkey) {
+
+            this.expire = expire;
+
+            this.time = time;
+
+            this.pubkey = pubkey;
+
+        }
+        public FunctionHeader(Number expire, Long time) {
+
+            this.expire = expire;
+
+            this.time = time;
+
+        }
+        public FunctionHeader(Number expire) {
+
+            this.expire = expire;
+
+        }
         public FunctionHeader() {
+
+        }
+/*        public FunctionHeader() {
         }
 
         public FunctionHeader(Number expire, Long time, String pubkey) {
@@ -176,7 +236,7 @@ public class Abi {
             this.pubkey = pubkey;
 
         }
-
+*/
 
 
         @JsonProperty("expire")
@@ -191,7 +251,7 @@ public class Abi {
          * Message expiration time in seconds. If not specified - calculated automatically from message_expiration_timeout(), try_index and message_expiration_timeout_grow_factor() (if ABI includes `expire` header).
          */
         public void setExpire(Number value) {
-            expire = value;
+            this.expire = value;
         }
 
         @JsonProperty("time")
@@ -206,7 +266,7 @@ public class Abi {
          * Message creation time in milliseconds. If not specified, `now` is used (if ABI includes `time` header).
          */
         public void setTime(Long value) {
-            time = value;
+            this.time = value;
         }
 
         @JsonProperty("pubkey")
@@ -221,7 +281,7 @@ public class Abi {
          * Public key is used by the contract to check the signature. Encoded in `hex`. If not specified, method fails with exception (if ABI includes `pubkey` header)..
          */
         public void setPubkey(String value) {
-            pubkey = value;
+            this.pubkey = value;
         }
 
 
@@ -234,7 +294,32 @@ public class Abi {
      *  
      */
     public static class CallSet  {
+
+        public CallSet(String functionName, FunctionHeader header, Object input) {
+
+            this.functionName = functionName;
+
+            this.header = header;
+
+            this.input = input;
+
+        }
+        public CallSet(String functionName, FunctionHeader header) {
+
+            this.functionName = functionName;
+
+            this.header = header;
+
+        }
+        public CallSet(String functionName) {
+
+            this.functionName = functionName;
+
+        }
         public CallSet() {
+
+        }
+/*        public CallSet() {
         }
 
         public CallSet(String functionName, FunctionHeader header, Object input) {
@@ -246,7 +331,7 @@ public class Abi {
             this.input = input;
 
         }
-
+*/
 
 
         @JsonProperty("function_name")
@@ -261,7 +346,7 @@ public class Abi {
          * Function name that is being called.
          */
         public void setFunctionName(String value) {
-            functionName = value;
+            this.functionName = value;
         }
 
         @JsonProperty("header")
@@ -276,7 +361,7 @@ public class Abi {
          * Function header.<p> If an application omits some header parameters required by the contract's ABI, the library will set the default values for them.
          */
         public void setHeader(FunctionHeader value) {
-            header = value;
+            this.header = value;
         }
 
         @JsonProperty("input")
@@ -291,7 +376,7 @@ public class Abi {
          * Function input parameters according to ABI.
          */
         public void setInput(Object value) {
-            input = value;
+            this.input = value;
         }
 
 
@@ -304,7 +389,32 @@ public class Abi {
      *  
      */
     public static class DeploySet  {
+
+        public DeploySet(String tvc, Number workchainId, Object initialData) {
+
+            this.tvc = tvc;
+
+            this.workchainId = workchainId;
+
+            this.initialData = initialData;
+
+        }
+        public DeploySet(String tvc, Number workchainId) {
+
+            this.tvc = tvc;
+
+            this.workchainId = workchainId;
+
+        }
+        public DeploySet(String tvc) {
+
+            this.tvc = tvc;
+
+        }
         public DeploySet() {
+
+        }
+/*        public DeploySet() {
         }
 
         public DeploySet(String tvc, Number workchainId, Object initialData) {
@@ -316,7 +426,7 @@ public class Abi {
             this.initialData = initialData;
 
         }
-
+*/
 
 
         @JsonProperty("tvc")
@@ -331,7 +441,7 @@ public class Abi {
          * Content of TVC file encoded in `base64`.
          */
         public void setTvc(String value) {
-            tvc = value;
+            this.tvc = value;
         }
 
         @JsonProperty("workchain_id")
@@ -346,7 +456,7 @@ public class Abi {
          * Target workchain for destination address. Default is `0`.
          */
         public void setWorkchainId(Number value) {
-            workchainId = value;
+            this.workchainId = value;
         }
 
         @JsonProperty("initial_data")
@@ -361,7 +471,7 @@ public class Abi {
          * List of initial values for contract's public variables.
          */
         public void setInitialData(Object value) {
-            initialData = value;
+            this.initialData = value;
         }
 
 
@@ -378,9 +488,13 @@ public class Abi {
      *  No keys are provided. Creates an unsigned message.
      */
     public static class None extends Signer  {
-        public None() {
-        }
 
+        public None() {
+
+        }
+/*        public None() {
+        }
+*/
 
 
 
@@ -394,7 +508,16 @@ public class Abi {
      *  Only public key is provided in unprefixed hex string format to generate unsigned message  and `data_to_sign` which can be signed later.
      */
     public static class External extends Signer  {
+
+        public External(String publicKey) {
+
+            this.publicKey = publicKey;
+
+        }
         public External() {
+
+        }
+/*        public External() {
         }
 
         public External(String publicKey) {
@@ -402,7 +525,7 @@ public class Abi {
             this.publicKey = publicKey;
 
         }
-
+*/
 
 
         @JsonProperty("public_key")
@@ -417,7 +540,7 @@ public class Abi {
          * 
          */
         public void setPublicKey(String value) {
-            publicKey = value;
+            this.publicKey = value;
         }
 
 
@@ -431,7 +554,16 @@ public class Abi {
      *  Key pair is provided for signing
      */
     public static class Keys extends Signer  {
+
+        public Keys(Crypto.KeyPair keys) {
+
+            this.keys = keys;
+
+        }
         public Keys() {
+
+        }
+/*        public Keys() {
         }
 
         public Keys(Crypto.KeyPair keys) {
@@ -439,7 +571,7 @@ public class Abi {
             this.keys = keys;
 
         }
-
+*/
 
 
         @JsonProperty("keys")
@@ -454,7 +586,7 @@ public class Abi {
          * 
          */
         public void setKeys(Crypto.KeyPair value) {
-            keys = value;
+            this.keys = value;
         }
 
 
@@ -468,7 +600,16 @@ public class Abi {
      *  Signing Box interface is provided for signing, allows Dapps to sign messages using external APIs, such as HSM, cold wallet, etc.
      */
     public static class SigningBox extends Signer  {
+
+        public SigningBox(Object handle) {
+
+            this.handle = handle;
+
+        }
         public SigningBox() {
+
+        }
+/*        public SigningBox() {
         }
 
         public SigningBox(Object handle) {
@@ -476,7 +617,7 @@ public class Abi {
             this.handle = handle;
 
         }
-
+*/
 
 
         @JsonProperty("handle")
@@ -491,7 +632,7 @@ public class Abi {
          * 
          */
         public void setHandle(Object value) {
-            handle = value;
+            this.handle = value;
         }
 
 
@@ -533,7 +674,16 @@ public class Abi {
      *  Deploy message.
      */
     public static class Message extends StateInitSource  {
+
+        public Message(Object source) {
+
+            this.source = source;
+
+        }
         public Message() {
+
+        }
+/*        public Message() {
         }
 
         public Message(Object source) {
@@ -541,7 +691,7 @@ public class Abi {
             this.source = source;
 
         }
-
+*/
 
 
         @JsonProperty("source")
@@ -556,7 +706,7 @@ public class Abi {
          * 
          */
         public void setSource(Object value) {
-            source = value;
+            this.source = value;
         }
 
 
@@ -570,7 +720,32 @@ public class Abi {
      *  State init data.
      */
     public static class StateInit extends StateInitSource  {
+
+        public StateInit(String code, String data, String library) {
+
+            this.code = code;
+
+            this.data = data;
+
+            this.library = library;
+
+        }
+        public StateInit(String code, String data) {
+
+            this.code = code;
+
+            this.data = data;
+
+        }
+        public StateInit(String code) {
+
+            this.code = code;
+
+        }
         public StateInit() {
+
+        }
+/*        public StateInit() {
         }
 
         public StateInit(String code, String data, String library) {
@@ -582,7 +757,7 @@ public class Abi {
             this.library = library;
 
         }
-
+*/
 
 
         @JsonProperty("code")
@@ -597,7 +772,7 @@ public class Abi {
          * Code BOC. Encoded in `base64`.
          */
         public void setCode(String value) {
-            code = value;
+            this.code = value;
         }
 
         @JsonProperty("data")
@@ -612,7 +787,7 @@ public class Abi {
          * Data BOC. Encoded in `base64`.
          */
         public void setData(String value) {
-            data = value;
+            this.data = value;
         }
 
         @JsonProperty("library")
@@ -627,7 +802,7 @@ public class Abi {
          * Library BOC. Encoded in `base64`.
          */
         public void setLibrary(String value) {
-            library = value;
+            this.library = value;
         }
 
 
@@ -641,7 +816,32 @@ public class Abi {
      *  Content of the TVC file. Encoded in `base64`.
      */
     public static class Tvc extends StateInitSource  {
+
+        public Tvc(String tvc, String publicKey, Object initParams) {
+
+            this.tvc = tvc;
+
+            this.publicKey = publicKey;
+
+            this.initParams = initParams;
+
+        }
+        public Tvc(String tvc, String publicKey) {
+
+            this.tvc = tvc;
+
+            this.publicKey = publicKey;
+
+        }
+        public Tvc(String tvc) {
+
+            this.tvc = tvc;
+
+        }
         public Tvc() {
+
+        }
+/*        public Tvc() {
         }
 
         public Tvc(String tvc, String publicKey, Object initParams) {
@@ -653,7 +853,7 @@ public class Abi {
             this.initParams = initParams;
 
         }
-
+*/
 
 
         @JsonProperty("tvc")
@@ -668,7 +868,7 @@ public class Abi {
          * 
          */
         public void setTvc(String value) {
-            tvc = value;
+            this.tvc = value;
         }
 
         @JsonProperty("public_key")
@@ -683,7 +883,7 @@ public class Abi {
          * 
          */
         public void setPublicKey(String value) {
-            publicKey = value;
+            this.publicKey = value;
         }
 
         @JsonProperty("init_params")
@@ -698,7 +898,7 @@ public class Abi {
          * 
          */
         public void setInitParams(Object value) {
-            initParams = value;
+            this.initParams = value;
         }
 
 
@@ -712,7 +912,23 @@ public class Abi {
      *  
      */
     public static class ResultOfEncodeMessageBody  {
+
+        public ResultOfEncodeMessageBody(String body, String dataToSign) {
+
+            this.body = body;
+
+            this.dataToSign = dataToSign;
+
+        }
+        public ResultOfEncodeMessageBody(String body) {
+
+            this.body = body;
+
+        }
         public ResultOfEncodeMessageBody() {
+
+        }
+/*        public ResultOfEncodeMessageBody() {
         }
 
         public ResultOfEncodeMessageBody(String body, String dataToSign) {
@@ -722,7 +938,7 @@ public class Abi {
             this.dataToSign = dataToSign;
 
         }
-
+*/
 
 
         @JsonProperty("body")
@@ -737,7 +953,7 @@ public class Abi {
          * Message body BOC encoded with `base64`.
          */
         public void setBody(String value) {
-            body = value;
+            this.body = value;
         }
 
         @JsonProperty("data_to_sign")
@@ -752,7 +968,7 @@ public class Abi {
          * Optional data to sign. Encoded with `base64`.<p> Presents when `message` is unsigned. Can be used for external message signing. Is this case you need to sing this data and produce signed message using `abi.attach_signature`.
          */
         public void setDataToSign(String value) {
-            dataToSign = value;
+            this.dataToSign = value;
         }
 
 
@@ -765,7 +981,43 @@ public class Abi {
      *  
      */
     public static class ResultOfEncodeMessage  {
+
+        public ResultOfEncodeMessage(String message, String dataToSign, String address, String messageId) {
+
+            this.message = message;
+
+            this.dataToSign = dataToSign;
+
+            this.address = address;
+
+            this.messageId = messageId;
+
+        }
+        public ResultOfEncodeMessage(String message, String dataToSign, String address) {
+
+            this.message = message;
+
+            this.dataToSign = dataToSign;
+
+            this.address = address;
+
+        }
+        public ResultOfEncodeMessage(String message, String dataToSign) {
+
+            this.message = message;
+
+            this.dataToSign = dataToSign;
+
+        }
+        public ResultOfEncodeMessage(String message) {
+
+            this.message = message;
+
+        }
         public ResultOfEncodeMessage() {
+
+        }
+/*        public ResultOfEncodeMessage() {
         }
 
         public ResultOfEncodeMessage(String message, String dataToSign, String address, String messageId) {
@@ -779,7 +1031,7 @@ public class Abi {
             this.messageId = messageId;
 
         }
-
+*/
 
 
         @JsonProperty("message")
@@ -794,7 +1046,7 @@ public class Abi {
          * Message BOC encoded with `base64`.
          */
         public void setMessage(String value) {
-            message = value;
+            this.message = value;
         }
 
         @JsonProperty("data_to_sign")
@@ -809,7 +1061,7 @@ public class Abi {
          * Optional data to be signed encoded in `base64`.<p> Returned in case of `Signer::External`. Can be used for external message signing. Is this case you need to use this data to create signature and then produce signed message using `abi.attach_signature`.
          */
         public void setDataToSign(String value) {
-            dataToSign = value;
+            this.dataToSign = value;
         }
 
         @JsonProperty("address")
@@ -824,7 +1076,7 @@ public class Abi {
          * Destination address.
          */
         public void setAddress(String value) {
-            address = value;
+            this.address = value;
         }
 
         @JsonProperty("message_id")
@@ -839,7 +1091,7 @@ public class Abi {
          * Message id.
          */
         public void setMessageId(String value) {
-            messageId = value;
+            this.messageId = value;
         }
 
 
@@ -852,7 +1104,23 @@ public class Abi {
      *  
      */
     public static class ResultOfAttachSignature  {
+
+        public ResultOfAttachSignature(String message, String messageId) {
+
+            this.message = message;
+
+            this.messageId = messageId;
+
+        }
+        public ResultOfAttachSignature(String message) {
+
+            this.message = message;
+
+        }
         public ResultOfAttachSignature() {
+
+        }
+/*        public ResultOfAttachSignature() {
         }
 
         public ResultOfAttachSignature(String message, String messageId) {
@@ -862,7 +1130,7 @@ public class Abi {
             this.messageId = messageId;
 
         }
-
+*/
 
 
         @JsonProperty("message")
@@ -877,7 +1145,7 @@ public class Abi {
          * Signed message BOC
          */
         public void setMessage(String value) {
-            message = value;
+            this.message = value;
         }
 
         @JsonProperty("message_id")
@@ -892,7 +1160,7 @@ public class Abi {
          * Message ID
          */
         public void setMessageId(String value) {
-            messageId = value;
+            this.messageId = value;
         }
 
 
@@ -905,7 +1173,43 @@ public class Abi {
      *  
      */
     public static class DecodedMessageBody  {
+
+        public DecodedMessageBody(MessageBodyType bodyType, String name, Object value, FunctionHeader header) {
+
+            this.bodyType = bodyType;
+
+            this.name = name;
+
+            this.value = value;
+
+            this.header = header;
+
+        }
+        public DecodedMessageBody(MessageBodyType bodyType, String name, Object value) {
+
+            this.bodyType = bodyType;
+
+            this.name = name;
+
+            this.value = value;
+
+        }
+        public DecodedMessageBody(MessageBodyType bodyType, String name) {
+
+            this.bodyType = bodyType;
+
+            this.name = name;
+
+        }
+        public DecodedMessageBody(MessageBodyType bodyType) {
+
+            this.bodyType = bodyType;
+
+        }
         public DecodedMessageBody() {
+
+        }
+/*        public DecodedMessageBody() {
         }
 
         public DecodedMessageBody(MessageBodyType bodyType, String name, Object value, FunctionHeader header) {
@@ -919,7 +1223,7 @@ public class Abi {
             this.header = header;
 
         }
-
+*/
 
 
         @JsonProperty("body_type")
@@ -934,7 +1238,7 @@ public class Abi {
          * Type of the message body content.
          */
         public void setBodyType(MessageBodyType value) {
-            bodyType = value;
+            this.bodyType = value;
         }
 
         @JsonProperty("name")
@@ -949,7 +1253,7 @@ public class Abi {
          * Function or event name.
          */
         public void setName(String value) {
-            name = value;
+            this.name = value;
         }
 
         @JsonProperty("value")
@@ -964,7 +1268,7 @@ public class Abi {
          * Parameters or result value.
          */
         public void setValue(Object value) {
-            value = value;
+            this.value = value;
         }
 
         @JsonProperty("header")
@@ -979,7 +1283,7 @@ public class Abi {
          * Function header.
          */
         public void setHeader(FunctionHeader value) {
-            header = value;
+            this.header = value;
         }
 
 
@@ -992,7 +1296,23 @@ public class Abi {
      *  
      */
     public static class ResultOfEncodeAccount  {
+
+        public ResultOfEncodeAccount(String account, String id) {
+
+            this.account = account;
+
+            this.id = id;
+
+        }
+        public ResultOfEncodeAccount(String account) {
+
+            this.account = account;
+
+        }
         public ResultOfEncodeAccount() {
+
+        }
+/*        public ResultOfEncodeAccount() {
         }
 
         public ResultOfEncodeAccount(String account, String id) {
@@ -1002,7 +1322,7 @@ public class Abi {
             this.id = id;
 
         }
-
+*/
 
 
         @JsonProperty("account")
@@ -1017,7 +1337,7 @@ public class Abi {
          * Account BOC encoded in `base64`.
          */
         public void setAccount(String value) {
-            account = value;
+            this.account = value;
         }
 
         @JsonProperty("id")
@@ -1032,7 +1352,7 @@ public class Abi {
          * Account ID  encoded in `hex`.
          */
         public void setId(String value) {
-            id = value;
+            this.id = value;
         }
 
 

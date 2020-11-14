@@ -3,22 +3,20 @@ SET PROJECT_DIR=%~dp0
 SET TON_DIR=%PROJECT_DIR%\target\TON-SDK
 
 IF NOT EXIST %TON_DIR% (
-    git clone --single-branch --branch platform-jni https://github.com/radianceteam/TON-SDK.git %TON_DIR%
+    git clone --single-branch --branch 1.1.0 https://github.com/tonlabs/TON-SDK.git %TON_DIR%
 )
 
-cd %TON_DIR%/ton_client/platforms/ton-client-jni
-git pull
-
+cd jni
 cargo build --release
 IF ERRORLEVEL 1 ( EXIT )
 SET RESOURCES_DIR=%PROJECT_DIR%\binding\src\main\resources
 IF NOT EXIST %RESOURCES_DIR% ( md %RESOURCES_DIR% )
-copy ..\..\..\target\release\*.dll %RESOURCES_DIR%
+copy target\release\*.dll %RESOURCES_DIR%
 cd %PROJECT_DIR%
 
 docker version
 IF ERRORLEVEL 1 (
-    mvn -DskipTests package
+    mvn -DskipTests install
 ) ELSE (
     docker images | findstr /C:"tonlabs/local-node"
     IF ERRORLEVEL 1 (
@@ -29,5 +27,5 @@ IF ERRORLEVEL 1 (
             docker start local-node || exit
         )
     )
-    mvn package
+    mvn install
 )

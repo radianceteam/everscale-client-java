@@ -10,11 +10,7 @@ which allows direct access to TONOS Client from Java Virtual Machine.
 The most of the library source code is generated from `api.json` by script `./binding/gen-java.js`.
 To use the script you must have [Node.js](https://nodejs.org/en/) installed.
 
-### How to use the library
-
-For usages exaples see [test sources](binding/src/test/java/com/radiance/tonclient/)
-
-### Prerequisites:
+### Prerequisites
 - Use the following command to install Java JDK:
 ```
     $ sudo apt-get install default-jdk
@@ -30,7 +26,7 @@ For usages exaples see [test sources](binding/src/test/java/com/radiance/tonclie
 - To run test, Docker Engine is required. If the Engine isn't installed the tests will be skipped.
 Follow installation instructions from https://docs.docker.com/engine/install/
 
-### Build:
+### Build
 - To build, enter the following command:
 ```
     $ build.sh
@@ -57,3 +53,52 @@ Follow installation instructions from https://docs.docker.com/engine/install/
 ```
     $ mvn clean
 ```
+### How to use the library
+
+Once the build succeed you will have the library installed to your local maven repository.
+To use it in your projects, add the dependency to `pom.xml`
+
+```
+    ...
+    <dependency>
+      <groupId>com.radiance.tonclient</groupId>
+      <artifactId>ton-client-binding</artifactId>
+      <version>1.0-SNAPSHOT</version>
+    </dependency>
+    ...
+```
+
+Example of usage:
+
+```
+    // At the beginning TON Context must be created
+    // Configuration parameters are passed as a json string
+    TONContext context = TONContext.create("{\"network\":{\"server_address\":\"https://net.ton.dev/graphql\"}}");
+
+    /* Alternatively TON context can be configured via ClientConfig object
+    TONContext context = TONContext.create(new ClientConfig(
+        new NetworkConfig("https://net.ton.dev/graphql")
+    ));
+    */
+
+    try {
+        // TON methods can be invoked via context directly ...
+        String randomBytes = context
+            .requestJSON("crypto.generate_random_bytes", "{\"length\":12}")
+            .get()
+            .findValue("bytes").asText();
+        System.out.println("Random bytes: '" + randomBytes + "'");
+
+        // ... or using convenience classes
+        Crypto crypto = new Crypto(context);
+        randomBytes = crypto.generateRandomBytes(12).get();
+        System.out.println("Random bytes: '" + randomBytes + "'");
+    } finally {
+        // context should be destroyed after using
+        context.destroy();
+    }
+```
+
+### See also
+- More usage examples [test sources](binding/src/test/java/com/radiance/tonclient/)
+- [Java API Docs](apidocs/index.html)

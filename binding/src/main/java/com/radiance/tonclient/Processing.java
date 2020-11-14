@@ -2,7 +2,6 @@ package com.radiance.tonclient;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.*;
-import ton.sdk.TONContext;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.function.Consumer;
 
@@ -15,7 +14,43 @@ public class Processing {
      *  
      */
     public static class ResultOfProcessMessage  {
+
+        public ResultOfProcessMessage(Object transaction, String[] outMessages, DecodedOutput decoded, Tvm.TransactionFees fees) {
+
+            this.transaction = transaction;
+
+            this.outMessages = outMessages;
+
+            this.decoded = decoded;
+
+            this.fees = fees;
+
+        }
+        public ResultOfProcessMessage(Object transaction, String[] outMessages, DecodedOutput decoded) {
+
+            this.transaction = transaction;
+
+            this.outMessages = outMessages;
+
+            this.decoded = decoded;
+
+        }
+        public ResultOfProcessMessage(Object transaction, String[] outMessages) {
+
+            this.transaction = transaction;
+
+            this.outMessages = outMessages;
+
+        }
+        public ResultOfProcessMessage(Object transaction) {
+
+            this.transaction = transaction;
+
+        }
         public ResultOfProcessMessage() {
+
+        }
+/*        public ResultOfProcessMessage() {
         }
 
         public ResultOfProcessMessage(Object transaction, String[] outMessages, DecodedOutput decoded, Tvm.TransactionFees fees) {
@@ -29,7 +64,7 @@ public class Processing {
             this.fees = fees;
 
         }
-
+*/
 
 
         @JsonProperty("transaction")
@@ -44,7 +79,7 @@ public class Processing {
          * Parsed transaction.<p> In addition to the regular transaction fields there is a `boc` field encoded with `base64` which contains source transaction BOC.
          */
         public void setTransaction(Object value) {
-            transaction = value;
+            this.transaction = value;
         }
 
         @JsonProperty("out_messages")
@@ -59,7 +94,7 @@ public class Processing {
          * List of output messages' BOCs. Encoded as `base64`
          */
         public void setOutMessages(String[] value) {
-            outMessages = value;
+            this.outMessages = value;
         }
 
         @JsonProperty("decoded")
@@ -74,7 +109,7 @@ public class Processing {
          * Optional decoded message bodies according to the optional `abi` parameter.
          */
         public void setDecoded(DecodedOutput value) {
-            decoded = value;
+            this.decoded = value;
         }
 
         @JsonProperty("fees")
@@ -89,7 +124,7 @@ public class Processing {
          * Transaction fees
          */
         public void setFees(Tvm.TransactionFees value) {
-            fees = value;
+            this.fees = value;
         }
 
 
@@ -102,7 +137,23 @@ public class Processing {
      *  
      */
     public static class DecodedOutput  {
+
+        public DecodedOutput(Abi.DecodedMessageBody[] outMessages, Object output) {
+
+            this.outMessages = outMessages;
+
+            this.output = output;
+
+        }
+        public DecodedOutput(Abi.DecodedMessageBody[] outMessages) {
+
+            this.outMessages = outMessages;
+
+        }
         public DecodedOutput() {
+
+        }
+/*        public DecodedOutput() {
         }
 
         public DecodedOutput(Abi.DecodedMessageBody[] outMessages, Object output) {
@@ -112,7 +163,7 @@ public class Processing {
             this.output = output;
 
         }
-
+*/
 
 
         @JsonProperty("out_messages")
@@ -127,7 +178,7 @@ public class Processing {
          * Decoded bodies of the out messages.<p> If the message can't be decoded, then `None` will be stored in the appropriate position.
          */
         public void setOutMessages(Abi.DecodedMessageBody[] value) {
-            outMessages = value;
+            this.outMessages = value;
         }
 
         @JsonProperty("output")
@@ -142,7 +193,7 @@ public class Processing {
          * Decoded body of the function output message.
          */
         public void setOutput(Object value) {
-            output = value;
+            this.output = value;
         }
 
 

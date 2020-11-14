@@ -1,4 +1,4 @@
-package ton.sdk;
+package com.radiance.tonclient;
 
 import java.io.*;
 import java.util.*;
@@ -38,7 +38,7 @@ public class TONContext {
     static {
         try {
             String osName = System.getProperty("os.name");
-            System.out.println("OS name: '" + osName + "'");
+            //System.out.println("OS name: '" + osName + "'");
             osName = osName.toLowerCase();
             String libPath;
             if (osName.indexOf("mac") >= 0 || osName.indexOf("darwin") >= 0)
@@ -127,9 +127,9 @@ public class TONContext {
         }
     }
 
-    public static TONContext create(String config) throws TONException {
-        String result = createContext(config);
-        System.out.println(result);
+    public static TONContext create(Object config) throws TONException {
+        String result = createContext(config==null?"":config.toString());
+        //System.out.println(config + " => " + result);
         try {
             JsonNode json = jsonMapper.readTree(result);
             JsonNode error = json.findValue("error");

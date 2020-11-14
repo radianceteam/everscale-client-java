@@ -2,7 +2,6 @@ package com.radiance.tonclient;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.*;
-import ton.sdk.TONContext;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**

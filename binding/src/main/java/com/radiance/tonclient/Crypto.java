@@ -2,7 +2,6 @@ package com.radiance.tonclient;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.*;
-import ton.sdk.TONContext;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -14,7 +13,23 @@ public class Crypto {
      *  
      */
     public static class KeyPair  {
+
+        public KeyPair(String _public, String secret) {
+
+            this._public = _public;
+
+            this.secret = secret;
+
+        }
+        public KeyPair(String _public) {
+
+            this._public = _public;
+
+        }
         public KeyPair() {
+
+        }
+/*        public KeyPair() {
         }
 
         public KeyPair(String _public, String secret) {
@@ -24,7 +39,7 @@ public class Crypto {
             this.secret = secret;
 
         }
-
+*/
 
 
         @JsonProperty("public")
@@ -39,7 +54,7 @@ public class Crypto {
          * Public key - 64 symbols hex string
          */
         public void setPublic(String value) {
-            _public = value;
+            this._public = value;
         }
 
         @JsonProperty("secret")
@@ -54,7 +69,7 @@ public class Crypto {
          * Private key - u64 symbols hex string
          */
         public void setSecret(String value) {
-            secret = value;
+            this.secret = value;
         }
 
 
@@ -67,7 +82,23 @@ public class Crypto {
      *  
      */
     public static class ResultOfSign  {
+
+        public ResultOfSign(String signed, String signature) {
+
+            this.signed = signed;
+
+            this.signature = signature;
+
+        }
+        public ResultOfSign(String signed) {
+
+            this.signed = signed;
+
+        }
         public ResultOfSign() {
+
+        }
+/*        public ResultOfSign() {
         }
 
         public ResultOfSign(String signed, String signature) {
@@ -77,7 +108,7 @@ public class Crypto {
             this.signature = signature;
 
         }
-
+*/
 
 
         @JsonProperty("signed")
@@ -92,7 +123,7 @@ public class Crypto {
          * Signed data combined with signature encoded in `base64`.
          */
         public void setSigned(String value) {
-            signed = value;
+            this.signed = value;
         }
 
         @JsonProperty("signature")
@@ -107,7 +138,7 @@ public class Crypto {
          * Signature encoded in `hex`.
          */
         public void setSignature(String value) {
-            signature = value;
+            this.signature = value;
         }
 
 

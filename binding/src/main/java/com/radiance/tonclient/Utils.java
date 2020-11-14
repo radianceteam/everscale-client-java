@@ -2,7 +2,6 @@ package com.radiance.tonclient;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.*;
-import ton.sdk.TONContext;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -18,9 +17,13 @@ public class Utils {
      *  
      */
     public static class AccountId extends AddressStringFormat  {
-        public AccountId() {
-        }
 
+        public AccountId() {
+
+        }
+/*        public AccountId() {
+        }
+*/
 
 
 
@@ -36,9 +39,13 @@ public class Utils {
      *  
      */
     public static class Hex extends AddressStringFormat  {
-        public Hex() {
-        }
 
+        public Hex() {
+
+        }
+/*        public Hex() {
+        }
+*/
 
 
 
@@ -52,7 +59,32 @@ public class Utils {
      *  
      */
     public static class Base64 extends AddressStringFormat  {
+
+        public Base64(Boolean url, Boolean test, Boolean bounce) {
+
+            this.url = url;
+
+            this.test = test;
+
+            this.bounce = bounce;
+
+        }
+        public Base64(Boolean url, Boolean test) {
+
+            this.url = url;
+
+            this.test = test;
+
+        }
+        public Base64(Boolean url) {
+
+            this.url = url;
+
+        }
         public Base64() {
+
+        }
+/*        public Base64() {
         }
 
         public Base64(Boolean url, Boolean test, Boolean bounce) {
@@ -64,7 +96,7 @@ public class Utils {
             this.bounce = bounce;
 
         }
-
+*/
 
 
         @JsonProperty("url")
@@ -79,7 +111,7 @@ public class Utils {
          * 
          */
         public void setUrl(Boolean value) {
-            url = value;
+            this.url = value;
         }
 
         @JsonProperty("test")
@@ -94,7 +126,7 @@ public class Utils {
          * 
          */
         public void setTest(Boolean value) {
-            test = value;
+            this.test = value;
         }
 
         @JsonProperty("bounce")
@@ -109,7 +141,7 @@ public class Utils {
          * 
          */
         public void setBounce(Boolean value) {
-            bounce = value;
+            this.bounce = value;
         }
 
 
