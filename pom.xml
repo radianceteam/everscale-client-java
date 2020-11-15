@@ -18,7 +18,6 @@
     </properties>
 
     <modules>
-        <!--<module>native</module>-->
         <module>binding</module>
     </modules>
 </project>

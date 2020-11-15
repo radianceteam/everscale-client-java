@@ -9,8 +9,8 @@ cargo build --release || exit
 
 resdir=$projectdir/binding/src/main/resources
 mkdir -p $resdir || exit
-cp target/release/*.so $resdir
-cp target/release/*.dylib $resdir
+cp target/release/*.so $resdir 2>/dev/null
+cp target/release/*.dylib $resdir 2>/dev/null
 
 cd $projectdir
 
