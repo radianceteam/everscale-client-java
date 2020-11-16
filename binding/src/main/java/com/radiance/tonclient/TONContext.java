@@ -5,11 +5,13 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
 import java.util.function.Consumer;
+import java.util.logging.Logger;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.radiance.tonclient.*;
 
 public class TONContext {
+    private static Logger log = Logger.getLogger(TONContext.class.getName());
     private class Callback<T> {
         Consumer<T> consumer;
         Class<T> clazz;
@@ -38,7 +40,7 @@ public class TONContext {
     static {
         try {
             String osName = System.getProperty("os.name");
-            //System.out.println("OS name: '" + osName + "'");
+            log.info("OS name: '" + osName + "'");
             osName = osName.toLowerCase();
             String libPath;
             if (osName.indexOf("mac") >= 0 || osName.indexOf("darwin") >= 0)
@@ -66,6 +68,7 @@ public class TONContext {
         inputStream.close();
         outputStream.close();
         tempFile.deleteOnExit();
+        log.info("Using '" + tempFile.getAbsolutePath() + "' as '" + resourceName + "'");
         return tempFile.getAbsolutePath();
     }
 
@@ -88,7 +91,7 @@ public class TONContext {
     }
 
     private static void responseHandler(int id, String params, int type, boolean finished) {
-        //System.out.println("<= id=" + id + " params=" + params + " type=" + type + " finished=" + finished);
+        log.info("<= " + id + " " + params + " type=" + type + " finished=" + finished);
         CompletableFuture<String> future;
         Callback<?> callback;
 
@@ -129,7 +132,7 @@ public class TONContext {
 
     public static TONContext create(Object config) throws TONException {
         String result = createContext(config==null?"":config.toString());
-        //System.out.println(config + " => " + result);
+        log.info("Create context: " + config + " => " + result);
         try {
             JsonNode json = jsonMapper.readTree(result);
             JsonNode error = json.findValue("error");
@@ -171,7 +174,7 @@ public class TONContext {
             responses.put(++requestCount, future);
             if (consumer != null)
                 callbacks.put(requestCount, new Callback<T>(consumer,clazz));
-            //System.out.println("=> id=" + requestCount + " " +functionName + " " + params);
+            log.info("=> " + requestCount + " " +functionName + " " + params);
             request(contextId, functionName, params, requestCount);
         }
         return future;
