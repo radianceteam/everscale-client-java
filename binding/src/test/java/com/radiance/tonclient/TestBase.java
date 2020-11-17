@@ -15,8 +15,11 @@ public abstract class TestBase {
     protected static Boc boc;
     protected static Tvm tvm;
 
-    protected static Abi.ABI eventsAbi, giverWalletAbi, walletAbi, multisigWalletAbi, giverAbi, subscriptionAbi;
-    protected static String eventsTvc, subscriptionTvc;
+    protected static Abi.ABI eventsAbi, helloAbi, giverWalletAbi, walletAbi,
+                    multisigWalletAbi, giverAbi, subscriptionAbi;
+    protected static String eventsTvc, helloTvc, subscriptionTvc;
+    protected static String giverAddress = "0:841288ed3b55d9cdafa806807f02a0ae0c169aa5edfe88a789a6482429756a94";
+
 
     private static Abi.ABI abiFromResource(String name) {
         Scanner s = new Scanner(TestBase.class.getResourceAsStream(name)).useDelimiter("\\A");
@@ -40,6 +43,8 @@ public abstract class TestBase {
 
         eventsAbi = abiFromResource("/Events.abi.json");
         eventsTvc = new String(Base64.getEncoder().encode(Files.readAllBytes(Paths.get(TestBase.class.getResource("/Events.tvc").toURI()))));
+        helloAbi = abiFromResource("/Hello.abi.json");
+        helloTvc = new String(Base64.getEncoder().encode(Files.readAllBytes(Paths.get(TestBase.class.getResource("/Hello.tvc").toURI()))));
         giverWalletAbi = abiFromResource("/GiverWallet.abi.json");
         walletAbi = abiFromResource("/Wallet.abi.json");
         multisigWalletAbi = abiFromResource("/SetcodeMultisigWallet.abi.json");
@@ -95,7 +100,7 @@ public abstract class TestBase {
     protected CompletableFuture<Processing.ResultOfProcessMessage> getGramsFromGiver(String address) {
         return processing.processMessage(
             giverAbi,
-            "0:841288ed3b55d9cdafa806807f02a0ae0c169aa5edfe88a789a6482429756a94",
+            giverAddress,
             null,
             new Abi.CallSet(
                 "sendGrams",

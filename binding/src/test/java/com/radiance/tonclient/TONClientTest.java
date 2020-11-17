@@ -29,8 +29,6 @@ public class TONClientTest extends TestBase {
 
     @Test
     public void subscription() throws Exception {
-        //net.waitForCollection("accounts");
-        
         Number handle = net.subscribeCollection("transactions", null, "id account_addr", event -> System.out.println("Event: " + event)).get();
         System.out.println("Handle: " + handle);
         Thread.sleep(3000);

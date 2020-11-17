@@ -48,8 +48,6 @@ public class ProcessingTest extends TestBase {
 
         net.unsubscribe(subscription).get();
 
-        //System.out.println("Events: " + events);
-        //System.out.println("Transactions: " + transCounter.get());
         assertEquals(new String[] {"WillFetchFirstBlock", "WillSend", "DidSend", "WillFetchNextBlock"}, events.toArray(new String[0]));
         assertNotEquals("Transaction counter", 0, transCounter.get());
     }
