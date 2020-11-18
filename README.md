@@ -1,5 +1,7 @@
 # Java library for TON Client
 
+[![SDK version](https://img.shields.io/badge/TON%20SDK%20version-1.1.0-green)](https://github.com/tonlabs/TON-SDK/tree/1.1.0)
+
 The Library is a binding for [TONOS Client](https://github.com/tonlabs/TON-SDK) written in Java
 that act as a bridge between TONOS Client and a Java application. The library includes original
 TONOS Library with incorporated support of [Java Native Interface (JNI)](https://en.wikipedia.org/wiki/Java_Native_Interface)
