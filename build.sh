@@ -3,7 +3,7 @@
 tondir=target/TON-SDK
 
 projectdir=`pwd`
-[ -d "$tondir" ] || git clone --single-branch --branch 1.1.0 https://github.com/tonlabs/TON-SDK.git $tondir
+[ -d "$tondir" ] || git clone --single-branch --branch 1.1.2 https://github.com/tonlabs/TON-SDK.git $tondir
 cd jni
 cargo build --release || exit
 
