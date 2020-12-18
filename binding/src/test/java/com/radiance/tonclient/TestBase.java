@@ -8,6 +8,7 @@ import java.util.Scanner;
 
 public abstract class TestBase {
     protected static TONContext context;
+    protected static Client client;
     protected static Crypto crypto;
     protected static Abi abiModule;
     protected static Processing processing;
@@ -21,7 +22,7 @@ public abstract class TestBase {
     protected static String giverAddress = "0:841288ed3b55d9cdafa806807f02a0ae0c169aa5edfe88a789a6482429756a94";
 
 
-    private static Abi.ABI abiFromResource(String name) {
+    protected static Abi.ABI abiFromResource(String name) {
         Scanner s = new Scanner(TestBase.class.getResourceAsStream(name)).useDelimiter("\\A");
         String data = s.hasNext() ? s.next() : "";
         s.close();
@@ -34,6 +35,7 @@ public abstract class TestBase {
 
         //context = TONContext.create("{\"network\": {\"server_address\": \"net.ton.dev\"}}");
         context = TONContext.create("{\"network\": {\"server_address\": \"http://localhost\"}}");
+        client = new Client(context);
         crypto = new Crypto(context);
         abiModule = new Abi(context);
         processing = new Processing(context);

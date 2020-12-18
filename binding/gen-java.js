@@ -4,11 +4,18 @@ const api = require('./api.json');
 const fs = require('fs');
 
 const packageName = 'com.radiance.tonclient';
-const reserved = ['public','private','protected','void','int','long','float','double','switch','case','return','new','class','interface','enum','try','catch','throw','throws'];
+//const reserved = ['public','private','protected','void','int','long','float','double','switch','case','return','new','class','interface','enum','try','catch','throw','throws'];
+
+const reserved = {
+    public: 'publicKey',
+    secret: 'secretKey',
+    switch: 'switchTo'
+};
 
 const PATH = './' + ('src.main.java.'+packageName).split('.').join('/') +'/';
 
 let types = {};
+let appInterfaces = {};
 let currMod;
 
 var genFiles = require('./gen-files.json');
@@ -20,7 +27,8 @@ for(var f of genFiles) {
 genFiles = [];
 
 function dereserve(iden) {
-    return (reserved.includes(iden)?'_':'') + iden;
+    //return (reserved.includes(iden)?'_':'') + iden;
+    return reserved[iden]||iden;
 }
 
 const flatMap = (f,xs) =>
@@ -50,7 +58,7 @@ function trimClassName(cName, mName) {
     let arr = cName.split('.');
     if (arr.length == 2 && arr[0] == arr[1].toLowerCase())
         cName = arr[0] + '.' + arr[1].toUpperCase();
-    return cName.startsWith(currMod.name+'.')?cName.split('.').pop():capitalize(cName);
+    return currMod&&cName.startsWith(currMod.name+'.')?cName.split('.').pop():capitalize(cName);
 }
 
 function setTypeExported(field) {
@@ -77,7 +85,19 @@ function stringifyFields(fields, type) {
 }
 
 function fieldMapper(f) {
-    let field = {name: f.name||'value', desc: f.description, getType:(mName) => ((!field.isRef)||(field.type in types&&types[field.type].isExported)?trimClassName(field.type, mName):'Object') + (field.isArray?'[]':'')};
+    let field = {name: f.name||'value', desc: f.description,
+        getType:(mName) => {
+            let result;
+            if (field.type in types && types[field.type].isSubclass)
+                result = types[field.type].parent;
+            else
+                result = (!field.isRef)||(field.type in types&&types[field.type].isExported)?trimClassName(field.type, mName):'Object';
+            if (field.isArray)
+                result += '[]';
+            //console.log(field.type,'=>',result);
+            return result;
+        }
+    };
     while (true) {
         if (f.type == 'Optional') {
             f = f.optional_inner;
@@ -97,6 +117,35 @@ function fieldMapper(f) {
     return field;
 }
 
+function getAppObjectHandler(obj) {
+    return `(params,type) -> {
+                Integer reqId = (Integer)((Map)params).get("app_request_id");
+                Map data = (Map)((Map)params).get("request_data");
+                System.out.println("-- " + data);
+                switch ((String)data.remove("type")) {
+${Object.entries(obj.methods).map(([n,o]) => {
+    
+    return `
+                    case "${n}":
+                        try {${o.params.length?`
+                            ParamsOf${obj.type}.${n} p = new ObjectMapper().convertValue(data, ParamsOf${obj.type}.${n}.class);
+                            System.out.println("!! " + p);`:''}
+                            appObject.${dereserve(n.charAt(0).toLowerCase()+n.substring(1))}(${o.params.map(p=>`p.${camelize('get_'+p.name)}()`)})${o.result?`.thenAccept(res -> {
+                                new Client(context).resolveAppRequest(
+                                    reqId,
+                                    new Client.AppRequestResult.Ok(new ResultOf${obj.type}.${n}(${o.result.length?'res':''}))
+                                );
+                            })`:''};
+                        } catch (Exception e) {
+                            new Client(context).resolveAppRequest(reqId, new Client.AppRequestResult.Error(e.getMessage()));
+                        }
+                        break;
+`}).join('')
+                }
+                }
+            }`;
+}
+
 api.modules.forEach(m => m.types.forEach(t => {
     let type = {};
     switch (t.type) {
@@ -111,8 +160,13 @@ api.modules.forEach(m => m.types.forEach(t => {
         case 'EnumOfTypes':
             type.variants = t.enum_types.map(v => ({name:v.name, desc:v.description, get fields() { return v.struct_fields.map(fieldMapper)}}));
             type.isEnumOfTypes = true;
+            break;
+        case 'Number':
+            type.parent = 'Integer';
+            type.isSubclass = true;
+            break;
         default:
-            //console.log(t.type,t.name);
+            console.log('!!! ', t);
     }
     types[m.name + '.' + t.name] = type;
 }));
@@ -136,13 +190,58 @@ api.modules.forEach(mod => {
             rField = f;
         }
 
-        var event = f.params.length > 2?camelize('_'+f.name+'_event'):false;
+        let event = false;
+        let appObject = false;
+        let fields = [];
+        f.params.forEach(p => {
+            switch (p.name) {
+                case 'context':
+                case '_context':
+                    break;
+                case 'params':
+                    fields = types[p.ref_name].fields;
+                    break;
+                case 'callback':
+                case 'request':
+                    event = camelize('_'+f.name+'_event');
+                    imports['java.util.function.Consumer'] = true;
+                    break;
+                case 'app_object':
+                    let ref = p.generic_args[0].ref_name;
+                    let name = ref.substring(ref.indexOf('.') + 9);
+                    console.log(name);
+                    if (!(name in appInterfaces)) {
+                        let methods = {};
+                        p.generic_args.forEach((t,i) => {
+                            for (let m of types[t.ref_name].variants) {
+                                let mName = m.name; //.charAt(0).toLowerCase() + m.name.slice(1);
+                                if (i==0)
+                                    methods[mName] = {params: m.fields};
+                                else
+                                    methods[mName].result = m.fields;
+                                setTypeExported({type:t.ref_name});
+                            }
+                        });
+                        appInterfaces[name] = {methods};
+                    }
+                    appObject = {type:name, methods:appInterfaces[name].methods};
+                    imports['java.util.Map'] = true;
+                    imports['com.fasterxml.jackson.databind.ObjectMapper'] = true;
+                    break;
+                default:
+                    console.log(p.name);
+            }
+        });
+
+        /*event = f.params.length > 2?camelize('_'+f.name+'_event'):false;
         if (event)
             imports['java.util.function.Consumer'] = true;
+        fields = f.params.length > 1?types[f.params[1].ref_name].fields:[];*/
 
-        let fields = f.params.length > 1?types[f.params[1].ref_name].fields:[];
         let params = flatMap(f=> isFlattable(f.type)?types[f.type].fields:[f], fields)
             .map(p=> ({type:setTypeExported(p).getType(), name:camelize(p.name), desc:p.desc}));
+        if (appObject)
+            params.push({type:appObject.type, name:'appObject'});
         body += `   /**\n`;
         body += `    * ${htmlize(f.description)}\n    *\n`;
         body += params.map(p => `    * @param ${p.name} ${htmlize(p.desc)}\n`).join('');
@@ -151,7 +250,7 @@ api.modules.forEach(mod => {
             body += `    * @return ${htmlize(rDesc)}\n`;
         body += `    */\n`;
         body += `    public CompletableFuture<${rField.getType(mod.name)}> ${camelize(f.name)}(${params.map(p=>p.type+' '+p.name).join(', ')}${event?`, Consumer<${event}> consumer`:''}) {\n`
-        body += `        return context.requestJSON${event?'Callback':''}("${mod.name}.${f.name}", ${stringifyFields(fields)}${event?`, consumer, ${event}.class`:''})\n`;
+        body += `        return context.requestJSON${event||appObject?'Callback':''}("${mod.name}.${f.name}", ${stringifyFields(fields)}${event?`, (event,type)->consumer.accept(event), ${event}.class`:''}${appObject?`, ${getAppObjectHandler(appObject)}, Object.class`:''})\n`;
         body += `            .thenApply(json -> TONContext.convertValue(json${rField.name?`.findValue("${rField.name}")`:''}, ${rField.getType(mod.name)}.class));\n`;
         body += `    }\n\n`;
     });
@@ -171,9 +270,11 @@ ${Object.entries(types).filter(([n,t])=>t.isExported&&n.startsWith(mod.name+'.')
     let genFunc;
     if (t.isEnum)
         genFunc = getEnumSource;
-    else if(t.isEnumOfTypes) {
+    else if(t.isEnumOfTypes)
         genFunc = getEnumOfTypesSource;
-    } else
+    //else if(t.isSubclass)
+    //    genFunc = (cName,t) => `    public static class ${cName} extends ${t.parent} {}\n`;
+    else if(t.isStruct)
         genFunc = getStructSource;
     if (genFunc)
         return genFunc(cName.split('.').pop(),t);
@@ -190,7 +291,7 @@ ${body}}
 });
 
 function getStructSource(cName, t, sClass) {
-    //console.log(cName,t.fields);
+    //console.log(cName,t.fields, sClass);
     var args = t.fields.filter(f=>f.name);
     var constr = '';
     do {
@@ -207,15 +308,6 @@ ${args.map(f=>`
      */
     public static class ${cName} ${sClass?`extends ${sClass} `:''} {
 ${constr}
-/*        public ${cName}() {
-        }
-${t.fields.filter(f=>f.name).length?`
-        public ${cName}(${t.fields.filter(f=>f.name).map(f=>`${f.getType()} ${camelize(f.name)}`).join(', ')}) {
-${t.fields.map(f=>`
-            this.${camelize(f.name)} = ${camelize(f.name)};
-`).join('')}
-        }
-`:''}*/
 
 ${t.fields.filter(f=>f.name).map(f=> {
     var arr = f.isArray?'[]':'';
@@ -270,6 +362,25 @@ ${t.variants.map(v => {
 `) + getStructSource(v.name,v,cName);
 }).join('\n')}
 }`;
+}
+
+currMod = null;
+
+for(let className in appInterfaces) {
+    genFiles.push(className + '.java');
+    let iface = appInterfaces[className];
+    fs.writeFileSync(PATH + className + '.java', `package ${packageName};
+
+import java.util.concurrent.CompletableFuture;
+
+public interface ${className} {
+${Object.entries(iface.methods).map(([n,o]) => {
+    let name = n.charAt(0).toLowerCase() + n.slice(1);
+    let res = o.result&&o.result.length?o.result[0].getType():'Void';
+    return `    CompletableFuture<${res}> ${dereserve(name)}(${o.params.map(p=>p.getType()+' '+camelize(p.name))});`;
+}).join('\n')}
+}
+`);
 }
 
 fs.writeFileSync('./gen-files.json', JSON.stringify(genFiles));

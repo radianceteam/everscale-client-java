@@ -5,7 +5,7 @@ import java.util.stream.*;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- *  Provides information about library.
+ *  
  */
 public class Client {
 
@@ -38,19 +38,6 @@ public class Client {
         public ClientConfig() {
 
         }
-/*        public ClientConfig() {
-        }
-
-        public ClientConfig(NetworkConfig network, CryptoConfig crypto, AbiConfig abi) {
-
-            this.network = network;
-
-            this.crypto = crypto;
-
-            this.abi = abi;
-
-        }
-*/
 
 
         @JsonProperty("network")
@@ -189,27 +176,6 @@ public class Client {
         public NetworkConfig() {
 
         }
-/*        public NetworkConfig() {
-        }
-
-        public NetworkConfig(String serverAddress, Number networkRetriesCount, Number messageRetriesCount, Number messageProcessingTimeout, Number waitForTimeout, Number outOfSyncThreshold, String accessKey) {
-
-            this.serverAddress = serverAddress;
-
-            this.networkRetriesCount = networkRetriesCount;
-
-            this.messageRetriesCount = messageRetriesCount;
-
-            this.messageProcessingTimeout = messageProcessingTimeout;
-
-            this.waitForTimeout = waitForTimeout;
-
-            this.outOfSyncThreshold = outOfSyncThreshold;
-
-            this.accessKey = accessKey;
-
-        }
-*/
 
 
         @JsonProperty("server_address")
@@ -328,17 +294,6 @@ public class Client {
      */
     public static class CryptoConfig  {
 
-        public CryptoConfig(Number mnemonicDictionary, Number mnemonicWordCount, String hdkeyDerivationPath, Boolean hdkeyCompliant) {
-
-            this.mnemonicDictionary = mnemonicDictionary;
-
-            this.mnemonicWordCount = mnemonicWordCount;
-
-            this.hdkeyDerivationPath = hdkeyDerivationPath;
-
-            this.hdkeyCompliant = hdkeyCompliant;
-
-        }
         public CryptoConfig(Number mnemonicDictionary, Number mnemonicWordCount, String hdkeyDerivationPath) {
 
             this.mnemonicDictionary = mnemonicDictionary;
@@ -363,21 +318,6 @@ public class Client {
         public CryptoConfig() {
 
         }
-/*        public CryptoConfig() {
-        }
-
-        public CryptoConfig(Number mnemonicDictionary, Number mnemonicWordCount, String hdkeyDerivationPath, Boolean hdkeyCompliant) {
-
-            this.mnemonicDictionary = mnemonicDictionary;
-
-            this.mnemonicWordCount = mnemonicWordCount;
-
-            this.hdkeyDerivationPath = hdkeyDerivationPath;
-
-            this.hdkeyCompliant = hdkeyCompliant;
-
-        }
-*/
 
 
         @JsonProperty("mnemonic_dictionary")
@@ -425,25 +365,10 @@ public class Client {
             this.hdkeyDerivationPath = value;
         }
 
-        @JsonProperty("hdkey_compliant")
-        private Boolean hdkeyCompliant;
-        /**
-         * 
-         */
-        public Boolean getHdkeyCompliant() {
-            return hdkeyCompliant;
-        }
-        /**
-         * 
-         */
-        public void setHdkeyCompliant(Boolean value) {
-            this.hdkeyCompliant = value;
-        }
-
 
         @Override
         public String toString() {
-            return "{"+Stream.of((mnemonicDictionary==null?null:("\"mnemonic_dictionary\":"+mnemonicDictionary)),(mnemonicWordCount==null?null:("\"mnemonic_word_count\":"+mnemonicWordCount)),(hdkeyDerivationPath==null?null:("\"hdkey_derivation_path\":\""+hdkeyDerivationPath+"\"")),(hdkeyCompliant==null?null:("\"hdkey_compliant\":"+hdkeyCompliant))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
+            return "{"+Stream.of((mnemonicDictionary==null?null:("\"mnemonic_dictionary\":"+mnemonicDictionary)),(mnemonicWordCount==null?null:("\"mnemonic_word_count\":"+mnemonicWordCount)),(hdkeyDerivationPath==null?null:("\"hdkey_derivation_path\":\""+hdkeyDerivationPath+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
         }
     }
     /**
@@ -475,19 +400,6 @@ public class Client {
         public AbiConfig() {
 
         }
-/*        public AbiConfig() {
-        }
-
-        public AbiConfig(Number workchain, Number messageExpirationTimeout, Number messageExpirationTimeoutGrowFactor) {
-
-            this.workchain = workchain;
-
-            this.messageExpirationTimeout = messageExpirationTimeout;
-
-            this.messageExpirationTimeoutGrowFactor = messageExpirationTimeoutGrowFactor;
-
-        }
-*/
 
 
         @JsonProperty("workchain")
@@ -561,29 +473,18 @@ public class Client {
         public BuildInfoDependency() {
 
         }
-/*        public BuildInfoDependency() {
-        }
-
-        public BuildInfoDependency(String name, String gitCommit) {
-
-            this.name = name;
-
-            this.gitCommit = gitCommit;
-
-        }
-*/
 
 
         @JsonProperty("name")
         private String name;
         /**
-         * Dependency name. Usually it is a crate name.
+         * Usually it is a crate name.
          */
         public String getName() {
             return name;
         }
         /**
-         * Dependency name. Usually it is a crate name.
+         * Usually it is a crate name.
          */
         public void setName(String value) {
             this.name = value;
@@ -592,13 +493,13 @@ public class Client {
         @JsonProperty("git_commit")
         private String gitCommit;
         /**
-         * Git commit hash of the related repository.
+         * 
          */
         public String getGitCommit() {
             return gitCommit;
         }
         /**
-         * Git commit hash of the related repository.
+         * 
          */
         public void setGitCommit(String value) {
             this.gitCommit = value;
@@ -610,6 +511,82 @@ public class Client {
             return "{"+Stream.of((name==null?null:("\"name\":\""+name+"\"")),(gitCommit==null?null:("\"git_commit\":\""+gitCommit+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
         }
     }
+    public static abstract class AppRequestResult {
+
+    /**
+     *  
+     */
+    public static class Error extends AppRequestResult  {
+
+        public Error(String text) {
+
+            this.text = text;
+
+        }
+        public Error() {
+
+        }
+
+
+        @JsonProperty("text")
+        private String text;
+        /**
+         * 
+         */
+        public String getText() {
+            return text;
+        }
+        /**
+         * 
+         */
+        public void setText(String value) {
+            this.text = value;
+        }
+
+
+        @Override
+        public String toString() {
+            return "{"+Stream.of("\"type\":\"Error\"",(text==null?null:("\"text\":\""+text+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
+        }
+    }
+
+    /**
+     *  
+     */
+    public static class Ok extends AppRequestResult  {
+
+        public Ok(Object result) {
+
+            this.result = result;
+
+        }
+        public Ok() {
+
+        }
+
+
+        @JsonProperty("result")
+        private Object result;
+        /**
+         * 
+         */
+        public Object getResult() {
+            return result;
+        }
+        /**
+         * 
+         */
+        public void setResult(Object value) {
+            this.result = value;
+        }
+
+
+        @Override
+        public String toString() {
+            return "{"+Stream.of("\"type\":\"Ok\"",(result==null?null:("\"result\":"+result))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
+        }
+    }
+}
     /**
      *  
      */
@@ -630,29 +607,18 @@ public class Client {
         public ResultOfBuildInfo() {
 
         }
-/*        public ResultOfBuildInfo() {
-        }
-
-        public ResultOfBuildInfo(Number buildNumber, BuildInfoDependency[] dependencies) {
-
-            this.buildNumber = buildNumber;
-
-            this.dependencies = dependencies;
-
-        }
-*/
 
 
         @JsonProperty("build_number")
         private Number buildNumber;
         /**
-         * Build number assigned to this build by the CI.
+         * 
          */
         public Number getBuildNumber() {
             return buildNumber;
         }
         /**
-         * Build number assigned to this build by the CI.
+         * 
          */
         public void setBuildNumber(Number value) {
             this.buildNumber = value;
@@ -661,13 +627,13 @@ public class Client {
         @JsonProperty("dependencies")
         private BuildInfoDependency[] dependencies;
         /**
-         * Fingerprint of the most important dependencies.
+         * 
          */
         public BuildInfoDependency[] getDependencies() {
             return dependencies;
         }
         /**
-         * Fingerprint of the most important dependencies.
+         * 
          */
         public void setDependencies(BuildInfoDependency[] value) {
             this.dependencies = value;
@@ -686,7 +652,7 @@ public class Client {
     }
 
    /**
-    * Returns Core Library API reference
+    * 
     *
     */
     public CompletableFuture<Object> getApiReference() {
@@ -695,9 +661,8 @@ public class Client {
     }
 
    /**
-    * Returns Core Library version
+    * 
     *
-    * @return Core Library version
     */
     public CompletableFuture<String> version() {
         return context.requestJSON("client.version", "{}")
@@ -705,12 +670,23 @@ public class Client {
     }
 
    /**
-    * Returns detailed information about this build.
+    * 
     *
     */
     public CompletableFuture<ResultOfBuildInfo> buildInfo() {
         return context.requestJSON("client.build_info", "{}")
             .thenApply(json -> TONContext.convertValue(json, ResultOfBuildInfo.class));
+    }
+
+   /**
+    * 
+    *
+    * @param appRequestId 
+    * @param result 
+    */
+    public CompletableFuture<Void> resolveAppRequest(Number appRequestId, AppRequestResult result) {
+        return context.requestJSON("client.resolve_app_request", "{"+Stream.of((appRequestId==null?null:("\"app_request_id\":"+appRequestId)),(result==null?null:("\"result\":"+result))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
+            .thenApply(json -> TONContext.convertValue(json, Void.class));
     }
 
 }

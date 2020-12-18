@@ -1,0 +1,93 @@
+#
+# A fatal error has been detected by the Java Runtime Environment:
+#
+#  SIGILL (0x4) at pc=0x00007f0e0b9abdea, pid=10107, tid=0x00007f0e0a1dc700
+#
+# JRE version: OpenJDK Runtime Environment (8.0_275-b01) (build 1.8.0_275-8u275-b01-0ubuntu1~16.04-b01)
+# Java VM: OpenJDK 64-Bit Server VM (25.275-b01 mixed mode linux-amd64 compressed oops)
+# Problematic frame:
+# C  [TONLibrary8177063163407529506.so+0x8fbdea]  std::panicking::rust_panic_with_hook::haa1ed36ada4ffb03+0x1aa
+#
+# Failed to write core dump. Core dumps have been disabled. To enable core dumping, try "ulimit -c unlimited" before starting Java again
+#
+# If you would like to submit a bug report, please visit:
+#   http://bugreport.java.com/bugreport/crash.jsp
+#
+
+---------------  T H R E A D  ---------------
+
+Current thread is native thread
+
+siginfo: si_signo: 4 (SIGILL), si_code: 2 (ILL_ILLOPN), si_addr: 0x00007f0e0b9abdea
+
+Registers:
+RAX=0x00007f0e0a1d9f03, RBX=0x0000000000000002, RCX=0x0000000000000000, RDX=0x000000000000002b
+RSP=0x00007f0e0a1da050, RBP=0x0000000000000000, RSI=0x00007f0e0bac6c7e, RDI=0x0000000000000000
+R8 =0x0000000000000081, R9 =0x00007f0e0befdb60, R10=0x00007f0e0a1d96e7, R11=0x0000000000000000
+R12=0x00007f0e0be893d0, R13=0x00007f0e0bac5d78, R14=0x00007f0e0bef3128, R15=0x00007f0e0a1da0c0
+RIP=0x00007f0e0b9abdea, EFLAGS=0x0000000000010202, CSGSFS=0x002b000000000033, ERR=0x0000000000000000
+  TRAPNO=0x0000000000000006
+
+Top of Stack: (sp=0x00007f0e0a1da050)
+0x00007f0e0a1da050:   00000000000001be 00007f0e0bef31c8
+0x00007f0e0a1da060:   0000000000000001 0000000000000000
+0x00007f0e0a1da070:   00007f0e0be893d0 00007f0e0bac5d78
+0x00007f0e0a1da080:   0000000000000000 00007f0e0a1da0f0
+0x00007f0e0a1da090:   00007f0e0befd7e8 0000000000000001
+0x00007f0e0a1da0a0:   00007f0e0be893d0 00007f0e28276fc8
+0x00007f0e0a1da0b0:   00000000bc000801 00007f0e0b9ab949
+0x00007f0e0a1da0c0:   00007f0e0a1da1b8 00007f0dbc002d10
+0x00007f0e0a1da0d0:   0000000000000056 0000000000000048
+0x00007f0e0a1da0e0:   00007f0e0a1da148 00007f0e0b9a99bc
+0x00007f0e0a1da0f0:   00007f0e0a1da1b8 00007f0e0a1da148
+0x00007f0e0a1da100:   00007f0e0be893d0 00007f0e0b9ab909
+0x00007f0e0a1da110:   00007f0e0a1da1b8 00007f0e0a1da148
+0x00007f0e0a1da120:   00007f0e0be893d0 0000000000000002
+0x00007f0e0a1da130:   0000000000000002 00007f0e0b9c7a51
+0x00007f0e0a1da140:   0000000000000000 00007f0e0bac8b20
+0x00007f0e0a1da150:   00007f0e0bef4960 00007f0e0a1da1b8
+0x00007f0e0a1da160:   00007f0e0be893d0 00007f0e0b9c7873
+0x00007f0e0a1da170:   0000000100145fa8 00007f0e0b9d1517
+0x00007f0e0a1da180:   000000000000002b 00007f0e0a1da200
+0x00007f0e0a1da190:   00007f0e0be89320 00007f0e0a1da178
+0x00007f0e0a1da1a0:   00007f0e0b9d0760 00007f0e0a1da188
+0x00007f0e0a1da1b0:   00007f0e0b9d0510 00007f0e0bef4940
+0x00007f0e0a1da1c0:   0000000000000002 0000000000000000
+0x00007f0e0a1da1d0:   0000000000000001 00007f0e0a1da198
+0x00007f0e0a1da1e0:   0000000000000002 00007f0e0b1585bb
+0x00007f0e0a1da1f0:   0000000200000002 00007f0e0a1da330
+0x00007f0e0a1da200:   00007f0e0befd7e8 0000000000000001
+0x00007f0e0a1da210:   000000000000000a 5a959ee81cb8dfca
+0x00007f0e0a1da220:   00007f0e09000001 00007f0e00000003
+0x00007f0e0a1da230:   0000000000000008 0000000000000000
+0x00007f0e0a1da240:   0000000000000000 00007f0dbc007560 
+
+Instructions: (pc=0x00007f0e0b9abdea)
+0x00007f0e0b9abdca:   c7 44 24 18 00 00 00 00 4c 89 6c 24 28 48 c7 44
+0x00007f0e0b9abdda:   24 30 00 00 00 00 48 8d 7c 24 08 e8 f6 ef ff ff
+0x00007f0e0b9abdea:   0f 0b 0f 0b 4c 89 ff 4c 89 f6 ff 15 26 d5 54 00
+0x00007f0e0b9abdfa:   0f 0b 48 8d 3d 5d 1d 55 00 ff 15 17 ea 54 00 48 
+
+Register to memory mapping:
+
+RAX=0x00007f0e0a1d9f03 is an unknown value
+RBX=0x0000000000000002 is an unknown value
+RCX=0x0000000000000000 is an unknown value
+RDX=0x000000000000002b is an unknown value
+RSP=0x00007f0e0a1da050 is an unknown value
+RBP=0x0000000000000000 is an unknown value
+RSI=0x00007f0e0bac6c7e: <offset 0xa16c7e> in /tmp/TONLibrary8177063163407529506.so at 0x00007f0e0b0b0000
+RDI=0x0000000000000000 is an unknown value
+R8 =0x0000000000000081 is an unknown value
+R9 =0x00007f0e0befdb60: <offset 0xe4db60> in /tmp/TONLibrary8177063163407529506.so at 0x00007f0e0b0b0000
+R10=0x00007f0e0a1d96e7 is an unknown value
+R11=0x0000000000000000 is an unknown value
+R12=0x00007f0e0be893d0: <offset 0xdd93d0> in /tmp/TONLibrary8177063163407529506.so at 0x00007f0e0b0b0000
+R13=0x00007f0e0bac5d78: <offset 0xa15d78> in /tmp/TONLibrary8177063163407529506.so at 0x00007f0e0b0b0000
+R14=0x00007f0e0bef3128: <offset 0xe43128> in /tmp/TONLibrary8177063163407529506.so at 0x00007f0e0b0b0000
+R15=0x00007f0e0a1da0c0 is an unknown value
+
+
+Stack: [0x00007f0e09fdc000,0x00007f0e0a1dd000],  sp=0x00007f0e0a1da050,  free space=2040k
+Native frames: (J=compiled Java code, j=interpreted, Vv=VM code, C=native code)
+C  [TONLibrary8177063163407529506.so+0x8fbdea]  std::panicking::rust_panic_with_hook::haa1ed36ada4ffb03+0x1aa

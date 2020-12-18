@@ -5,7 +5,7 @@ import java.util.stream.*;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- *  Misc utility Functions.
+ *  
  */
 public class Utils {
 
@@ -21,9 +21,6 @@ public class Utils {
         public AccountId() {
 
         }
-/*        public AccountId() {
-        }
-*/
 
 
 
@@ -43,9 +40,6 @@ public class Utils {
         public Hex() {
 
         }
-/*        public Hex() {
-        }
-*/
 
 
 
@@ -84,19 +78,6 @@ public class Utils {
         public Base64() {
 
         }
-/*        public Base64() {
-        }
-
-        public Base64(Boolean url, Boolean test, Boolean bounce) {
-
-            this.url = url;
-
-            this.test = test;
-
-            this.bounce = bounce;
-
-        }
-*/
 
 
         @JsonProperty("url")
@@ -158,11 +139,10 @@ public class Utils {
     }
 
    /**
-    * Converts address from any TON format to any TON format
+    * 
     *
-    * @param address Account address in any TON format.
-    * @param outputFormat Specify the format to convert to.
-    * @return Address in the specified format
+    * @param address 
+    * @param outputFormat 
     */
     public CompletableFuture<String> convertAddress(String address, AddressStringFormat outputFormat) {
         return context.requestJSON("utils.convert_address", "{"+Stream.of((address==null?null:("\"address\":\""+address+"\"")),(outputFormat==null?null:("\"output_format\":"+outputFormat))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
