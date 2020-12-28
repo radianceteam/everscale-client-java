@@ -1,6 +1,6 @@
 # Java library for TON Client
 
-[![SDK version](https://img.shields.io/badge/TON%20SDK%20version-1.1.0-green)](https://github.com/tonlabs/TON-SDK/tree/1.1.0)
+[![SDK version](https://img.shields.io/badge/TON%20SDK%20version-1.5.0-green)](https://github.com/tonlabs/TON-SDK/tree/1.1.0)
 
 The Library is a binding for [TONOS Client](https://github.com/tonlabs/TON-SDK) written in Java
 that act as a bridge between TONOS Client and a Java application. The library includes original
@@ -99,3 +99,4 @@ Example of usage:
 ### See also
 - More usage examples [test sources](binding/src/test/java/com/radiance/tonclient/)
 - [Java API Docs](apidocs/)
+- [Support channel](https://t.me/RADIANCE_TON_SDK)
