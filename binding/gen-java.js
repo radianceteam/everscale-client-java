@@ -4,7 +4,6 @@ const api = require('./api.json');
 const fs = require('fs');
 
 const packageName = 'com.radiance.tonclient';
-//const reserved = ['public','private','protected','void','int','long','float','double','switch','case','return','new','class','interface','enum','try','catch','throw','throws'];
 
 const reserved = {
     public: 'publicKey',
@@ -119,25 +118,24 @@ function fieldMapper(f) {
 
 function getAppObjectHandler(obj) {
     return `(params,type) -> {
-                Integer reqId = (Integer)((Map)params).get("app_request_id");
-                Map data = (Map)((Map)params).get("request_data");
-                System.out.println("-- " + data);
+                Map data = (Map)(type==3?((Map)params).get("request_data"):params);
                 switch ((String)data.remove("type")) {
 ${Object.entries(obj.methods).map(([n,o]) => {
     
     return `
                     case "${n}":
                         try {${o.params.length?`
-                            ParamsOf${obj.type}.${n} p = new ObjectMapper().convertValue(data, ParamsOf${obj.type}.${n}.class);
-                            System.out.println("!! " + p);`:''}
-                            appObject.${dereserve(n.charAt(0).toLowerCase()+n.substring(1))}(${o.params.map(p=>`p.${camelize('get_'+p.name)}()`)})${o.result?`.thenAccept(res -> {
+                            ParamsOf${obj.type}.${n} p = new ObjectMapper().convertValue(data, ParamsOf${obj.type}.${n}.class);`:''}
+                            appObject.${dereserve(n.charAt(0).toLowerCase()+n.substring(1))}(${o.params.map(p=>`p.${camelize('get_'+p.name)}()`)})${o.result?`.whenComplete((res,ex) -> {
                                 new Client(context).resolveAppRequest(
-                                    reqId,
-                                    new Client.AppRequestResult.Ok(new ResultOf${obj.type}.${n}(${o.result.length?'res':''}))
+                                    (Integer)((Map)params).get("app_request_id"),
+                                    ex==null?
+                                        new Client.AppRequestResult.Ok(new ResultOf${obj.type}.${n}(${o.result.length?'res':''})):
+                                        new Client.AppRequestResult.Error(ex.getMessage())
                                 );
                             })`:''};
                         } catch (Exception e) {
-                            new Client(context).resolveAppRequest(reqId, new Client.AppRequestResult.Error(e.getMessage()));
+                            e.printStackTrace(System.out);
                         }
                         break;
 `}).join('')
@@ -377,7 +375,7 @@ public interface ${className} {
 ${Object.entries(iface.methods).map(([n,o]) => {
     let name = n.charAt(0).toLowerCase() + n.slice(1);
     let res = o.result&&o.result.length?o.result[0].getType():'Void';
-    return `    CompletableFuture<${res}> ${dereserve(name)}(${o.params.map(p=>p.getType()+' '+camelize(p.name))});`;
+    return `    ${o.result?`CompletableFuture<${res}>`:'void'} ${dereserve(name)}(${o.params.map(p=>p.getType()+' '+camelize(p.name))});`;
 }).join('\n')}
 }
 `);

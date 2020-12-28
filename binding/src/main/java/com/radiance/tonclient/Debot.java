@@ -253,6 +253,25 @@ public class Debot {
         }
     }
 
+        public static final SwitchCompleted SwitchCompleted = new SwitchCompleted();
+
+    /**
+     *  
+     */
+    public static class SwitchCompleted extends ParamsOfAppDebotBrowser  {
+
+        public SwitchCompleted() {
+
+        }
+
+
+
+        @Override
+        public String toString() {
+            return "{"+"\"type\":\"SwitchCompleted\""+"}";
+        }
+    }
+
     /**
      *  
      */
@@ -514,81 +533,88 @@ public class Debot {
     */
     public CompletableFuture<Integer> start(String address, AppDebotBrowser appObject) {
         return context.requestJSONCallback("debot.start", "{"+(address==null?"":("\"address\":\""+address+"\""))+"}", (params,type) -> {
-                Integer reqId = (Integer)((Map)params).get("app_request_id");
-                Map data = (Map)((Map)params).get("request_data");
-                System.out.println("-- " + data);
+                Map data = (Map)(type==3?((Map)params).get("request_data"):params);
                 switch ((String)data.remove("type")) {
 
                     case "Log":
                         try {
                             ParamsOfAppDebotBrowser.Log p = new ObjectMapper().convertValue(data, ParamsOfAppDebotBrowser.Log.class);
-                            System.out.println("!! " + p);
                             appObject.log(p.getMsg());
                         } catch (Exception e) {
-                            new Client(context).resolveAppRequest(reqId, new Client.AppRequestResult.Error(e.getMessage()));
+                            e.printStackTrace(System.out);
                         }
                         break;
 
                     case "Switch":
                         try {
                             ParamsOfAppDebotBrowser.Switch p = new ObjectMapper().convertValue(data, ParamsOfAppDebotBrowser.Switch.class);
-                            System.out.println("!! " + p);
                             appObject.switchTo(p.getContextId());
                         } catch (Exception e) {
-                            new Client(context).resolveAppRequest(reqId, new Client.AppRequestResult.Error(e.getMessage()));
+                            e.printStackTrace(System.out);
+                        }
+                        break;
+
+                    case "SwitchCompleted":
+                        try {
+                            appObject.switchCompleted();
+                        } catch (Exception e) {
+                            e.printStackTrace(System.out);
                         }
                         break;
 
                     case "ShowAction":
                         try {
                             ParamsOfAppDebotBrowser.ShowAction p = new ObjectMapper().convertValue(data, ParamsOfAppDebotBrowser.ShowAction.class);
-                            System.out.println("!! " + p);
                             appObject.showAction(p.getAction());
                         } catch (Exception e) {
-                            new Client(context).resolveAppRequest(reqId, new Client.AppRequestResult.Error(e.getMessage()));
+                            e.printStackTrace(System.out);
                         }
                         break;
 
                     case "Input":
                         try {
                             ParamsOfAppDebotBrowser.Input p = new ObjectMapper().convertValue(data, ParamsOfAppDebotBrowser.Input.class);
-                            System.out.println("!! " + p);
-                            appObject.input(p.getPrompt()).thenAccept(res -> {
+                            appObject.input(p.getPrompt()).whenComplete((res,ex) -> {
                                 new Client(context).resolveAppRequest(
-                                    reqId,
-                                    new Client.AppRequestResult.Ok(new ResultOfAppDebotBrowser.Input(res))
+                                    (Integer)((Map)params).get("app_request_id"),
+                                    ex==null?
+                                        new Client.AppRequestResult.Ok(new ResultOfAppDebotBrowser.Input(res)):
+                                        new Client.AppRequestResult.Error(ex.getMessage())
                                 );
                             });
                         } catch (Exception e) {
-                            new Client(context).resolveAppRequest(reqId, new Client.AppRequestResult.Error(e.getMessage()));
+                            e.printStackTrace(System.out);
                         }
                         break;
 
                     case "GetSigningBox":
                         try {
-                            appObject.getSigningBox().thenAccept(res -> {
+                            appObject.getSigningBox().whenComplete((res,ex) -> {
                                 new Client(context).resolveAppRequest(
-                                    reqId,
-                                    new Client.AppRequestResult.Ok(new ResultOfAppDebotBrowser.GetSigningBox(res))
+                                    (Integer)((Map)params).get("app_request_id"),
+                                    ex==null?
+                                        new Client.AppRequestResult.Ok(new ResultOfAppDebotBrowser.GetSigningBox(res)):
+                                        new Client.AppRequestResult.Error(ex.getMessage())
                                 );
                             });
                         } catch (Exception e) {
-                            new Client(context).resolveAppRequest(reqId, new Client.AppRequestResult.Error(e.getMessage()));
+                            e.printStackTrace(System.out);
                         }
                         break;
 
                     case "InvokeDebot":
                         try {
                             ParamsOfAppDebotBrowser.InvokeDebot p = new ObjectMapper().convertValue(data, ParamsOfAppDebotBrowser.InvokeDebot.class);
-                            System.out.println("!! " + p);
-                            appObject.invokeDebot(p.getDebotAddr(),p.getAction()).thenAccept(res -> {
+                            appObject.invokeDebot(p.getDebotAddr(),p.getAction()).whenComplete((res,ex) -> {
                                 new Client(context).resolveAppRequest(
-                                    reqId,
-                                    new Client.AppRequestResult.Ok(new ResultOfAppDebotBrowser.InvokeDebot())
+                                    (Integer)((Map)params).get("app_request_id"),
+                                    ex==null?
+                                        new Client.AppRequestResult.Ok(new ResultOfAppDebotBrowser.InvokeDebot()):
+                                        new Client.AppRequestResult.Error(ex.getMessage())
                                 );
                             });
                         } catch (Exception e) {
-                            new Client(context).resolveAppRequest(reqId, new Client.AppRequestResult.Error(e.getMessage()));
+                            e.printStackTrace(System.out);
                         }
                         break;
 
@@ -605,81 +631,88 @@ public class Debot {
     */
     public CompletableFuture<Integer> fetch(String address, AppDebotBrowser appObject) {
         return context.requestJSONCallback("debot.fetch", "{"+(address==null?"":("\"address\":\""+address+"\""))+"}", (params,type) -> {
-                Integer reqId = (Integer)((Map)params).get("app_request_id");
-                Map data = (Map)((Map)params).get("request_data");
-                System.out.println("-- " + data);
+                Map data = (Map)(type==3?((Map)params).get("request_data"):params);
                 switch ((String)data.remove("type")) {
 
                     case "Log":
                         try {
                             ParamsOfAppDebotBrowser.Log p = new ObjectMapper().convertValue(data, ParamsOfAppDebotBrowser.Log.class);
-                            System.out.println("!! " + p);
                             appObject.log(p.getMsg());
                         } catch (Exception e) {
-                            new Client(context).resolveAppRequest(reqId, new Client.AppRequestResult.Error(e.getMessage()));
+                            e.printStackTrace(System.out);
                         }
                         break;
 
                     case "Switch":
                         try {
                             ParamsOfAppDebotBrowser.Switch p = new ObjectMapper().convertValue(data, ParamsOfAppDebotBrowser.Switch.class);
-                            System.out.println("!! " + p);
                             appObject.switchTo(p.getContextId());
                         } catch (Exception e) {
-                            new Client(context).resolveAppRequest(reqId, new Client.AppRequestResult.Error(e.getMessage()));
+                            e.printStackTrace(System.out);
+                        }
+                        break;
+
+                    case "SwitchCompleted":
+                        try {
+                            appObject.switchCompleted();
+                        } catch (Exception e) {
+                            e.printStackTrace(System.out);
                         }
                         break;
 
                     case "ShowAction":
                         try {
                             ParamsOfAppDebotBrowser.ShowAction p = new ObjectMapper().convertValue(data, ParamsOfAppDebotBrowser.ShowAction.class);
-                            System.out.println("!! " + p);
                             appObject.showAction(p.getAction());
                         } catch (Exception e) {
-                            new Client(context).resolveAppRequest(reqId, new Client.AppRequestResult.Error(e.getMessage()));
+                            e.printStackTrace(System.out);
                         }
                         break;
 
                     case "Input":
                         try {
                             ParamsOfAppDebotBrowser.Input p = new ObjectMapper().convertValue(data, ParamsOfAppDebotBrowser.Input.class);
-                            System.out.println("!! " + p);
-                            appObject.input(p.getPrompt()).thenAccept(res -> {
+                            appObject.input(p.getPrompt()).whenComplete((res,ex) -> {
                                 new Client(context).resolveAppRequest(
-                                    reqId,
-                                    new Client.AppRequestResult.Ok(new ResultOfAppDebotBrowser.Input(res))
+                                    (Integer)((Map)params).get("app_request_id"),
+                                    ex==null?
+                                        new Client.AppRequestResult.Ok(new ResultOfAppDebotBrowser.Input(res)):
+                                        new Client.AppRequestResult.Error(ex.getMessage())
                                 );
                             });
                         } catch (Exception e) {
-                            new Client(context).resolveAppRequest(reqId, new Client.AppRequestResult.Error(e.getMessage()));
+                            e.printStackTrace(System.out);
                         }
                         break;
 
                     case "GetSigningBox":
                         try {
-                            appObject.getSigningBox().thenAccept(res -> {
+                            appObject.getSigningBox().whenComplete((res,ex) -> {
                                 new Client(context).resolveAppRequest(
-                                    reqId,
-                                    new Client.AppRequestResult.Ok(new ResultOfAppDebotBrowser.GetSigningBox(res))
+                                    (Integer)((Map)params).get("app_request_id"),
+                                    ex==null?
+                                        new Client.AppRequestResult.Ok(new ResultOfAppDebotBrowser.GetSigningBox(res)):
+                                        new Client.AppRequestResult.Error(ex.getMessage())
                                 );
                             });
                         } catch (Exception e) {
-                            new Client(context).resolveAppRequest(reqId, new Client.AppRequestResult.Error(e.getMessage()));
+                            e.printStackTrace(System.out);
                         }
                         break;
 
                     case "InvokeDebot":
                         try {
                             ParamsOfAppDebotBrowser.InvokeDebot p = new ObjectMapper().convertValue(data, ParamsOfAppDebotBrowser.InvokeDebot.class);
-                            System.out.println("!! " + p);
-                            appObject.invokeDebot(p.getDebotAddr(),p.getAction()).thenAccept(res -> {
+                            appObject.invokeDebot(p.getDebotAddr(),p.getAction()).whenComplete((res,ex) -> {
                                 new Client(context).resolveAppRequest(
-                                    reqId,
-                                    new Client.AppRequestResult.Ok(new ResultOfAppDebotBrowser.InvokeDebot())
+                                    (Integer)((Map)params).get("app_request_id"),
+                                    ex==null?
+                                        new Client.AppRequestResult.Ok(new ResultOfAppDebotBrowser.InvokeDebot()):
+                                        new Client.AppRequestResult.Error(ex.getMessage())
                                 );
                             });
                         } catch (Exception e) {
-                            new Client(context).resolveAppRequest(reqId, new Client.AppRequestResult.Error(e.getMessage()));
+                            e.printStackTrace(System.out);
                         }
                         break;
 

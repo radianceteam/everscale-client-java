@@ -87,4 +87,14 @@ public class Boc {
             .thenApply(json -> TONContext.convertValue(json.findValue("hash"), String.class));
     }
 
+   /**
+    * 
+    *
+    * @param tvc 
+    */
+    public CompletableFuture<String> getCodeFromTvc(String tvc) {
+        return context.requestJSON("boc.get_code_from_tvc", "{"+(tvc==null?"":("\"tvc\":\""+tvc+"\""))+"}")
+            .thenApply(json -> TONContext.convertValue(json.findValue("code"), String.class));
+    }
+
 }

@@ -5,6 +5,8 @@ import java.nio.file.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.Base64;
 import java.util.Scanner;
+import java.io.IOException;
+import java.net.URISyntaxException;
 
 public abstract class TestBase {
     protected static TONContext context;
@@ -27,6 +29,10 @@ public abstract class TestBase {
         String data = s.hasNext() ? s.next() : "";
         s.close();
         return new Abi.ABI.Serialized(data);
+    }
+
+    protected static String tvcFromResource(String name) throws IOException, URISyntaxException {
+        return new String(Base64.getEncoder().encode(Files.readAllBytes(Paths.get(TestBase.class.getResource(name).toURI()))));
     }
 
     @BeforeClass

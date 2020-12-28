@@ -197,8 +197,33 @@ public class CryptoTest extends TestBase {
                 "d9b9dc5033fb416134e5d2107fdbacab5aadb297cb82dbdcd137d663bac59f7f"  // secret
             ).get()))
         );
+    }
 
+    @Test
+    public void testSigningBox() throws Exception {
+        CompletableFuture<Integer> res = crypto.registerSigningBox(new AppSigningBox() {
+            public CompletableFuture<String> getPublicKey() {
+                return CompletableFuture.completedFuture("abcdef");
+            }
 
+            public CompletableFuture<String> sign(String unsigned) {
+                return CompletableFuture.completedFuture("0123456789abcdef");
+            };
+        });
+
+        Integer handle = res.get();
+        System.out.println("Handle: " + handle);
+
+        CompletableFuture<Abi.ResultOfEncodeMessageBody> encoded = abiModule.encodeMessageBody(
+            abiFromResource("/Transfer.abi.json"),
+            new Abi.CallSet("transfer", null, "{\"comment\":\""+ (new BigInteger(1, "Hello friend!!!".getBytes()).toString(16)) +"\"}"),
+            true,
+            new Abi.Signer.SigningBox(handle),
+            null
+        );
+
+        System.out.println("Encoded: " + encoded.get());
+        crypto.removeSigningBox(handle);
     }
 }
 

@@ -152,7 +152,7 @@ public class Net {
     }
 
    /**
-    * Suspends network module to stop any network activity
+    * 
     *
     */
     public CompletableFuture<Void> suspend() {
@@ -161,11 +161,40 @@ public class Net {
     }
 
    /**
-    * Resumes network module to enable network activity
+    * 
     *
     */
     public CompletableFuture<Void> resume() {
         return context.requestJSON("net.resume", "{}")
+            .thenApply(json -> TONContext.convertValue(json, Void.class));
+    }
+
+   /**
+    * 
+    *
+    * @param address 
+    */
+    public CompletableFuture<String> findLastShardBlock(String address) {
+        return context.requestJSON("net.find_last_shard_block", "{"+(address==null?"":("\"address\":\""+address+"\""))+"}")
+            .thenApply(json -> TONContext.convertValue(json.findValue("block_id"), String.class));
+    }
+
+   /**
+    * 
+    *
+    */
+    public CompletableFuture<String[]> fetchEndpoints() {
+        return context.requestJSON("net.fetch_endpoints", "{}")
+            .thenApply(json -> TONContext.convertValue(json.findValue("endpoints"), String[].class));
+    }
+
+   /**
+    * 
+    *
+    * @param endpoints 
+    */
+    public CompletableFuture<Void> setEndpoints(String[] endpoints) {
+        return context.requestJSON("net.set_endpoints", "{"+(endpoints==null?"":("\"endpoints\":\""+endpoints+"\""))+"}")
             .thenApply(json -> TONContext.convertValue(json, Void.class));
     }
 

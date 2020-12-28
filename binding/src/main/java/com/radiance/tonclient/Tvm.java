@@ -582,13 +582,13 @@ public class Tvm {
         @JsonProperty("account")
         private String account;
         /**
-         * Encoded as `base64`.Attention! Only data in account state is updated.
+         * Encoded as `base64`.Attention! Only `account_state.storage.state.data` part of the boc is updated.
          */
         public String getAccount() {
             return account;
         }
         /**
-         * Encoded as `base64`.Attention! Only data in account state is updated.
+         * Encoded as `base64`.Attention! Only `account_state.storage.state.data` part of the boc is updated.
          */
         public void setAccount(String value) {
             this.account = value;
@@ -607,7 +607,7 @@ public class Tvm {
     }
 
    /**
-    * 
+    * Performs all the phases of contract execution on Transaction Executor -the same component that is used on Validator Nodes.<p>Can be used for contract debug, to find out the reason of message unsuccessfuldelivery - as Validators just throw away failed transactions, here you can catch it.<p>Another use case is to estimate fees for message execution. Set  `AccountForExecutor::Account.unlimited_balance`to `true` so that emulation will not depend on the actual balance.<p>One more use case - you can procude the sequence of operations,thus emulating the multiple contract calls locally.And so on.<p>To get the account boc (bag of cells) - use `net.query` method to download it from graphql api(field `boc` of `account`) or generate it with `abi.encode_account method`.To get the message boc - use `abi.encode_message` or prepare it any other way, for instance, with Fift script.<p>If you need this emulation to be as precise as possible then specify `ParamsOfRunExecutor` parameter.If you need to see the aborted transaction as a result, not as an error, set `skip_transaction_check` to `true`.
     *
     * @param message Must be encoded as base64.
     * @param account 
@@ -621,7 +621,7 @@ public class Tvm {
     }
 
    /**
-    * 
+    * Performs only a part of compute phase of transaction executionthat is used to run get-methods of ABI-compatible contracts.<p>If you try to run get methods with `run_executor` you will get an error, because it checks ACCEPT and exitsif there is none, which is actually true for get methods.<p> To get the account boc (bag of cells) - use `net.query` method to download it from graphql api(field `boc` of `account`) or generate it with `abi.encode_account method`.To get the message boc - use `abi.encode_message` or prepare it any other way, for instance, with Fift script.<p>Attention! Updated account state is produces as well, but only`account_state.storage.state.data`  part of the boc is updated.
     *
     * @param message Must be encoded as base64.
     * @param account Must be encoded as base64.
@@ -634,7 +634,7 @@ public class Tvm {
     }
 
    /**
-    * 
+    * Executes a getmethod of FIFT contract that fulfills the smc-guidelines https://test.ton.org/smc-guidelines.txtand returns the result data from TVM's stack
     *
     * @param account 
     * @param functionName 

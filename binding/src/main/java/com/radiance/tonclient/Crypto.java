@@ -410,7 +410,7 @@ public class Crypto {
     }
 
    /**
-    * 
+    * Verifies the signature in `signed` using the signer's public key `public`and returns the message `unsigned`.<p>If the signature fails verification, crypto_sign_open raises an exception.
     *
     * @param signed Encoded with `base64`.
     * @param publicKey 
@@ -421,7 +421,7 @@ public class Crypto {
     }
 
    /**
-    * 
+    * Signs the message `unsigned` using the secret key `secret`and returns a signature `signature`.
     *
     * @param unsigned 
     * @param secretKey 
@@ -633,36 +633,37 @@ public class Crypto {
     */
     public CompletableFuture<Integer> registerSigningBox(AppSigningBox appObject) {
         return context.requestJSONCallback("crypto.register_signing_box", "{}", (params,type) -> {
-                Integer reqId = (Integer)((Map)params).get("app_request_id");
-                Map data = (Map)((Map)params).get("request_data");
-                System.out.println("-- " + data);
+                Map data = (Map)(type==3?((Map)params).get("request_data"):params);
                 switch ((String)data.remove("type")) {
 
                     case "GetPublicKey":
                         try {
-                            appObject.getPublicKey().thenAccept(res -> {
+                            appObject.getPublicKey().whenComplete((res,ex) -> {
                                 new Client(context).resolveAppRequest(
-                                    reqId,
-                                    new Client.AppRequestResult.Ok(new ResultOfAppSigningBox.GetPublicKey(res))
+                                    (Integer)((Map)params).get("app_request_id"),
+                                    ex==null?
+                                        new Client.AppRequestResult.Ok(new ResultOfAppSigningBox.GetPublicKey(res)):
+                                        new Client.AppRequestResult.Error(ex.getMessage())
                                 );
                             });
                         } catch (Exception e) {
-                            new Client(context).resolveAppRequest(reqId, new Client.AppRequestResult.Error(e.getMessage()));
+                            e.printStackTrace(System.out);
                         }
                         break;
 
                     case "Sign":
                         try {
                             ParamsOfAppSigningBox.Sign p = new ObjectMapper().convertValue(data, ParamsOfAppSigningBox.Sign.class);
-                            System.out.println("!! " + p);
-                            appObject.sign(p.getUnsigned()).thenAccept(res -> {
+                            appObject.sign(p.getUnsigned()).whenComplete((res,ex) -> {
                                 new Client(context).resolveAppRequest(
-                                    reqId,
-                                    new Client.AppRequestResult.Ok(new ResultOfAppSigningBox.Sign(res))
+                                    (Integer)((Map)params).get("app_request_id"),
+                                    ex==null?
+                                        new Client.AppRequestResult.Ok(new ResultOfAppSigningBox.Sign(res)):
+                                        new Client.AppRequestResult.Error(ex.getMessage())
                                 );
                             });
                         } catch (Exception e) {
-                            new Client(context).resolveAppRequest(reqId, new Client.AppRequestResult.Error(e.getMessage()));
+                            e.printStackTrace(System.out);
                         }
                         break;
 
