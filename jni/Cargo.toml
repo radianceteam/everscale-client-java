@@ -1,6 +1,6 @@
 [package]
 name = "ton-client-jni"
-version = "0.1.0"
+version = "1.5.0"
 authors = ["Igor Vasilev"]
 edition = "2018"
 
@@ -11,6 +11,6 @@ crate-type = ["cdylib"]
 [dependencies]
 jni = "0.18.0"
 lazy_static = "1.1.0"
-ton_client = { path = "../target/TON-SDK/ton_client/client" }
+ton_client = { path = "../target/TON-SDK/ton_client" }
 
 

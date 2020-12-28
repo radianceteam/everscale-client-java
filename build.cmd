@@ -3,7 +3,7 @@ SET PROJECT_DIR=%~dp0
 SET TON_DIR=%PROJECT_DIR%\target\TON-SDK
 
 IF NOT EXIST %TON_DIR% (
-    git clone --single-branch --branch 1.1.0 https://github.com/tonlabs/TON-SDK.git %TON_DIR%
+    git clone --single-branch --branch 1.5.0 https://github.com/tonlabs/TON-SDK.git %TON_DIR%
 )
 
 cd jni
@@ -20,7 +20,7 @@ IF ERRORLEVEL 1 (
 ) ELSE (
     docker images | findstr /C:"tonlabs/local-node"
     IF ERRORLEVEL 1 (
-        docker run -d --name local-node -p80:80 tonlabs/local-node
+        docker run -d --name local-node -e USER_AGREEMENT=yes -p80:80 tonlabs/local-node
     ) ELSE (
         docker ps | findstr /C:"tonlabs/local-node"
         IF ERRORLEVEL 1 (

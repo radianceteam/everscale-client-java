@@ -49,33 +49,18 @@ public class Tvm {
         public ExecutionOptions() {
 
         }
-/*        public ExecutionOptions() {
-        }
-
-        public ExecutionOptions(String blockchainConfig, Number blockTime, Long blockLt, Long transactionLt) {
-
-            this.blockchainConfig = blockchainConfig;
-
-            this.blockTime = blockTime;
-
-            this.blockLt = blockLt;
-
-            this.transactionLt = transactionLt;
-
-        }
-*/
 
 
         @JsonProperty("blockchain_config")
         private String blockchainConfig;
         /**
-         * boc with config
+         * 
          */
         public String getBlockchainConfig() {
             return blockchainConfig;
         }
         /**
-         * boc with config
+         * 
          */
         public void setBlockchainConfig(String value) {
             this.blockchainConfig = value;
@@ -84,13 +69,13 @@ public class Tvm {
         @JsonProperty("block_time")
         private Number blockTime;
         /**
-         * time that is used as transaction time
+         * 
          */
         public Number getBlockTime() {
             return blockTime;
         }
         /**
-         * time that is used as transaction time
+         * 
          */
         public void setBlockTime(Number value) {
             this.blockTime = value;
@@ -99,13 +84,13 @@ public class Tvm {
         @JsonProperty("block_lt")
         private Long blockLt;
         /**
-         * block logical time
+         * 
          */
         public Long getBlockLt() {
             return blockLt;
         }
         /**
-         * block logical time
+         * 
          */
         public void setBlockLt(Long value) {
             this.blockLt = value;
@@ -114,13 +99,13 @@ public class Tvm {
         @JsonProperty("transaction_lt")
         private Long transactionLt;
         /**
-         * transaction logical time
+         * 
          */
         public Long getTransactionLt() {
             return transactionLt;
         }
         /**
-         * transaction logical time
+         * 
          */
         public void setTransactionLt(Long value) {
             this.transactionLt = value;
@@ -137,16 +122,13 @@ public class Tvm {
         public static final None None = new None();
 
     /**
-     *  Non-existing account to run a creation internal message. Should be used with `skip_transaction_check = true` if the message has no deploy data since transactions on the uninitialized account are always aborted
+     *  
      */
     public static class None extends AccountForExecutor  {
 
         public None() {
 
         }
-/*        public None() {
-        }
-*/
 
 
 
@@ -159,16 +141,13 @@ public class Tvm {
         public static final Uninit Uninit = new Uninit();
 
     /**
-     *  Emulate uninitialized account to run deploy message
+     *  
      */
     public static class Uninit extends AccountForExecutor  {
 
         public Uninit() {
 
         }
-/*        public Uninit() {
-        }
-*/
 
 
 
@@ -179,7 +158,7 @@ public class Tvm {
     }
 
     /**
-     *  Account state to run message
+     *  
      */
     public static class Account extends AccountForExecutor  {
 
@@ -198,29 +177,18 @@ public class Tvm {
         public Account() {
 
         }
-/*        public Account() {
-        }
-
-        public Account(String boc, Boolean unlimitedBalance) {
-
-            this.boc = boc;
-
-            this.unlimitedBalance = unlimitedBalance;
-
-        }
-*/
 
 
         @JsonProperty("boc")
         private String boc;
         /**
-         * Account BOC. Encoded as base64.
+         * Encoded as base64.
          */
         public String getBoc() {
             return boc;
         }
         /**
-         * Account BOC. Encoded as base64.
+         * Encoded as base64.
          */
         public void setBoc(String value) {
             this.boc = value;
@@ -229,13 +197,13 @@ public class Tvm {
         @JsonProperty("unlimited_balance")
         private Boolean unlimitedBalance;
         /**
-         * Flag for running account with the unlimited balance. Can be used to calculate transaction fees without balance check
+         * Can be used to calculatetransaction fees without balance check
          */
         public Boolean getUnlimitedBalance() {
             return unlimitedBalance;
         }
         /**
-         * Flag for running account with the unlimited balance. Can be used to calculate transaction fees without balance check
+         * Can be used to calculatetransaction fees without balance check
          */
         public void setUnlimitedBalance(Boolean value) {
             this.unlimitedBalance = value;
@@ -316,25 +284,6 @@ public class Tvm {
         public TransactionFees() {
 
         }
-/*        public TransactionFees() {
-        }
-
-        public TransactionFees(Long inMsgFwdFee, Long storageFee, Long gasFee, Long outMsgsFwdFee, Long totalAccountFees, Long totalOutput) {
-
-            this.inMsgFwdFee = inMsgFwdFee;
-
-            this.storageFee = storageFee;
-
-            this.gasFee = gasFee;
-
-            this.outMsgsFwdFee = outMsgsFwdFee;
-
-            this.totalAccountFees = totalAccountFees;
-
-            this.totalOutput = totalOutput;
-
-        }
-*/
 
 
         @JsonProperty("in_msg_fwd_fee")
@@ -486,35 +435,18 @@ public class Tvm {
         public ResultOfRunExecutor() {
 
         }
-/*        public ResultOfRunExecutor() {
-        }
-
-        public ResultOfRunExecutor(Object transaction, String[] outMessages, Processing.DecodedOutput decoded, String account, TransactionFees fees) {
-
-            this.transaction = transaction;
-
-            this.outMessages = outMessages;
-
-            this.decoded = decoded;
-
-            this.account = account;
-
-            this.fees = fees;
-
-        }
-*/
 
 
         @JsonProperty("transaction")
         private Object transaction;
         /**
-         * Parsed transaction.<p> In addition to the regular transaction fields there is a `boc` field encoded with `base64` which contains source transaction BOC.
+         * In addition to the regular transaction fields there is a`boc` field encoded with `base64` which contains sourcetransaction BOC.
          */
         public Object getTransaction() {
             return transaction;
         }
         /**
-         * Parsed transaction.<p> In addition to the regular transaction fields there is a `boc` field encoded with `base64` which contains source transaction BOC.
+         * In addition to the regular transaction fields there is a`boc` field encoded with `base64` which contains sourcetransaction BOC.
          */
         public void setTransaction(Object value) {
             this.transaction = value;
@@ -523,13 +455,13 @@ public class Tvm {
         @JsonProperty("out_messages")
         private String[] outMessages;
         /**
-         * List of output messages' BOCs. Encoded as `base64`
+         * Encoded as `base64`
          */
         public String[] getOutMessages() {
             return outMessages;
         }
         /**
-         * List of output messages' BOCs. Encoded as `base64`
+         * Encoded as `base64`
          */
         public void setOutMessages(String[] value) {
             this.outMessages = value;
@@ -538,13 +470,13 @@ public class Tvm {
         @JsonProperty("decoded")
         private Processing.DecodedOutput decoded;
         /**
-         * Optional decoded message bodies according to the optional `abi` parameter.
+         * 
          */
         public Processing.DecodedOutput getDecoded() {
             return decoded;
         }
         /**
-         * Optional decoded message bodies according to the optional `abi` parameter.
+         * 
          */
         public void setDecoded(Processing.DecodedOutput value) {
             this.decoded = value;
@@ -553,13 +485,13 @@ public class Tvm {
         @JsonProperty("account")
         private String account;
         /**
-         * Updated account state BOC. Encoded as `base64`
+         * Encoded as `base64`
          */
         public String getAccount() {
             return account;
         }
         /**
-         * Updated account state BOC. Encoded as `base64`
+         * Encoded as `base64`
          */
         public void setAccount(String value) {
             this.account = value;
@@ -568,13 +500,13 @@ public class Tvm {
         @JsonProperty("fees")
         private TransactionFees fees;
         /**
-         * Transaction fees
+         * 
          */
         public TransactionFees getFees() {
             return fees;
         }
         /**
-         * Transaction fees
+         * 
          */
         public void setFees(TransactionFees value) {
             this.fees = value;
@@ -615,31 +547,18 @@ public class Tvm {
         public ResultOfRunTvm() {
 
         }
-/*        public ResultOfRunTvm() {
-        }
-
-        public ResultOfRunTvm(String[] outMessages, Processing.DecodedOutput decoded, String account) {
-
-            this.outMessages = outMessages;
-
-            this.decoded = decoded;
-
-            this.account = account;
-
-        }
-*/
 
 
         @JsonProperty("out_messages")
         private String[] outMessages;
         /**
-         * List of output messages' BOCs. Encoded as `base64`
+         * Encoded as `base64`
          */
         public String[] getOutMessages() {
             return outMessages;
         }
         /**
-         * List of output messages' BOCs. Encoded as `base64`
+         * Encoded as `base64`
          */
         public void setOutMessages(String[] value) {
             this.outMessages = value;
@@ -648,13 +567,13 @@ public class Tvm {
         @JsonProperty("decoded")
         private Processing.DecodedOutput decoded;
         /**
-         * Optional decoded message bodies according to the optional `abi` parameter.
+         * 
          */
         public Processing.DecodedOutput getDecoded() {
             return decoded;
         }
         /**
-         * Optional decoded message bodies according to the optional `abi` parameter.
+         * 
          */
         public void setDecoded(Processing.DecodedOutput value) {
             this.decoded = value;
@@ -663,13 +582,13 @@ public class Tvm {
         @JsonProperty("account")
         private String account;
         /**
-         * Updated account state BOC. Encoded as `base64`. Attention! Only data in account state is updated.
+         * Encoded as `base64`.Attention! Only `account_state.storage.state.data` part of the boc is updated.
          */
         public String getAccount() {
             return account;
         }
         /**
-         * Updated account state BOC. Encoded as `base64`. Attention! Only data in account state is updated.
+         * Encoded as `base64`.Attention! Only `account_state.storage.state.data` part of the boc is updated.
          */
         public void setAccount(String value) {
             this.account = value;
@@ -688,13 +607,13 @@ public class Tvm {
     }
 
    /**
-    * 
+    * Performs all the phases of contract execution on Transaction Executor -the same component that is used on Validator Nodes.<p>Can be used for contract debug, to find out the reason of message unsuccessfuldelivery - as Validators just throw away failed transactions, here you can catch it.<p>Another use case is to estimate fees for message execution. Set  `AccountForExecutor::Account.unlimited_balance`to `true` so that emulation will not depend on the actual balance.<p>One more use case - you can procude the sequence of operations,thus emulating the multiple contract calls locally.And so on.<p>To get the account boc (bag of cells) - use `net.query` method to download it from graphql api(field `boc` of `account`) or generate it with `abi.encode_account method`.To get the message boc - use `abi.encode_message` or prepare it any other way, for instance, with Fift script.<p>If you need this emulation to be as precise as possible then specify `ParamsOfRunExecutor` parameter.If you need to see the aborted transaction as a result, not as an error, set `skip_transaction_check` to `true`.
     *
-    * @param message Input message BOC. Must be encoded as base64.
-    * @param account Account to run on executor
-    * @param executionOptions Execution options.
-    * @param abi Contract ABI for decoding output messages
-    * @param skipTransactionCheck Skip transaction check flag
+    * @param message Must be encoded as base64.
+    * @param account 
+    * @param executionOptions 
+    * @param abi 
+    * @param skipTransactionCheck 
     */
     public CompletableFuture<ResultOfRunExecutor> runExecutor(String message, AccountForExecutor account, ExecutionOptions executionOptions, Abi.ABI abi, Boolean skipTransactionCheck) {
         return context.requestJSON("tvm.run_executor", "{"+Stream.of((message==null?null:("\"message\":\""+message+"\"")),(account==null?null:("\"account\":"+account)),(executionOptions==null?null:("\"execution_options\":"+executionOptions)),(abi==null?null:("\"abi\":"+abi)),(skipTransactionCheck==null?null:("\"skip_transaction_check\":"+skipTransactionCheck))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
@@ -702,12 +621,12 @@ public class Tvm {
     }
 
    /**
-    * 
+    * Performs only a part of compute phase of transaction executionthat is used to run get-methods of ABI-compatible contracts.<p>If you try to run get methods with `run_executor` you will get an error, because it checks ACCEPT and exitsif there is none, which is actually true for get methods.<p> To get the account boc (bag of cells) - use `net.query` method to download it from graphql api(field `boc` of `account`) or generate it with `abi.encode_account method`.To get the message boc - use `abi.encode_message` or prepare it any other way, for instance, with Fift script.<p>Attention! Updated account state is produces as well, but only`account_state.storage.state.data`  part of the boc is updated.
     *
-    * @param message Input message BOC. Must be encoded as base64.
-    * @param account Account BOC. Must be encoded as base64.
-    * @param executionOptions Execution options.
-    * @param abi Contract ABI for dedcoding output messages
+    * @param message Must be encoded as base64.
+    * @param account Must be encoded as base64.
+    * @param executionOptions 
+    * @param abi 
     */
     public CompletableFuture<ResultOfRunTvm> runTvm(String message, String account, ExecutionOptions executionOptions, Abi.ABI abi) {
         return context.requestJSON("tvm.run_tvm", "{"+Stream.of((message==null?null:("\"message\":\""+message+"\"")),(account==null?null:("\"account\":\""+account+"\"")),(executionOptions==null?null:("\"execution_options\":"+executionOptions)),(abi==null?null:("\"abi\":"+abi))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
@@ -715,13 +634,12 @@ public class Tvm {
     }
 
    /**
-    * Executes getmethod and returns data from TVM stack
+    * Executes a getmethod of FIFT contract that fulfills the smc-guidelines https://test.ton.org/smc-guidelines.txtand returns the result data from TVM's stack
     *
-    * @param account Account BOC in `base64`
-    * @param functionName Function name
-    * @param input Input parameters
+    * @param account 
+    * @param functionName 
+    * @param input 
     * @param executionOptions 
-    * @return Values returned by getmethod on stack
     */
     public CompletableFuture<Object> runGet(String account, String functionName, Object input, ExecutionOptions executionOptions) {
         return context.requestJSON("tvm.run_get", "{"+Stream.of((account==null?null:("\"account\":\""+account+"\"")),(functionName==null?null:("\"function_name\":\""+functionName+"\"")),(input==null?null:("\"input\":"+input)),(executionOptions==null?null:("\"execution_options\":"+executionOptions))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
