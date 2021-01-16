@@ -7,6 +7,7 @@ import static org.junit.Assert.assertNotEquals;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.TimeUnit;
 
 public class ProcessingTest extends TestBase {
 
@@ -22,10 +23,10 @@ public class ProcessingTest extends TestBase {
             new Abi.DeploySet(tvc, null, null),
             new Abi.CallSet(
                 "constructor",
-                new Abi.FunctionHeader(Integer.MAX_VALUE, null, keys.getPublic()),
-                null),
+                new Abi.FunctionHeader((int)(System.currentTimeMillis()/1000) + 10, null, keys.getPublic())),
             new Abi.Signer.Keys(keys),
-            null).get();
+            null
+        ).get();
 
         getGramsFromGiver(encoded.getAddress()).get();
 
