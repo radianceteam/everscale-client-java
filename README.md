@@ -1,6 +1,6 @@
 # Java library for TON Client
 
-[![SDK version](https://img.shields.io/badge/TON%20SDK%20version-1.5.0-green)](https://github.com/tonlabs/TON-SDK/tree/1.5.0)
+[![SDK version](https://img.shields.io/badge/TON%20SDK%20version-1.5.2-green)](https://github.com/tonlabs/TON-SDK/tree/1.5.2)
 
 The Library is a binding for [TONOS Client](https://github.com/tonlabs/TON-SDK) written in Java
 that act as a bridge between TONOS Client and a Java application. The library includes original
@@ -42,7 +42,7 @@ Follow installation instructions from https://docs.docker.com/engine/install/
 ```
     $ mvn test
 ```
-- If succeed, you can find "ton-client-binding-1.5.0-jar-with-dependencies.jar" file located under ${Project_basedir}/binding/target
+- If succeed, you can find "ton-client-binding-1.5.2-jar-with-dependencies.jar" file located under ${Project_basedir}/binding/target
 
 
 ### Clean

@@ -6,7 +6,7 @@
 
     <groupId>com.radiance.tonclient</groupId>
     <artifactId>ton-client-binding</artifactId>
-    <version>1.5.0</version>
+    <version>1.5.2</version>
 
     <name>ton-client-binding</name>
     <!-- FIXME change it to the project's website -->

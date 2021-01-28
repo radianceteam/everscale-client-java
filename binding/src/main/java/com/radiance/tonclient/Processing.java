@@ -209,7 +209,7 @@ public class Processing {
     }
 
    /**
-    * Creates ABI-compatible message,sends it to the network and monitors for the result transaction.Decodes the output messages' bodies.<p>If contract's ABI includes "expire" header, thenSDK implements retries in case of unsuccessful message delivery within the expirationtimeout: SDK recreates the message, sends it and processes it again.<p>The intermediate events, such as `WillFetchFirstBlock`, `WillSend`, `DidSend`,`WillFetchNextBlock`, etc - are switched on/off by `send_events` flagand logged into the supplied callback function.The retry configuration parameters are defined in client's `NetworkConfig`.<p>If contract's ABI does not include "expire" headerthen, if no transaction is found within the network timeout (see config parameter ), exits with error.
+    * Creates ABI-compatible message,sends it to the network and monitors for the result transaction.Decodes the output messages' bodies.<p>If contract's ABI includes "expire" header, thenSDK implements retries in case of unsuccessful message delivery within the expirationtimeout: SDK recreates the message, sends it and processes it again.<p>The intermediate events, such as `WillFetchFirstBlock`, `WillSend`, `DidSend`,`WillFetchNextBlock`, etc - are switched on/off by `send_events` flagand logged into the supplied callback function.<p>The retry configuration parameters are defined in the client's `NetworkConfig` and `AbiConfig`.<p>If contract's ABI does not include "expire" headerthen, if no transaction is found within the network timeout (see config parameter ), exits with error.
     *
     * @param abi 
     * @param address Must be specified in case of non-deploy message.
