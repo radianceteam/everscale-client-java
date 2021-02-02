@@ -45,5 +45,6 @@ jobs:
           docker run -d --name local-node -e USER_AGREEMENT=yes -p80:80 tonlabs/local-node
           mvn install
 
+      - name: Skip Tests
         if: !matrix.config.test
         run: mvn -DskipTests install
