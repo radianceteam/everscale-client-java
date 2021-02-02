@@ -29,7 +29,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: jni/target
-          key: ${{ runner.os }}-client-${{ branch }}
+          key: ${{ runner.os }}-client-${{ github.ref }}
 
       - name: Build TON Client
         run: |
