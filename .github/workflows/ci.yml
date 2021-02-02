@@ -25,6 +25,12 @@ jobs:
         with:
           java-version: 1.8
 
+      - name: Cache TON Client
+        uses: actions/cache@v2
+        with:
+          path: jni/target
+          key: ${{ runner.os }}-client-${{ branch }}
+
       - name: Build TON Client
         run: |
           projectdir=`pwd`
