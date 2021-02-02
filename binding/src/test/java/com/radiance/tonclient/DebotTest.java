@@ -14,6 +14,7 @@ import java.util.concurrent.ExecutionException;
 import java.math.BigInteger;
 
 public class DebotTest extends TestBase {
+    private static final int EXIT_CHOICE = 9;
 
     static class Step {
         int choice;
@@ -182,7 +183,7 @@ public class DebotTest extends TestBase {
         browser.execute(new Step[] {
             new Step(1, new String[] {"Test Goto Action"}),
             new Step(1, new String[] {"Debot Tests"}),
-            new Step(8, new String[] {})
+            new Step(EXIT_CHOICE, new String[] {})
         });
     }
 
@@ -194,7 +195,7 @@ public class DebotTest extends TestBase {
             new Step(1, new String[] {"test simple print"}),
             new Step(2, new String[] {"integer=1,addr=" + browser.targetAddr + ",string=test_string_1"}),
             new Step(3, new String[] {"Debot Tests"}),
-            new Step(8, new String[] {})
+            new Step(EXIT_CHOICE, new String[] {})
         });
     }
 
@@ -208,7 +209,7 @@ public class DebotTest extends TestBase {
             new Step(2, new String[] {"hello"}, new String[] {}),
             new Step(3, new String[] {}, new String[] {"integer=2,addr=-1:1111111111111111111111111111111111111111111111111111111111111111,string=hello"}),
             new Step(4, new String[] {}, new String[] {"Debot Tests"}),
-            new Step(8, new String[] {}, new String[] {})
+            new Step(EXIT_CHOICE, new String[] {}, new String[] {})
         });
     }
 
@@ -220,7 +221,7 @@ public class DebotTest extends TestBase {
             new Step(1, new String[] {}),
             new Step(2, new String[] {"data=64"}),
             new Step(3, new String[] {"Debot Tests"}),
-            new Step(8, new String[] {})
+            new Step(EXIT_CHOICE, new String[] {})
         });
     }
 
@@ -233,7 +234,7 @@ public class DebotTest extends TestBase {
             new Step(2, new String[] {}),
             new Step(3, new String[] {"data=100"}),
             new Step(4, new String[] {"Debot Tests"}),
-            new Step(8, new String[] {})
+            new Step(EXIT_CHOICE, new String[] {})
         });
     }
 
@@ -247,7 +248,7 @@ public class DebotTest extends TestBase {
                 new Step(1, new String[] {"Sending message {}", "Transaction succeeded."})
             }),
             new Step(2, new String[] {"Debot Tests"}),
-            new Step(8, new String[] {})
+            new Step(EXIT_CHOICE, new String[] {})
         });
     }
 
@@ -262,7 +263,7 @@ public class DebotTest extends TestBase {
             new Step(4, new String[] {}),
             new Step(5, new String[] {}),
             new Step(6, new String[] {"Debot Tests"}),
-            new Step(8, new String[] {})
+            new Step(EXIT_CHOICE, new String[] {})
         });
     }
 
