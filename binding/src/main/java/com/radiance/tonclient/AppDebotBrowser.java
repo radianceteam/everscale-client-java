@@ -10,4 +10,5 @@ public interface AppDebotBrowser {
     CompletableFuture<String> input(String prompt);
     CompletableFuture<Integer> getSigningBox();
     CompletableFuture<Void> invokeDebot(String debotAddr,Debot.DebotAction action);
+    void send(String message);
 }

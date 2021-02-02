@@ -96,13 +96,17 @@ public class Client {
      */
     public static class NetworkConfig  {
 
-        public NetworkConfig(String serverAddress, String[] endpoints, Number networkRetriesCount, Number messageRetriesCount, Number messageProcessingTimeout, Number waitForTimeout, Number outOfSyncThreshold, Number reconnectTimeout, String accessKey) {
+        public NetworkConfig(String serverAddress, String[] endpoints, Number networkRetriesCount, Number maxReconnectTimeout, Number reconnectTimeout, Number messageRetriesCount, Number messageProcessingTimeout, Number waitForTimeout, Number outOfSyncThreshold, String accessKey) {
 
             this.serverAddress = serverAddress;
 
             this.endpoints = endpoints;
 
             this.networkRetriesCount = networkRetriesCount;
+
+            this.maxReconnectTimeout = maxReconnectTimeout;
+
+            this.reconnectTimeout = reconnectTimeout;
 
             this.messageRetriesCount = messageRetriesCount;
 
@@ -111,19 +115,21 @@ public class Client {
             this.waitForTimeout = waitForTimeout;
 
             this.outOfSyncThreshold = outOfSyncThreshold;
-
-            this.reconnectTimeout = reconnectTimeout;
 
             this.accessKey = accessKey;
 
         }
-        public NetworkConfig(String serverAddress, String[] endpoints, Number networkRetriesCount, Number messageRetriesCount, Number messageProcessingTimeout, Number waitForTimeout, Number outOfSyncThreshold, Number reconnectTimeout) {
+        public NetworkConfig(String serverAddress, String[] endpoints, Number networkRetriesCount, Number maxReconnectTimeout, Number reconnectTimeout, Number messageRetriesCount, Number messageProcessingTimeout, Number waitForTimeout, Number outOfSyncThreshold) {
 
             this.serverAddress = serverAddress;
 
             this.endpoints = endpoints;
 
             this.networkRetriesCount = networkRetriesCount;
+
+            this.maxReconnectTimeout = maxReconnectTimeout;
+
+            this.reconnectTimeout = reconnectTimeout;
 
             this.messageRetriesCount = messageRetriesCount;
 
@@ -132,11 +138,73 @@ public class Client {
             this.waitForTimeout = waitForTimeout;
 
             this.outOfSyncThreshold = outOfSyncThreshold;
+
+        }
+        public NetworkConfig(String serverAddress, String[] endpoints, Number networkRetriesCount, Number maxReconnectTimeout, Number reconnectTimeout, Number messageRetriesCount, Number messageProcessingTimeout, Number waitForTimeout) {
+
+            this.serverAddress = serverAddress;
+
+            this.endpoints = endpoints;
+
+            this.networkRetriesCount = networkRetriesCount;
+
+            this.maxReconnectTimeout = maxReconnectTimeout;
+
+            this.reconnectTimeout = reconnectTimeout;
+
+            this.messageRetriesCount = messageRetriesCount;
+
+            this.messageProcessingTimeout = messageProcessingTimeout;
+
+            this.waitForTimeout = waitForTimeout;
+
+        }
+        public NetworkConfig(String serverAddress, String[] endpoints, Number networkRetriesCount, Number maxReconnectTimeout, Number reconnectTimeout, Number messageRetriesCount, Number messageProcessingTimeout) {
+
+            this.serverAddress = serverAddress;
+
+            this.endpoints = endpoints;
+
+            this.networkRetriesCount = networkRetriesCount;
+
+            this.maxReconnectTimeout = maxReconnectTimeout;
+
+            this.reconnectTimeout = reconnectTimeout;
+
+            this.messageRetriesCount = messageRetriesCount;
+
+            this.messageProcessingTimeout = messageProcessingTimeout;
+
+        }
+        public NetworkConfig(String serverAddress, String[] endpoints, Number networkRetriesCount, Number maxReconnectTimeout, Number reconnectTimeout, Number messageRetriesCount) {
+
+            this.serverAddress = serverAddress;
+
+            this.endpoints = endpoints;
+
+            this.networkRetriesCount = networkRetriesCount;
+
+            this.maxReconnectTimeout = maxReconnectTimeout;
+
+            this.reconnectTimeout = reconnectTimeout;
+
+            this.messageRetriesCount = messageRetriesCount;
+
+        }
+        public NetworkConfig(String serverAddress, String[] endpoints, Number networkRetriesCount, Number maxReconnectTimeout, Number reconnectTimeout) {
+
+            this.serverAddress = serverAddress;
+
+            this.endpoints = endpoints;
+
+            this.networkRetriesCount = networkRetriesCount;
+
+            this.maxReconnectTimeout = maxReconnectTimeout;
 
             this.reconnectTimeout = reconnectTimeout;
 
         }
-        public NetworkConfig(String serverAddress, String[] endpoints, Number networkRetriesCount, Number messageRetriesCount, Number messageProcessingTimeout, Number waitForTimeout, Number outOfSyncThreshold) {
+        public NetworkConfig(String serverAddress, String[] endpoints, Number networkRetriesCount, Number maxReconnectTimeout) {
 
             this.serverAddress = serverAddress;
 
@@ -144,52 +212,7 @@ public class Client {
 
             this.networkRetriesCount = networkRetriesCount;
 
-            this.messageRetriesCount = messageRetriesCount;
-
-            this.messageProcessingTimeout = messageProcessingTimeout;
-
-            this.waitForTimeout = waitForTimeout;
-
-            this.outOfSyncThreshold = outOfSyncThreshold;
-
-        }
-        public NetworkConfig(String serverAddress, String[] endpoints, Number networkRetriesCount, Number messageRetriesCount, Number messageProcessingTimeout, Number waitForTimeout) {
-
-            this.serverAddress = serverAddress;
-
-            this.endpoints = endpoints;
-
-            this.networkRetriesCount = networkRetriesCount;
-
-            this.messageRetriesCount = messageRetriesCount;
-
-            this.messageProcessingTimeout = messageProcessingTimeout;
-
-            this.waitForTimeout = waitForTimeout;
-
-        }
-        public NetworkConfig(String serverAddress, String[] endpoints, Number networkRetriesCount, Number messageRetriesCount, Number messageProcessingTimeout) {
-
-            this.serverAddress = serverAddress;
-
-            this.endpoints = endpoints;
-
-            this.networkRetriesCount = networkRetriesCount;
-
-            this.messageRetriesCount = messageRetriesCount;
-
-            this.messageProcessingTimeout = messageProcessingTimeout;
-
-        }
-        public NetworkConfig(String serverAddress, String[] endpoints, Number networkRetriesCount, Number messageRetriesCount) {
-
-            this.serverAddress = serverAddress;
-
-            this.endpoints = endpoints;
-
-            this.networkRetriesCount = networkRetriesCount;
-
-            this.messageRetriesCount = messageRetriesCount;
+            this.maxReconnectTimeout = maxReconnectTimeout;
 
         }
         public NetworkConfig(String serverAddress, String[] endpoints, Number networkRetriesCount) {
@@ -236,13 +259,13 @@ public class Client {
         @JsonProperty("endpoints")
         private String[] endpoints;
         /**
-         * Any correct URL format can be specified, including IP addresses
+         * Any correct URL format can be specified, including IP addresses This parameter is prevailing over `server_address`.
          */
         public String[] getEndpoints() {
             return endpoints;
         }
         /**
-         * Any correct URL format can be specified, including IP addresses
+         * Any correct URL format can be specified, including IP addresses This parameter is prevailing over `server_address`.
          */
         public void setEndpoints(String[] value) {
             this.endpoints = value;
@@ -251,16 +274,46 @@ public class Client {
         @JsonProperty("network_retries_count")
         private Number networkRetriesCount;
         /**
-         * 
+         * You must use `network.max_reconnect_timeout` that allows to specify maximum network resolving timeout.
          */
         public Number getNetworkRetriesCount() {
             return networkRetriesCount;
         }
         /**
-         * 
+         * You must use `network.max_reconnect_timeout` that allows to specify maximum network resolving timeout.
          */
         public void setNetworkRetriesCount(Number value) {
             this.networkRetriesCount = value;
+        }
+
+        @JsonProperty("max_reconnect_timeout")
+        private Number maxReconnectTimeout;
+        /**
+         * Default value is 120000 (2 min)
+         */
+        public Number getMaxReconnectTimeout() {
+            return maxReconnectTimeout;
+        }
+        /**
+         * Default value is 120000 (2 min)
+         */
+        public void setMaxReconnectTimeout(Number value) {
+            this.maxReconnectTimeout = value;
+        }
+
+        @JsonProperty("reconnect_timeout")
+        private Number reconnectTimeout;
+        /**
+         * 
+         */
+        public Number getReconnectTimeout() {
+            return reconnectTimeout;
+        }
+        /**
+         * 
+         */
+        public void setReconnectTimeout(Number value) {
+            this.reconnectTimeout = value;
         }
 
         @JsonProperty("message_retries_count")
@@ -311,31 +364,16 @@ public class Client {
         @JsonProperty("out_of_sync_threshold")
         private Number outOfSyncThreshold;
         /**
-         * If client's device time is out of sink and difference is more thanthe threshhold then error will occur. Also the error will occur if the specified threshhold is more than`message_processing_timeout/2`.The default value is 15 sec.
+         * If client's device time is out of sync and difference is more than the threshold then error will occur. Also an error will occur if the specified threshold is more than`message_processing_timeout/2`.The default value is 15 sec.
          */
         public Number getOutOfSyncThreshold() {
             return outOfSyncThreshold;
         }
         /**
-         * If client's device time is out of sink and difference is more thanthe threshhold then error will occur. Also the error will occur if the specified threshhold is more than`message_processing_timeout/2`.The default value is 15 sec.
+         * If client's device time is out of sync and difference is more than the threshold then error will occur. Also an error will occur if the specified threshold is more than`message_processing_timeout/2`.The default value is 15 sec.
          */
         public void setOutOfSyncThreshold(Number value) {
             this.outOfSyncThreshold = value;
-        }
-
-        @JsonProperty("reconnect_timeout")
-        private Number reconnectTimeout;
-        /**
-         * 
-         */
-        public Number getReconnectTimeout() {
-            return reconnectTimeout;
-        }
-        /**
-         * 
-         */
-        public void setReconnectTimeout(Number value) {
-            this.reconnectTimeout = value;
         }
 
         @JsonProperty("access_key")
@@ -356,7 +394,7 @@ public class Client {
 
         @Override
         public String toString() {
-            return "{"+Stream.of((serverAddress==null?null:("\"server_address\":\""+serverAddress+"\"")),(endpoints==null?null:("\"endpoints\":\""+endpoints+"\"")),(networkRetriesCount==null?null:("\"network_retries_count\":"+networkRetriesCount)),(messageRetriesCount==null?null:("\"message_retries_count\":"+messageRetriesCount)),(messageProcessingTimeout==null?null:("\"message_processing_timeout\":"+messageProcessingTimeout)),(waitForTimeout==null?null:("\"wait_for_timeout\":"+waitForTimeout)),(outOfSyncThreshold==null?null:("\"out_of_sync_threshold\":"+outOfSyncThreshold)),(reconnectTimeout==null?null:("\"reconnect_timeout\":"+reconnectTimeout)),(accessKey==null?null:("\"access_key\":\""+accessKey+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
+            return "{"+Stream.of((serverAddress==null?null:("\"server_address\":\""+serverAddress+"\"")),(endpoints==null?null:("\"endpoints\":\""+endpoints+"\"")),(networkRetriesCount==null?null:("\"network_retries_count\":"+networkRetriesCount)),(maxReconnectTimeout==null?null:("\"max_reconnect_timeout\":"+maxReconnectTimeout)),(reconnectTimeout==null?null:("\"reconnect_timeout\":"+reconnectTimeout)),(messageRetriesCount==null?null:("\"message_retries_count\":"+messageRetriesCount)),(messageProcessingTimeout==null?null:("\"message_processing_timeout\":"+messageProcessingTimeout)),(waitForTimeout==null?null:("\"wait_for_timeout\":"+waitForTimeout)),(outOfSyncThreshold==null?null:("\"out_of_sync_threshold\":"+outOfSyncThreshold)),(accessKey==null?null:("\"access_key\":\""+accessKey+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
         }
     }
     /**

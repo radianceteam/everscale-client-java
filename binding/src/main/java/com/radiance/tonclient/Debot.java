@@ -84,13 +84,13 @@ public class Debot {
         @JsonProperty("description")
         private String description;
         /**
-         * Should be used by Debot Browser as name ofmenu item.
+         * Should be used by Debot Browser as name of menu item.
          */
         public String getDescription() {
             return description;
         }
         /**
-         * Should be used by Debot Browser as name ofmenu item.
+         * Should be used by Debot Browser as name of menu item.
          */
         public void setDescription(String value) {
             this.description = value;
@@ -99,13 +99,13 @@ public class Debot {
         @JsonProperty("name")
         private String name;
         /**
-         * Can be a debot function name or a print string(for Print Action).
+         * Can be a debot function name or a print string (for Print Action).
          */
         public String getName() {
             return name;
         }
         /**
-         * Can be a debot function name or a print string(for Print Action).
+         * Can be a debot function name or a print string (for Print Action).
          */
         public void setName(String value) {
             this.name = value;
@@ -144,13 +144,13 @@ public class Debot {
         @JsonProperty("attributes")
         private String attributes;
         /**
-         * In the form of "param=value,flag".attribute example: instant, args, fargs, sign.
+         * In the form of "param=value,flag". attribute example: instant, args, fargs, sign.
          */
         public String getAttributes() {
             return attributes;
         }
         /**
-         * In the form of "param=value,flag".attribute example: instant, args, fargs, sign.
+         * In the form of "param=value,flag". attribute example: instant, args, fargs, sign.
          */
         public void setAttributes(String value) {
             this.attributes = value;
@@ -423,6 +423,43 @@ public class Debot {
             return "{"+Stream.of("\"type\":\"InvokeDebot\"",(debotAddr==null?null:("\"debot_addr\":\""+debotAddr+"\"")),(action==null?null:("\"action\":"+action))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
         }
     }
+
+    /**
+     *  
+     */
+    public static class Send extends ParamsOfAppDebotBrowser  {
+
+        public Send(String message) {
+
+            this.message = message;
+
+        }
+        public Send() {
+
+        }
+
+
+        @JsonProperty("message")
+        private String message;
+        /**
+         * Message body contains interface function and parameters.
+         */
+        public String getMessage() {
+            return message;
+        }
+        /**
+         * Message body contains interface function and parameters.
+         */
+        public void setMessage(String value) {
+            this.message = value;
+        }
+
+
+        @Override
+        public String toString() {
+            return "{"+Stream.of("\"type\":\"Send\"",(message==null?null:("\"message\":\""+message+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
+        }
+    }
 }
     public static abstract class ResultOfAppDebotBrowser {
 
@@ -618,6 +655,15 @@ public class Debot {
                         }
                         break;
 
+                    case "Send":
+                        try {
+                            ParamsOfAppDebotBrowser.Send p = new ObjectMapper().convertValue(data, ParamsOfAppDebotBrowser.Send.class);
+                            appObject.send(p.getMessage());
+                        } catch (Exception e) {
+                            e.printStackTrace(System.out);
+                        }
+                        break;
+
                 }
             }, Object.class)
             .thenApply(json -> TONContext.convertValue(json.findValue("debot_handle"), Integer.class));
@@ -716,6 +762,15 @@ public class Debot {
                         }
                         break;
 
+                    case "Send":
+                        try {
+                            ParamsOfAppDebotBrowser.Send p = new ObjectMapper().convertValue(data, ParamsOfAppDebotBrowser.Send.class);
+                            appObject.send(p.getMessage());
+                        } catch (Exception e) {
+                            e.printStackTrace(System.out);
+                        }
+                        break;
+
                 }
             }, Object.class)
             .thenApply(json -> TONContext.convertValue(json.findValue("debot_handle"), Integer.class));
@@ -729,6 +784,19 @@ public class Debot {
     */
     public CompletableFuture<Void> execute(Integer debotHandle, DebotAction action) {
         return context.requestJSON("debot.execute", "{"+Stream.of((debotHandle==null?null:("\"debot_handle\":"+debotHandle)),(action==null?null:("\"action\":"+action))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
+            .thenApply(json -> TONContext.convertValue(json, Void.class));
+    }
+
+   /**
+    * Used by Debot Browser to send response on Dinterface call or from other Debots.
+    *
+    * @param debotHandle 
+    * @param source 
+    * @param funcId 
+    * @param params 
+    */
+    public CompletableFuture<Void> send(Integer debotHandle, String source, Number funcId, String params) {
+        return context.requestJSON("debot.send", "{"+Stream.of((debotHandle==null?null:("\"debot_handle\":"+debotHandle)),(source==null?null:("\"source\":\""+source+"\"")),(funcId==null?null:("\"func_id\":"+funcId)),(params==null?null:("\"params\":\""+params+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
             .thenApply(json -> TONContext.convertValue(json, Void.class));
     }
 

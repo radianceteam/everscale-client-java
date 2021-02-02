@@ -208,13 +208,13 @@ public class Abi {
         @JsonProperty("time")
         private Long time;
         /**
-         * If not specified, `now` is used(if ABI includes `time` header).
+         * If not specified, `now` is used (if ABI includes `time` header).
          */
         public Long getTime() {
             return time;
         }
         /**
-         * If not specified, `now` is used(if ABI includes `time` header).
+         * If not specified, `now` is used (if ABI includes `time` header).
          */
         public void setTime(Long value) {
             this.time = value;
@@ -223,13 +223,13 @@ public class Abi {
         @JsonProperty("pubkey")
         private String pubkey;
         /**
-         * Encoded in `hex`.If not specified, method fails with exception (if ABI includes `pubkey` header)..
+         * Encoded in `hex`. If not specified, method fails with exception (if ABI includes `pubkey` header)..
          */
         public String getPubkey() {
             return pubkey;
         }
         /**
-         * Encoded in `hex`.If not specified, method fails with exception (if ABI includes `pubkey` header)..
+         * Encoded in `hex`. If not specified, method fails with exception (if ABI includes `pubkey` header)..
          */
         public void setPubkey(String value) {
             this.pubkey = value;
@@ -328,6 +328,17 @@ public class Abi {
      */
     public static class DeploySet  {
 
+        public DeploySet(String tvc, Number workchainId, Object initialData, String initialPubkey) {
+
+            this.tvc = tvc;
+
+            this.workchainId = workchainId;
+
+            this.initialData = initialData;
+
+            this.initialPubkey = initialPubkey;
+
+        }
         public DeploySet(String tvc, Number workchainId, Object initialData) {
 
             this.tvc = tvc;
@@ -399,10 +410,25 @@ public class Abi {
             this.initialData = value;
         }
 
+        @JsonProperty("initial_pubkey")
+        private String initialPubkey;
+        /**
+         * Public key resolving priority:1. Public key from deploy set.2. Public key, specified in TVM file.3. Public key, provided by Signer.
+         */
+        public String getInitialPubkey() {
+            return initialPubkey;
+        }
+        /**
+         * Public key resolving priority:1. Public key from deploy set.2. Public key, specified in TVM file.3. Public key, provided by Signer.
+         */
+        public void setInitialPubkey(String value) {
+            this.initialPubkey = value;
+        }
+
 
         @Override
         public String toString() {
-            return "{"+Stream.of((tvc==null?null:("\"tvc\":\""+tvc+"\"")),(workchainId==null?null:("\"workchain_id\":"+workchainId)),(initialData==null?null:("\"initial_data\":"+initialData))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
+            return "{"+Stream.of((tvc==null?null:("\"tvc\":\""+tvc+"\"")),(workchainId==null?null:("\"workchain_id\":"+workchainId)),(initialData==null?null:("\"initial_data\":"+initialData)),(initialPubkey==null?null:("\"initial_pubkey\":\""+initialPubkey+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
         }
     }
     public static abstract class Signer {
@@ -808,13 +834,13 @@ public class Abi {
         @JsonProperty("data_to_sign")
         private String dataToSign;
         /**
-         * Encoded with `base64`.Presents when `message` is unsigned. Can be used for externalmessage signing. Is this case you need to sing this data andproduce signed message using `abi.attach_signature`.
+         * Encoded with `base64`. Presents when `message` is unsigned. Can be used for externalmessage signing. Is this case you need to sing this data andproduce signed message using `abi.attach_signature`.
          */
         public String getDataToSign() {
             return dataToSign;
         }
         /**
-         * Encoded with `base64`.Presents when `message` is unsigned. Can be used for externalmessage signing. Is this case you need to sing this data andproduce signed message using `abi.attach_signature`.
+         * Encoded with `base64`. Presents when `message` is unsigned. Can be used for externalmessage signing. Is this case you need to sing this data andproduce signed message using `abi.attach_signature`.
          */
         public void setDataToSign(String value) {
             this.dataToSign = value;
@@ -1192,7 +1218,7 @@ public class Abi {
     }
 
    /**
-    * Allows to encode deploy and function call messages,both signed and unsigned.<p>Use cases include messages of any possible type:- deploy with initial function call (i.e. `constructor` or any other function that is used for some kindof initialization);- deploy without initial function call;- signed/unsigned + data for signing.<p>`Signer` defines how the message should or shouldn't be signed:<p>`Signer::None` creates an unsigned message. This may be needed in case of some public methods,that do not require authorization by pubkey.<p>`Signer::External` takes public key and returns `data_to_sign` for later signing.Use `attach_signature` method with the result signature to get the signed message.<p>`Signer::Keys` creates a signed message with provided key pair.<p><a target="_blank" href="SOON">SOON</a> `Signer::SigningBox` Allows using a special interface to imlepement signingwithout private key disclosure to SDK. For instance, in case of using a cold wallet or HSM,when application calls some API to sign data.
+    * Allows to encode deploy and function call messages,both signed and unsigned.<p>Use cases include messages of any possible type:- deploy with initial function call (i.e. `constructor` or any other function that is used for some kindof initialization);- deploy without initial function call;- signed/unsigned + data for signing.<p>`Signer` defines how the message should or shouldn't be signed:<p>`Signer::None` creates an unsigned message. This may be needed in case of some public methods,that do not require authorization by pubkey.<p>`Signer::External` takes public key and returns `data_to_sign` for later signing.Use `attach_signature` method with the result signature to get the signed message.<p>`Signer::Keys` creates a signed message with provided key pair.<p><a target="_blank" href="SOON">SOON</a> `Signer::SigningBox` Allows using a special interface to implement signingwithout private key disclosure to SDK. For instance, in case of using a cold wallet or HSM,when application calls some API to sign data.<p>There is an optional public key can be provided in deploy set in order to substitute onein TVM file.<p>Public key resolving priority:1. Public key from deploy set.2. Public key, specified in TVM file.3. Public key, provided by signer.
     *
     * @param abi 
     * @param address Must be specified in case of non-deploy message.

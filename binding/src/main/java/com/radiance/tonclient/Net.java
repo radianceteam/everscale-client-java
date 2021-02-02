@@ -94,11 +94,22 @@ public class Net {
     * 
     *
     * @param query 
-    * @param variables Must be a map with named values thatcan be used in query.
+    * @param variables Must be a map with named values that can be used in query.
     */
     public CompletableFuture<Object> query(String query, Object variables) {
         return context.requestJSON("net.query", "{"+Stream.of((query==null?null:("\"query\":\""+query+"\"")),(variables==null?null:("\"variables\":"+variables))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
             .thenApply(json -> TONContext.convertValue(json.findValue("result"), Object.class));
+    }
+
+   /**
+    * 
+    *
+    * @param operations 
+    * @return Returns an array of values. Each value corresponds to `queries` item.
+    */
+    public CompletableFuture<Object[]> batchQuery(Object[] operations) {
+        return context.requestJSON("net.batch_query", "{"+(operations==null?"":("\"operations\":"+operations))+"}")
+            .thenApply(json -> TONContext.convertValue(json.findValue("results"), Object[].class));
     }
 
    /**
@@ -113,6 +124,19 @@ public class Net {
     public CompletableFuture<Object[]> queryCollection(String collection, Object filter, String result, OrderBy[] order, Number limit) {
         return context.requestJSON("net.query_collection", "{"+Stream.of((collection==null?null:("\"collection\":\""+collection+"\"")),(filter==null?null:("\"filter\":"+filter)),(result==null?null:("\"result\":\""+result+"\"")),(order==null?null:("\"order\":"+order)),(limit==null?null:("\"limit\":"+limit))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
             .thenApply(json -> TONContext.convertValue(json.findValue("result"), Object[].class));
+    }
+
+   /**
+    * Aggregates values from the specified `fields` for recordsthat satisfies the `filter` conditions,
+    *
+    * @param collection 
+    * @param filter 
+    * @param fields 
+    * @return Returns an array of strings. Each string refers to the corresponding `fields` item.Numeric value is returned as a decimal string representations.
+    */
+    public CompletableFuture<Object> aggregateCollection(String collection, Object filter, Object[] fields) {
+        return context.requestJSON("net.aggregate_collection", "{"+Stream.of((collection==null?null:("\"collection\":\""+collection+"\"")),(filter==null?null:("\"filter\":"+filter)),(fields==null?null:("\"fields\":"+fields))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
+            .thenApply(json -> TONContext.convertValue(json.findValue("values"), Object.class));
     }
 
    /**

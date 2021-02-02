@@ -109,6 +109,10 @@ public class DebotTest extends TestBase {
 
         public void switchCompleted() { }
 
+        public void send(String message) {
+            System.out.println("DebotTest send message: '" + message + "'");
+        }
+
 
         void execute(Step[] steps, boolean start) throws InterruptedException, ExecutionException {
             Integer handle = null;

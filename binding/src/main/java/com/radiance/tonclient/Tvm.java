@@ -197,13 +197,13 @@ public class Tvm {
         @JsonProperty("unlimited_balance")
         private Boolean unlimitedBalance;
         /**
-         * Can be used to calculatetransaction fees without balance check
+         * Can be used to calculate transaction fees without balance check
          */
         public Boolean getUnlimitedBalance() {
             return unlimitedBalance;
         }
         /**
-         * Can be used to calculatetransaction fees without balance check
+         * Can be used to calculate transaction fees without balance check
          */
         public void setUnlimitedBalance(Boolean value) {
             this.unlimitedBalance = value;
@@ -582,13 +582,13 @@ public class Tvm {
         @JsonProperty("account")
         private String account;
         /**
-         * Encoded as `base64`.Attention! Only `account_state.storage.state.data` part of the boc is updated.
+         * Encoded as `base64`. Attention! Only `account_state.storage.state.data` part of the boc is updated.
          */
         public String getAccount() {
             return account;
         }
         /**
-         * Encoded as `base64`.Attention! Only `account_state.storage.state.data` part of the boc is updated.
+         * Encoded as `base64`. Attention! Only `account_state.storage.state.data` part of the boc is updated.
          */
         public void setAccount(String value) {
             this.account = value;

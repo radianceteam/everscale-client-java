@@ -434,6 +434,18 @@ public class Crypto {
    /**
     * 
     *
+    * @param unsigned Encoded with `base64`.
+    * @param signature Encoded with `hex`.
+    * @param publicKey 
+    */
+    public CompletableFuture<Boolean> naclSignDetachedVerify(String unsigned, String signature, String publicKey) {
+        return context.requestJSON("crypto.nacl_sign_detached_verify", "{"+Stream.of((unsigned==null?null:("\"unsigned\":\""+unsigned+"\"")),(signature==null?null:("\"signature\":\""+signature+"\"")),(publicKey==null?null:("\"public\":\""+publicKey+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
+            .thenApply(json -> TONContext.convertValue(json.findValue("succeeded"), Boolean.class));
+    }
+
+   /**
+    * 
+    *
     */
     public CompletableFuture<KeyPair> naclBoxKeypair() {
         return context.requestJSON("crypto.nacl_box_keypair", "{}")
@@ -699,7 +711,7 @@ public class Crypto {
     *
     * @param signingBox 
     * @param unsigned Must be encoded with `base64`.
-    * @return Encoded with `base64`.
+    * @return Encoded with `hex`.
     */
     public CompletableFuture<String> signingBoxSign(Integer signingBox, String unsigned) {
         return context.requestJSON("crypto.signing_box_sign", "{"+Stream.of((signingBox==null?null:("\"signing_box\":"+signingBox)),(unsigned==null?null:("\"unsigned\":\""+unsigned+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
