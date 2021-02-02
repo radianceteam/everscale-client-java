@@ -28,7 +28,7 @@ jobs:
       - name: Build TON Client
         run: |
           projectdir=`pwd`
-          branch=${GITHAB_REF##*/}
+          branch=${GITHUB_REF##*/}
           echo running on branch $branch
           tondir=target/TON-SDK
           git clone --single-branch --branch $branch https://github.com/tonlabs/TON-SDK.git $tondir
