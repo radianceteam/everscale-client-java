@@ -3,6 +3,7 @@ package com.radiance.tonclient;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.*;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.Arrays;
 import java.util.function.Consumer;
 
 /**
@@ -115,7 +116,7 @@ public class Processing {
 
         @Override
         public String toString() {
-            return "{"+Stream.of((transaction==null?null:("\"transaction\":"+transaction)),(outMessages==null?null:("\"out_messages\":\""+outMessages+"\"")),(decoded==null?null:("\"decoded\":"+decoded)),(fees==null?null:("\"fees\":"+fees))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
+            return "{"+Stream.of((transaction==null?null:("\"transaction\":"+transaction)),(outMessages==null?null:("\"out_messages\":\""+Arrays.toString(outMessages)+"\"")),(decoded==null?null:("\"decoded\":"+decoded)),(fees==null?null:("\"fees\":"+fees))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
         }
     }
     /**
@@ -173,7 +174,7 @@ public class Processing {
 
         @Override
         public String toString() {
-            return "{"+Stream.of((outMessages==null?null:("\"out_messages\":"+outMessages)),(output==null?null:("\"output\":"+output))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
+            return "{"+Stream.of((outMessages==null?null:("\"out_messages\":"+Arrays.toString(outMessages))),(output==null?null:("\"output\":"+output))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
         }
     }
     private TONContext context;

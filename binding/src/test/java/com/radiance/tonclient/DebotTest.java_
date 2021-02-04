@@ -162,6 +162,7 @@ public class DebotTest extends TestBase {
             new Abi.CallSet("constructor"),
             new Abi.Signer.Keys(keys)
         );
+        targetFuture.join(); // wait for completion to avoid concurrency issues in node se
 
         CompletableFuture<String> debotFuture = deployWithGiver(
             debotAbi,
@@ -177,7 +178,7 @@ public class DebotTest extends TestBase {
         return new TestBrowser(context, debotFuture.get(), targetFuture.get(), keys);
     }
 
-    //@Test
+    @Test
     public void testDebotGoto() throws Exception {
         TestBrowser browser = initDebot();
         browser.execute(new Step[] {
@@ -187,7 +188,7 @@ public class DebotTest extends TestBase {
         });
     }
 
-    //@Test
+    @Test
     public void testDebotPrint() throws Exception {
         TestBrowser browser = initDebot();
         browser.execute(new Step[] {
@@ -199,7 +200,7 @@ public class DebotTest extends TestBase {
         });
     }
 
-    //@Test
+    @Test
     public void testDebotRunAction() throws Exception {
         TestBrowser browser = initDebot();
         browser.execute(new Step[] {
@@ -213,7 +214,7 @@ public class DebotTest extends TestBase {
         });
     }
 
-    //@Test
+    @Test
     public void testDebotRunMethod() throws Exception {
         TestBrowser browser = initDebot();
         browser.execute(new Step[] {
@@ -225,7 +226,7 @@ public class DebotTest extends TestBase {
         });
     }
 
-    //@Test
+    @Test
     public void testDebotSendMsg() throws Exception {
         TestBrowser browser = initDebot();
         browser.execute(new Step[] {
@@ -254,7 +255,7 @@ public class DebotTest extends TestBase {
         } catch(Exception e) { e.printStackTrace(); throw e; }
     }
 
-    //@Test
+    @Test
     public void testDebotEngineCalls() throws Exception {
         TestBrowser browser = initDebot();
         browser.execute(new Step[] {
@@ -269,7 +270,7 @@ public class DebotTest extends TestBase {
         });
     }
 
-    //@Test
+    @Test
     public void testMsigDebot() throws Exception {
         Crypto.KeyPair keys = crypto.generateRandomSignKeys().get();
         Abi.ABI walletAbi = abiFromResource("/SetcodeMultisigWallet.abi.json");

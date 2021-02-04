@@ -3,6 +3,7 @@ package com.radiance.tonclient;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.*;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.Arrays;
 
 /**
  *  
@@ -394,7 +395,7 @@ public class Client {
 
         @Override
         public String toString() {
-            return "{"+Stream.of((serverAddress==null?null:("\"server_address\":\""+serverAddress+"\"")),(endpoints==null?null:("\"endpoints\":\""+endpoints+"\"")),(networkRetriesCount==null?null:("\"network_retries_count\":"+networkRetriesCount)),(maxReconnectTimeout==null?null:("\"max_reconnect_timeout\":"+maxReconnectTimeout)),(reconnectTimeout==null?null:("\"reconnect_timeout\":"+reconnectTimeout)),(messageRetriesCount==null?null:("\"message_retries_count\":"+messageRetriesCount)),(messageProcessingTimeout==null?null:("\"message_processing_timeout\":"+messageProcessingTimeout)),(waitForTimeout==null?null:("\"wait_for_timeout\":"+waitForTimeout)),(outOfSyncThreshold==null?null:("\"out_of_sync_threshold\":"+outOfSyncThreshold)),(accessKey==null?null:("\"access_key\":\""+accessKey+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
+            return "{"+Stream.of((serverAddress==null?null:("\"server_address\":\""+serverAddress+"\"")),(endpoints==null?null:("\"endpoints\":\""+Arrays.toString(endpoints)+"\"")),(networkRetriesCount==null?null:("\"network_retries_count\":"+networkRetriesCount)),(maxReconnectTimeout==null?null:("\"max_reconnect_timeout\":"+maxReconnectTimeout)),(reconnectTimeout==null?null:("\"reconnect_timeout\":"+reconnectTimeout)),(messageRetriesCount==null?null:("\"message_retries_count\":"+messageRetriesCount)),(messageProcessingTimeout==null?null:("\"message_processing_timeout\":"+messageProcessingTimeout)),(waitForTimeout==null?null:("\"wait_for_timeout\":"+waitForTimeout)),(outOfSyncThreshold==null?null:("\"out_of_sync_threshold\":"+outOfSyncThreshold)),(accessKey==null?null:("\"access_key\":\""+accessKey+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
         }
     }
     /**
@@ -750,7 +751,7 @@ public class Client {
 
         @Override
         public String toString() {
-            return "{"+Stream.of((buildNumber==null?null:("\"build_number\":"+buildNumber)),(dependencies==null?null:("\"dependencies\":"+dependencies))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
+            return "{"+Stream.of((buildNumber==null?null:("\"build_number\":"+buildNumber)),(dependencies==null?null:("\"dependencies\":"+Arrays.toString(dependencies)))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
         }
     }
     private TONContext context;

@@ -79,7 +79,7 @@ function stringifyFields(fields, type) {
         const flat = isFlattable(f.type);
         if (flat)
             return `"\\"${f.name}\\":"+${stringifyFields(types[f.type].fields)}`;
-        return `(${camelize(f.name)}==null?${stream?'null':'""'}:("\\"${f.name}\\":${qu}"+${camelize(f.name)}${qu?`+"${qu}"`:''}))`;
+        return `(${camelize(f.name)}==null?${stream?'null':'""'}:("\\"${f.name}\\":${qu}"+${(n=>f.isArray?`Arrays.toString(${n})`:n)(camelize(f.name))}${qu?`+"${qu}"`:''}))`;
     }))}${stream&&`).filter(_f -> _f != null).collect(Collectors.joining(","))`}+"`:''}}"`
 }
 
@@ -181,7 +181,7 @@ setTypeExported({type:'client.ClientConfig'});
 
 api.modules.forEach(mod => {
     currMod = mod;
-    let imports = {'java.util.concurrent.CompletableFuture':true,'java.util.stream.*':true,'com.fasterxml.jackson.annotation.JsonProperty':true};
+    let imports = {'java.util.concurrent.CompletableFuture':true,'java.util.stream.*':true,'com.fasterxml.jackson.annotation.JsonProperty':true,'java.util.Arrays':true};
     let body = '';
 
     mod.functions.forEach(f => {

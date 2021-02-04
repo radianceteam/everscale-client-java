@@ -8,9 +8,10 @@ import com.fasterxml.jackson.databind.JsonNode;
 import org.junit.*;
 import java.util.*;
 import java.util.concurrent.*;
+import static com.radiance.tonclient.Net.ParamsOfQueryOperation.*;
 
 public class NetTest extends TestBase {
-/*
+
     @Test
     public void blockSignatures() throws Exception {
         net.queryCollection("blocks_signatures", null, "id", null, 1).get();
@@ -47,7 +48,7 @@ public class NetTest extends TestBase {
         ).get(10, TimeUnit.SECONDS);
         assertTrue("waitFor", (Integer)trans.get("now") >= now);
     }
-*/
+
     @Test
     public void subscribeForTransactionsWithAddresses() throws Exception {
         Crypto.KeyPair keysArr[] = new Crypto.KeyPair[1];
@@ -91,6 +92,15 @@ public class NetTest extends TestBase {
                 transactions.get(1).findValue("id")
             );
         }
+    }
+
+    @Test
+    public void batchQuery() throws Exception {
+        CompletableFuture<Object[]> result = net.batchQuery(new Net.ParamsOfQueryOperation[] {
+            new QueryCollection("blocks_signatures", null, "id"),
+            new AggregateCollection("accounts", null, new Net.FieldAggregation[] {})
+        });
+        assertEquals("Batch query", result.get().length, 2);
     }
 }
 

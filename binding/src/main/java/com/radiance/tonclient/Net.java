@@ -3,6 +3,7 @@ package com.radiance.tonclient;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.*;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.Arrays;
 import java.util.function.Consumer;
 
 /**
@@ -219,7 +220,7 @@ public class Net {
 
         @Override
         public String toString() {
-            return "{"+Stream.of("\"type\":\"QueryCollection\"",(collection==null?null:("\"collection\":\""+collection+"\"")),(filter==null?null:("\"filter\":"+filter)),(result==null?null:("\"result\":\""+result+"\"")),(order==null?null:("\"order\":"+order)),(limit==null?null:("\"limit\":"+limit))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
+            return "{"+Stream.of("\"type\":\"QueryCollection\"",(collection==null?null:("\"collection\":\""+collection+"\"")),(filter==null?null:("\"filter\":"+filter)),(result==null?null:("\"result\":\""+result+"\"")),(order==null?null:("\"order\":"+Arrays.toString(order))),(limit==null?null:("\"limit\":"+limit))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
         }
     }
 
@@ -411,7 +412,7 @@ public class Net {
 
         @Override
         public String toString() {
-            return "{"+Stream.of("\"type\":\"AggregateCollection\"",(collection==null?null:("\"collection\":\""+collection+"\"")),(filter==null?null:("\"filter\":"+filter)),(fields==null?null:("\"fields\":"+fields))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
+            return "{"+Stream.of("\"type\":\"AggregateCollection\"",(collection==null?null:("\"collection\":\""+collection+"\"")),(filter==null?null:("\"filter\":"+filter)),(fields==null?null:("\"fields\":"+Arrays.toString(fields)))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
         }
     }
 }
@@ -528,7 +529,7 @@ public class Net {
     * @return Returns an array of values. Each value corresponds to `queries` item.
     */
     public CompletableFuture<Object[]> batchQuery(ParamsOfQueryOperation[] operations) {
-        return context.requestJSON("net.batch_query", "{"+(operations==null?"":("\"operations\":"+operations))+"}")
+        return context.requestJSON("net.batch_query", "{"+(operations==null?"":("\"operations\":"+Arrays.toString(operations)))+"}")
             .thenApply(json -> TONContext.convertValue(json.findValue("results"), Object[].class));
     }
 
@@ -542,7 +543,7 @@ public class Net {
     * @param limit 
     */
     public CompletableFuture<Object[]> queryCollection(String collection, Object filter, String result, OrderBy[] order, Number limit) {
-        return context.requestJSON("net.query_collection", "{"+Stream.of((collection==null?null:("\"collection\":\""+collection+"\"")),(filter==null?null:("\"filter\":"+filter)),(result==null?null:("\"result\":\""+result+"\"")),(order==null?null:("\"order\":"+order)),(limit==null?null:("\"limit\":"+limit))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
+        return context.requestJSON("net.query_collection", "{"+Stream.of((collection==null?null:("\"collection\":\""+collection+"\"")),(filter==null?null:("\"filter\":"+filter)),(result==null?null:("\"result\":\""+result+"\"")),(order==null?null:("\"order\":"+Arrays.toString(order))),(limit==null?null:("\"limit\":"+limit))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
             .thenApply(json -> TONContext.convertValue(json.findValue("result"), Object[].class));
     }
 
@@ -555,7 +556,7 @@ public class Net {
     * @return Returns an array of strings. Each string refers to the corresponding `fields` item.Numeric value is returned as a decimal string representations.
     */
     public CompletableFuture<Object> aggregateCollection(String collection, Object filter, FieldAggregation[] fields) {
-        return context.requestJSON("net.aggregate_collection", "{"+Stream.of((collection==null?null:("\"collection\":\""+collection+"\"")),(filter==null?null:("\"filter\":"+filter)),(fields==null?null:("\"fields\":"+fields))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
+        return context.requestJSON("net.aggregate_collection", "{"+Stream.of((collection==null?null:("\"collection\":\""+collection+"\"")),(filter==null?null:("\"filter\":"+filter)),(fields==null?null:("\"fields\":"+Arrays.toString(fields)))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
             .thenApply(json -> TONContext.convertValue(json.findValue("values"), Object.class));
     }
 
@@ -638,7 +639,7 @@ public class Net {
     * @param endpoints 
     */
     public CompletableFuture<Void> setEndpoints(String[] endpoints) {
-        return context.requestJSON("net.set_endpoints", "{"+(endpoints==null?"":("\"endpoints\":\""+endpoints+"\""))+"}")
+        return context.requestJSON("net.set_endpoints", "{"+(endpoints==null?"":("\"endpoints\":\""+Arrays.toString(endpoints)+"\""))+"}")
             .thenApply(json -> TONContext.convertValue(json, Void.class));
     }
 

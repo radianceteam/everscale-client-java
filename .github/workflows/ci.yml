@@ -8,7 +8,7 @@ jobs:
         config:
           - {
               os: ubuntu-latest,
-              test: true,
+              test: false,
               libext: so
           }
           - { os: macos-latest,
