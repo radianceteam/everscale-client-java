@@ -3,7 +3,7 @@
 tondir=target/TON-SDK
 
 projectdir=`pwd`
-branch=1.6.0
+branch=1.6.1
 #`git rev-parse --abbrev-ref HEAD`
 
 [ -d "$tondir" ] || git clone --single-branch --branch $branch https://github.com/tonlabs/TON-SDK.git $tondir
@@ -19,7 +19,7 @@ cd $projectdir
 
 if command -v docker; then
     if [[ "$(docker images -q tonlabs/local-node 2> /dev/null)" == "" ]]; then
-        docker run -d --name local-node -e USER_AGREEMENT=yes -p80:80 tonlabs/local-node || exit
+        docker run -d --name local-node -e USER_AGREEMENT=yes -p80:80 tonlabs/local-node:0.24.9 || exit
     elif ! docker ps | grep -q tonlabs/local-node; then
         docker start local-node || exit
     fi

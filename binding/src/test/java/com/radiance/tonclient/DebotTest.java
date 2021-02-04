@@ -167,7 +167,7 @@ public class DebotTest extends TestBase {
             debotAbi,
             new Abi.DeploySet(tvcFromResource("/testDebot.tvc")),
             new Abi.CallSet("constructor", null, "{" +
-                "\"debotAbi\": \"" + toHexBytes(((Abi.ABI.Serialized)debotAbi).getValue().toString()) + "\"," +
+                //"\"debotAbi\": \"" + toHexBytes(((Abi.ABI.Serialized)debotAbi).getValue().toString()) + "\"," +
                 "\"targetAbi\": \"" + toHexBytes(((Abi.ABI.Serialized)targetAbi).getValue().toString()) + "\"," +
                 "\"targetAddr\": \"" + targetAddress + "\"" +
             "}"),
@@ -240,6 +240,7 @@ public class DebotTest extends TestBase {
 
     @Test
     public void testDebotInvokeDebot() throws Exception {
+        try {
         TestBrowser browser = initDebot();
         browser.execute(new Step[] {
             new Step(6, new String[] {browser.debotAddr}, new String[] {"Test Invoke Debot Action", "enter debot address:"}),
@@ -250,6 +251,7 @@ public class DebotTest extends TestBase {
             new Step(2, new String[] {"Debot Tests"}),
             new Step(EXIT_CHOICE, new String[] {})
         });
+        } catch(Exception e) { e.printStackTrace(); throw e; }
     }
 
     //@Test

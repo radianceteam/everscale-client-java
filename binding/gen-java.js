@@ -156,7 +156,15 @@ api.modules.forEach(m => m.types.forEach(t => {
             type.isEnum = true;
             break;
         case 'EnumOfTypes':
-            type.variants = t.enum_types.map(v => ({name:v.name, desc:v.description, get fields() { return v.struct_fields.map(fieldMapper)}}));
+            type.variants = t.enum_types.map(v => ({
+                name:v.name,
+                desc:v.description,
+                get fields() {
+                    if (v.ref_name)
+                        return types[v.ref_name].fields;
+                    return v.struct_fields.map(fieldMapper)
+                }
+            }));
             type.isEnumOfTypes = true;
             break;
         case 'Number':
