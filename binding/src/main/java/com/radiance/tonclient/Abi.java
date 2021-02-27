@@ -964,6 +964,88 @@ public class Abi {
     /**
      *  
      */
+    public static class ResultOfEncodeInternalMessage  {
+
+        public ResultOfEncodeInternalMessage(String message, String address, String messageId) {
+
+            this.message = message;
+
+            this.address = address;
+
+            this.messageId = messageId;
+
+        }
+        public ResultOfEncodeInternalMessage(String message, String address) {
+
+            this.message = message;
+
+            this.address = address;
+
+        }
+        public ResultOfEncodeInternalMessage(String message) {
+
+            this.message = message;
+
+        }
+        public ResultOfEncodeInternalMessage() {
+
+        }
+
+
+        @JsonProperty("message")
+        private String message;
+        /**
+         * 
+         */
+        public String getMessage() {
+            return message;
+        }
+        /**
+         * 
+         */
+        public void setMessage(String value) {
+            this.message = value;
+        }
+
+        @JsonProperty("address")
+        private String address;
+        /**
+         * 
+         */
+        public String getAddress() {
+            return address;
+        }
+        /**
+         * 
+         */
+        public void setAddress(String value) {
+            this.address = value;
+        }
+
+        @JsonProperty("message_id")
+        private String messageId;
+        /**
+         * 
+         */
+        public String getMessageId() {
+            return messageId;
+        }
+        /**
+         * 
+         */
+        public void setMessageId(String value) {
+            this.messageId = value;
+        }
+
+
+        @Override
+        public String toString() {
+            return "{"+Stream.of((message==null?null:("\"message\":\""+message+"\"")),(address==null?null:("\"address\":\""+address+"\"")),(messageId==null?null:("\"message_id\":\""+messageId+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
+        }
+    }
+    /**
+     *  
+     */
     public static class ResultOfAttachSignature  {
 
         public ResultOfAttachSignature(String message, String messageId) {
@@ -1234,6 +1316,22 @@ public class Abi {
     }
 
    /**
+    * Allows to encode deploy and function call messages.<p>Use cases include messages of any possible type:- deploy with initial function call (i.e. `constructor` or any other function that is used for some kindof initialization);- deploy without initial function call;- simple function call<p>There is an optional public key can be provided in deploy set in order to substitute onein TVM file.<p>Public key resolving priority:1. Public key from deploy set.2. Public key, specified in TVM file.
+    *
+    * @param abi 
+    * @param address Must be specified in case of non-deploy message.
+    * @param deploySet Must be specified in case of deploy message.
+    * @param callSet Must be specified in case of non-deploy message.<p>In case of deploy message it is optional and contains parametersof the functions that will to be called upon deploy transaction.
+    * @param value 
+    * @param bounce Default is true.
+    * @param enableIhr Default is false.
+    */
+    public CompletableFuture<ResultOfEncodeInternalMessage> encodeInternalMessage(ABI abi, String address, DeploySet deploySet, CallSet callSet, String value, Boolean bounce, Boolean enableIhr) {
+        return context.requestJSON("abi.encode_internal_message", "{"+Stream.of((abi==null?null:("\"abi\":"+abi)),(address==null?null:("\"address\":\""+address+"\"")),(deploySet==null?null:("\"deploy_set\":"+deploySet)),(callSet==null?null:("\"call_set\":"+callSet)),(value==null?null:("\"value\":\""+value+"\"")),(bounce==null?null:("\"bounce\":"+bounce)),(enableIhr==null?null:("\"enable_ihr\":"+enableIhr))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
+            .thenApply(json -> TONContext.convertValue(json, ResultOfEncodeInternalMessage.class));
+    }
+
+   /**
     * 
     *
     * @param abi 
@@ -1276,9 +1374,10 @@ public class Abi {
     * @param balance 
     * @param lastTransLt 
     * @param lastPaid 
+    * @param bocCache The BOC itself returned if no cache type provided
     */
-    public CompletableFuture<ResultOfEncodeAccount> encodeAccount(StateInitSource stateInit, Long balance, Long lastTransLt, Number lastPaid) {
-        return context.requestJSON("abi.encode_account", "{"+Stream.of((stateInit==null?null:("\"state_init\":"+stateInit)),(balance==null?null:("\"balance\":"+balance)),(lastTransLt==null?null:("\"last_trans_lt\":"+lastTransLt)),(lastPaid==null?null:("\"last_paid\":"+lastPaid))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
+    public CompletableFuture<ResultOfEncodeAccount> encodeAccount(StateInitSource stateInit, Long balance, Long lastTransLt, Number lastPaid, Boc.BocCacheType bocCache) {
+        return context.requestJSON("abi.encode_account", "{"+Stream.of((stateInit==null?null:("\"state_init\":"+stateInit)),(balance==null?null:("\"balance\":"+balance)),(lastTransLt==null?null:("\"last_trans_lt\":"+lastTransLt)),(lastPaid==null?null:("\"last_paid\":"+lastPaid)),(bocCache==null?null:("\"boc_cache\":"+bocCache))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
             .thenApply(json -> TONContext.convertValue(json, ResultOfEncodeAccount.class));
     }
 

@@ -583,13 +583,13 @@ public class Tvm {
         @JsonProperty("account")
         private String account;
         /**
-         * Encoded as `base64`. Attention! Only `account_state.storage.state.data` part of the boc is updated.
+         * Encoded as `base64`. Attention! Only `account_state.storage.state.data` part of the BOC is updated.
          */
         public String getAccount() {
             return account;
         }
         /**
-         * Encoded as `base64`. Attention! Only `account_state.storage.state.data` part of the boc is updated.
+         * Encoded as `base64`. Attention! Only `account_state.storage.state.data` part of the BOC is updated.
          */
         public void setAccount(String value) {
             this.account = value;
@@ -608,42 +608,47 @@ public class Tvm {
     }
 
    /**
-    * Performs all the phases of contract execution on Transaction Executor -the same component that is used on Validator Nodes.<p>Can be used for contract debug, to find out the reason of message unsuccessfuldelivery - as Validators just throw away failed transactions, here you can catch it.<p>Another use case is to estimate fees for message execution. Set  `AccountForExecutor::Account.unlimited_balance`to `true` so that emulation will not depend on the actual balance.<p>One more use case - you can procude the sequence of operations,thus emulating the multiple contract calls locally.And so on.<p>To get the account boc (bag of cells) - use `net.query` method to download it from graphql api(field `boc` of `account`) or generate it with `abi.encode_account method`.To get the message boc - use `abi.encode_message` or prepare it any other way, for instance, with Fift script.<p>If you need this emulation to be as precise as possible then specify `ParamsOfRunExecutor` parameter.If you need to see the aborted transaction as a result, not as an error, set `skip_transaction_check` to `true`.
+    * Performs all the phases of contract execution on Transaction Executor -the same component that is used on Validator Nodes.<p>Can be used for contract debugginh, to find out the reason why message was not delivered successfully - because Validators just throw away the failed external inbound messages, here you can catch them.<p>Another use case is to estimate fees for message execution. Set  `AccountForExecutor::Account.unlimited_balance`to `true` so that emulation will not depend on the actual balance.<p>One more use case - you can produce the sequence of operations,thus emulating the multiple contract calls locally.And so on.<p>To get the account BOC (bag of cells) - use `net.query` method to download it from GraphQL API(field `boc` of `account`) or generate it with `abi.encode_account` method.To get the message BOC - use `abi.encode_message` or prepare it any other way, for instance, with FIFT script.<p>If you need this emulation to be as precise as possible then specify `ParamsOfRunExecutor` parameter.If you need to see the aborted transaction as a result, not as an error, set `skip_transaction_check` to `true`.
     *
     * @param message Must be encoded as base64.
     * @param account 
     * @param executionOptions 
     * @param abi 
     * @param skipTransactionCheck 
+    * @param bocCache The BOC itself returned if no cache type provided
+    * @param returnUpdatedAccount Empty string is returned if the flag is `false`
     */
-    public CompletableFuture<ResultOfRunExecutor> runExecutor(String message, AccountForExecutor account, ExecutionOptions executionOptions, Abi.ABI abi, Boolean skipTransactionCheck) {
-        return context.requestJSON("tvm.run_executor", "{"+Stream.of((message==null?null:("\"message\":\""+message+"\"")),(account==null?null:("\"account\":"+account)),(executionOptions==null?null:("\"execution_options\":"+executionOptions)),(abi==null?null:("\"abi\":"+abi)),(skipTransactionCheck==null?null:("\"skip_transaction_check\":"+skipTransactionCheck))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
+    public CompletableFuture<ResultOfRunExecutor> runExecutor(String message, AccountForExecutor account, ExecutionOptions executionOptions, Abi.ABI abi, Boolean skipTransactionCheck, Boc.BocCacheType bocCache, Boolean returnUpdatedAccount) {
+        return context.requestJSON("tvm.run_executor", "{"+Stream.of((message==null?null:("\"message\":\""+message+"\"")),(account==null?null:("\"account\":"+account)),(executionOptions==null?null:("\"execution_options\":"+executionOptions)),(abi==null?null:("\"abi\":"+abi)),(skipTransactionCheck==null?null:("\"skip_transaction_check\":"+skipTransactionCheck)),(bocCache==null?null:("\"boc_cache\":"+bocCache)),(returnUpdatedAccount==null?null:("\"return_updated_account\":"+returnUpdatedAccount))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
             .thenApply(json -> TONContext.convertValue(json, ResultOfRunExecutor.class));
     }
 
    /**
-    * Performs only a part of compute phase of transaction executionthat is used to run get-methods of ABI-compatible contracts.<p>If you try to run get methods with `run_executor` you will get an error, because it checks ACCEPT and exitsif there is none, which is actually true for get methods.<p> To get the account boc (bag of cells) - use `net.query` method to download it from graphql api(field `boc` of `account`) or generate it with `abi.encode_account method`.To get the message boc - use `abi.encode_message` or prepare it any other way, for instance, with Fift script.<p>Attention! Updated account state is produces as well, but only`account_state.storage.state.data`  part of the boc is updated.
+    * Performs only a part of compute phase of transaction executionthat is used to run get-methods of ABI-compatible contracts.<p>If you try to run get-methods with `run_executor` you will get an error, because it checks ACCEPT and exitsif there is none, which is actually true for get-methods.<p> To get the account BOC (bag of cells) - use `net.query` method to download it from GraphQL API(field `boc` of `account`) or generate it with `abi.encode_account method`.To get the message BOC - use `abi.encode_message` or prepare it any other way, for instance, with FIFT script.<p>Attention! Updated account state is produces as well, but only`account_state.storage.state.data`  part of the BOC is updated.
     *
     * @param message Must be encoded as base64.
     * @param account Must be encoded as base64.
     * @param executionOptions 
     * @param abi 
+    * @param bocCache The BOC itself returned if no cache type provided
+    * @param returnUpdatedAccount Empty string is returned if the flag is `false`
     */
-    public CompletableFuture<ResultOfRunTvm> runTvm(String message, String account, ExecutionOptions executionOptions, Abi.ABI abi) {
-        return context.requestJSON("tvm.run_tvm", "{"+Stream.of((message==null?null:("\"message\":\""+message+"\"")),(account==null?null:("\"account\":\""+account+"\"")),(executionOptions==null?null:("\"execution_options\":"+executionOptions)),(abi==null?null:("\"abi\":"+abi))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
+    public CompletableFuture<ResultOfRunTvm> runTvm(String message, String account, ExecutionOptions executionOptions, Abi.ABI abi, Boc.BocCacheType bocCache, Boolean returnUpdatedAccount) {
+        return context.requestJSON("tvm.run_tvm", "{"+Stream.of((message==null?null:("\"message\":\""+message+"\"")),(account==null?null:("\"account\":\""+account+"\"")),(executionOptions==null?null:("\"execution_options\":"+executionOptions)),(abi==null?null:("\"abi\":"+abi)),(bocCache==null?null:("\"boc_cache\":"+bocCache)),(returnUpdatedAccount==null?null:("\"return_updated_account\":"+returnUpdatedAccount))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
             .thenApply(json -> TONContext.convertValue(json, ResultOfRunTvm.class));
     }
 
    /**
-    * Executes a getmethod of FIFT contract that fulfills the smc-guidelines https://test.ton.org/smc-guidelines.txtand returns the result data from TVM's stack
+    * Executes a get-method of FIFT contract that fulfills the smc-guidelines https://test.ton.org/smc-guidelines.txtand returns the result data from TVM's stack
     *
     * @param account 
     * @param functionName 
     * @param input 
     * @param executionOptions 
+    * @param tupleListAsArray Default is `false`. Input parameters may use any of lists representationsIf you receive this error on Web: "Runtime error. Unreachable code should not be executed...",set this flag to true.This may happen, for example, when elector contract contains too many participants
     */
-    public CompletableFuture<Object> runGet(String account, String functionName, Object input, ExecutionOptions executionOptions) {
-        return context.requestJSON("tvm.run_get", "{"+Stream.of((account==null?null:("\"account\":\""+account+"\"")),(functionName==null?null:("\"function_name\":\""+functionName+"\"")),(input==null?null:("\"input\":"+input)),(executionOptions==null?null:("\"execution_options\":"+executionOptions))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
+    public CompletableFuture<Object> runGet(String account, String functionName, Object input, ExecutionOptions executionOptions, Boolean tupleListAsArray) {
+        return context.requestJSON("tvm.run_get", "{"+Stream.of((account==null?null:("\"account\":\""+account+"\"")),(functionName==null?null:("\"function_name\":\""+functionName+"\"")),(input==null?null:("\"input\":"+input)),(executionOptions==null?null:("\"execution_options\":"+executionOptions)),(tupleListAsArray==null?null:("\"tuple_list_as_array\":"+tupleListAsArray))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
             .thenApply(json -> TONContext.convertValue(json.findValue("output"), Object.class));
     }
 

@@ -1,3 +1,5 @@
 **/target
 jni/Cargo.lock
 /binding/src/main/resources/*
+**/.idea
+**/*.iml

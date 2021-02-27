@@ -15,6 +15,17 @@ public class Client {
      */
     public static class ClientConfig  {
 
+        public ClientConfig(NetworkConfig network, CryptoConfig crypto, AbiConfig abi, BocConfig boc) {
+
+            this.network = network;
+
+            this.crypto = crypto;
+
+            this.abi = abi;
+
+            this.boc = boc;
+
+        }
         public ClientConfig(NetworkConfig network, CryptoConfig crypto, AbiConfig abi) {
 
             this.network = network;
@@ -86,10 +97,25 @@ public class Client {
             this.abi = value;
         }
 
+        @JsonProperty("boc")
+        private BocConfig boc;
+        /**
+         * 
+         */
+        public BocConfig getBoc() {
+            return boc;
+        }
+        /**
+         * 
+         */
+        public void setBoc(BocConfig value) {
+            this.boc = value;
+        }
+
 
         @Override
         public String toString() {
-            return "{"+Stream.of((network==null?null:("\"network\":"+network)),(crypto==null?null:("\"crypto\":"+crypto)),(abi==null?null:("\"abi\":"+abi))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
+            return "{"+Stream.of((network==null?null:("\"network\":"+network)),(crypto==null?null:("\"crypto\":"+crypto)),(abi==null?null:("\"abi\":"+abi)),(boc==null?null:("\"boc\":"+boc))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
         }
     }
     /**
@@ -560,6 +586,42 @@ public class Client {
         @Override
         public String toString() {
             return "{"+Stream.of((workchain==null?null:("\"workchain\":"+workchain)),(messageExpirationTimeout==null?null:("\"message_expiration_timeout\":"+messageExpirationTimeout)),(messageExpirationTimeoutGrowFactor==null?null:("\"message_expiration_timeout_grow_factor\":"+messageExpirationTimeoutGrowFactor))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
+        }
+    }
+    /**
+     *  
+     */
+    public static class BocConfig  {
+
+        public BocConfig(Number cacheMaxSize) {
+
+            this.cacheMaxSize = cacheMaxSize;
+
+        }
+        public BocConfig() {
+
+        }
+
+
+        @JsonProperty("cache_max_size")
+        private Number cacheMaxSize;
+        /**
+         * Default is 10 MB
+         */
+        public Number getCacheMaxSize() {
+            return cacheMaxSize;
+        }
+        /**
+         * Default is 10 MB
+         */
+        public void setCacheMaxSize(Number value) {
+            this.cacheMaxSize = value;
+        }
+
+
+        @Override
+        public String toString() {
+            return "{"+(cacheMaxSize==null?"":("\"cache_max_size\":"+cacheMaxSize))+"}";
         }
     }
     /**

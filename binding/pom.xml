@@ -6,7 +6,7 @@
 
     <groupId>com.radiance.tonclient</groupId>
     <artifactId>ton-client-binding</artifactId>
-    <version>1.6.2</version>
+    <version>1.9.0</version>
 
     <name>ton-client-binding</name>
     <!-- FIXME change it to the project's website -->
@@ -38,7 +38,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
-                <version>1.6.2</version>
+                <version>1.9.0</version>
                 <configuration>
                     <mainClass>com.radiance.tonclient.TONContext</mainClass>
                 </configuration>

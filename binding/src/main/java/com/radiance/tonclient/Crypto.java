@@ -464,7 +464,7 @@ public class Crypto {
     }
 
    /**
-    * Encrypt and authenticate a message using the senders secret key, the recievers publickey, and a nonce.
+    * Encrypt and authenticate a message using the senders secret key, the receivers publickey, and a nonce.
     *
     * @param decrypted 
     * @param nonce 
