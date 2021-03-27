@@ -116,19 +116,19 @@ public class DebotTest extends TestBase {
 
 
         void execute(Step[] steps, boolean start) throws InterruptedException, ExecutionException {
-            Integer handle = null;
+            Debot.RegisteredDebot debot = null;
 
             for (int i=0; i<=steps.length; i++) {
                 if (i==0)
-                    handle = (start?debot.start(debotAddr, this):debot.fetch(debotAddr, this)).get();
+                    debot = (start? this.debot.start(debotAddr, this): this.debot.fetch(debotAddr, this)).get();
                 else {
                     currentStep = steps[i-1];
-                    debot.execute(handle, availableActions.get(currentStep.choice - 1)).get();
+                    this.debot.execute(debot.getDebotHandle(), availableActions.get(currentStep.choice - 1)).get();
                     currentStep.validate();
                 }
             }
 
-            debot.remove(handle);
+            this.debot.remove(debot.getDebotHandle(), debot.getDebotAbi());
         }
 
         void execute(Step[] steps) throws InterruptedException, ExecutionException {

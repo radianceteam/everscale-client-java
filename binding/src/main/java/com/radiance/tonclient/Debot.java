@@ -178,6 +178,64 @@ public class Debot {
             return "{"+Stream.of((description==null?null:("\"description\":\""+description+"\"")),(name==null?null:("\"name\":\""+name+"\"")),(actionType==null?null:("\"action_type\":"+actionType)),(to==null?null:("\"to\":"+to)),(attributes==null?null:("\"attributes\":\""+attributes+"\"")),(misc==null?null:("\"misc\":\""+misc+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
         }
     }
+    /**
+     *  
+     */
+    public static class RegisteredDebot  {
+
+        public RegisteredDebot(Integer debotHandle, String debotAbi) {
+
+            this.debotHandle = debotHandle;
+
+            this.debotAbi = debotAbi;
+
+        }
+        public RegisteredDebot(Integer debotHandle) {
+
+            this.debotHandle = debotHandle;
+
+        }
+        public RegisteredDebot() {
+
+        }
+
+
+        @JsonProperty("debot_handle")
+        private Integer debotHandle;
+        /**
+         * 
+         */
+        public Integer getDebotHandle() {
+            return debotHandle;
+        }
+        /**
+         * 
+         */
+        public void setDebotHandle(Integer value) {
+            this.debotHandle = value;
+        }
+
+        @JsonProperty("debot_abi")
+        private String debotAbi;
+        /**
+         * 
+         */
+        public String getDebotAbi() {
+            return debotAbi;
+        }
+        /**
+         * 
+         */
+        public void setDebotAbi(String value) {
+            this.debotAbi = value;
+        }
+
+
+        @Override
+        public String toString() {
+            return "{"+Stream.of((debotHandle==null?null:("\"debot_handle\":"+debotHandle)),(debotAbi==null?null:("\"debot_abi\":\""+debotAbi+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
+        }
+    }
     public static abstract class ParamsOfAppDebotBrowser {
 
     /**
@@ -569,7 +627,7 @@ public class Debot {
     * @param address 
     * @param appObject 
     */
-    public CompletableFuture<Integer> start(String address, AppDebotBrowser appObject) {
+    public CompletableFuture<RegisteredDebot> start(String address, AppDebotBrowser appObject) {
         return context.requestJSONCallback("debot.start", "{"+(address==null?"":("\"address\":\""+address+"\""))+"}", (params,type) -> {
                 Map data = (Map)(type==3?((Map)params).get("request_data"):params);
                 switch ((String)data.remove("type")) {
@@ -667,7 +725,7 @@ public class Debot {
 
                 }
             }, Object.class)
-            .thenApply(json -> TONContext.convertValue(json.findValue("debot_handle"), Integer.class));
+            .thenApply(json -> TONContext.convertValue(json, RegisteredDebot.class));
     }
 
    /**
@@ -676,7 +734,7 @@ public class Debot {
     * @param address 
     * @param appObject 
     */
-    public CompletableFuture<Integer> fetch(String address, AppDebotBrowser appObject) {
+    public CompletableFuture<RegisteredDebot> fetch(String address, AppDebotBrowser appObject) {
         return context.requestJSONCallback("debot.fetch", "{"+(address==null?"":("\"address\":\""+address+"\""))+"}", (params,type) -> {
                 Map data = (Map)(type==3?((Map)params).get("request_data"):params);
                 switch ((String)data.remove("type")) {
@@ -774,7 +832,7 @@ public class Debot {
 
                 }
             }, Object.class)
-            .thenApply(json -> TONContext.convertValue(json.findValue("debot_handle"), Integer.class));
+            .thenApply(json -> TONContext.convertValue(json, RegisteredDebot.class));
     }
 
    /**
@@ -792,12 +850,10 @@ public class Debot {
     * Used by Debot Browser to send response on Dinterface call or from other Debots.
     *
     * @param debotHandle 
-    * @param source 
-    * @param funcId 
-    * @param params 
+    * @param message 
     */
-    public CompletableFuture<Void> send(Integer debotHandle, String source, Number funcId, String params) {
-        return context.requestJSON("debot.send", "{"+Stream.of((debotHandle==null?null:("\"debot_handle\":"+debotHandle)),(source==null?null:("\"source\":\""+source+"\"")),(funcId==null?null:("\"func_id\":"+funcId)),(params==null?null:("\"params\":\""+params+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
+    public CompletableFuture<Void> send(Integer debotHandle, String message) {
+        return context.requestJSON("debot.send", "{"+Stream.of((debotHandle==null?null:("\"debot_handle\":"+debotHandle)),(message==null?null:("\"message\":\""+message+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
             .thenApply(json -> TONContext.convertValue(json, Void.class));
     }
 
@@ -805,9 +861,10 @@ public class Debot {
     * Removes handle from Client Context and drops debot engine referenced by that handle.
     *
     * @param debotHandle 
+    * @param debotAbi 
     */
-    public CompletableFuture<Void> remove(Integer debotHandle) {
-        return context.requestJSON("debot.remove", "{"+(debotHandle==null?"":("\"debot_handle\":"+debotHandle))+"}")
+    public CompletableFuture<Void> remove(Integer debotHandle, String debotAbi) {
+        return context.requestJSON("debot.remove", "{"+Stream.of((debotHandle==null?null:("\"debot_handle\":"+debotHandle)),(debotAbi==null?null:("\"debot_abi\":\""+debotAbi+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
             .thenApply(json -> TONContext.convertValue(json, Void.class));
     }
 

@@ -2,12 +2,11 @@ package com.radiance.tonclient;
 
 import org.junit.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.TimeUnit;
+
+import static org.junit.Assert.*;
 
 public class ProcessingTest extends TestBase {
 
@@ -49,7 +48,7 @@ public class ProcessingTest extends TestBase {
 
         net.unsubscribe(subscription).get();
 
-        assertEquals(new String[] {"WillFetchFirstBlock", "WillSend", "DidSend", "WillFetchNextBlock"}, events.toArray(new String[0]));
+        assertArrayEquals(new String[] {"WillFetchFirstBlock", "WillSend", "DidSend", "WillFetchNextBlock"}, events.toArray(new String[0]));
         assertNotEquals("Transaction counter", 0, transCounter.get());
     }
 }

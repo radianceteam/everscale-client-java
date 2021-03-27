@@ -49,7 +49,7 @@ function htmlize(s) {
 
 function isFlattable(typeName) {
     let type = types[typeName];
-    return type && type.isStruct && typeName.indexOf('.ParamsOf') > 0;
+    return type && type.isStruct && (typeName.indexOf('.ParamsOf') > 0 || typeName.indexOf('.ResultOf') > 0);
 }
 
 function trimClassName(cName, mName) {
@@ -205,6 +205,15 @@ api.modules.forEach(mod => {
                 case '_context':
                     break;
                 case 'params':
+                    /*
+                    var fl = types[p.ref_name]
+                    if (isFlattable(p.ref_name) || fl.fields.length == 1)
+                        fields = fl.fields;
+                    else {
+                        fl.getType = () => '=======================';
+                        fl.name = '!!!!!!!!!!!!';
+                        fields = [fl];
+                    }*/
                     fields = types[p.ref_name].fields;
                     break;
                 case 'callback':

@@ -150,4 +150,15 @@ public class Utils {
             .thenApply(json -> TONContext.convertValue(json.findValue("address"), String.class));
     }
 
+   /**
+    * 
+    *
+    * @param account 
+    * @param period 
+    */
+    public CompletableFuture<String> calcStorageFee(String account, Number period) {
+        return context.requestJSON("utils.calc_storage_fee", "{"+Stream.of((account==null?null:("\"account\":\""+account+"\"")),(period==null?null:("\"period\":"+period))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
+            .thenApply(json -> TONContext.convertValue(json.findValue("fee"), String.class));
+    }
+
 }
