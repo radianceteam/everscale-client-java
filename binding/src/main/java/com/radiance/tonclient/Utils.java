@@ -161,4 +161,27 @@ public class Utils {
             .thenApply(json -> TONContext.convertValue(json.findValue("fee"), String.class));
     }
 
+   /**
+    * 
+    *
+    * @param uncompressed Must be encoded as base64.
+    * @param level 
+    * @return Must be encoded as base64.
+    */
+    public CompletableFuture<String> compressZstd(String uncompressed, Number level) {
+        return context.requestJSON("utils.compress_zstd", "{"+Stream.of((uncompressed==null?null:("\"uncompressed\":\""+uncompressed+"\"")),(level==null?null:("\"level\":"+level))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
+            .thenApply(json -> TONContext.convertValue(json.findValue("compressed"), String.class));
+    }
+
+   /**
+    * 
+    *
+    * @param compressed Must be encoded as base64.
+    * @return Must be encoded as base64.
+    */
+    public CompletableFuture<String> decompressZstd(String compressed) {
+        return context.requestJSON("utils.decompress_zstd", "{"+(compressed==null?"":("\"compressed\":\""+compressed+"\""))+"}")
+            .thenApply(json -> TONContext.convertValue(json.findValue("decompressed"), String.class));
+    }
+
 }

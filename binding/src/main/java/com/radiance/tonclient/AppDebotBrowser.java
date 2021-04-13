@@ -11,4 +11,5 @@ public interface AppDebotBrowser {
     CompletableFuture<Integer> getSigningBox();
     CompletableFuture<Void> invokeDebot(String debotAddr,Debot.DebotAction action);
     void send(String message);
+    CompletableFuture<Boolean> approve(Object activity);
 }
