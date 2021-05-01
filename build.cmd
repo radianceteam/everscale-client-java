@@ -3,7 +3,7 @@ SET PROJECT_DIR=%~dp0
 SET TON_DIR=%PROJECT_DIR%\target\TON-SDK
 
 IF NOT EXIST %TON_DIR% (
-    git clone --single-branch --branch 1.12.0 https://github.com/tonlabs/TON-SDK.git %TON_DIR%
+    git clone --single-branch --branch 1.14.4 https://github.com/tonlabs/TON-SDK.git %TON_DIR%
 )
 
 cd jni

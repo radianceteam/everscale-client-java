@@ -39,10 +39,10 @@ public class ProcessingTest extends TestBase {
 
         String blockId = processing.sendMessage(encoded.getMessage(), abi, true, event -> {
             events.add(event.getType());
-        }).get();
+        }).get().getShardBlockId();
         System.out.println("Block Id: " + blockId);
 
-        processing.waitForTransaction(abi, encoded.getMessage(), blockId, true, event -> {
+        processing.waitForTransaction(abi, encoded.getMessage(), blockId, true, null, event -> {
             events.add(event.getType());
         }).get();
 

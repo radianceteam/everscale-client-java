@@ -183,7 +183,7 @@ public class Debot {
      */
     public static class DebotInfo  {
 
-        public DebotInfo(String name, String version, String publisher, String key, String author, String support, String hello, String language, String dabi, String icon, String[] interfaces) {
+        public DebotInfo(String name, String version, String publisher, String caption, String author, String support, String hello, String language, String dabi, String icon, String[] interfaces) {
 
             this.name = name;
 
@@ -191,7 +191,7 @@ public class Debot {
 
             this.publisher = publisher;
 
-            this.key = key;
+            this.caption = caption;
 
             this.author = author;
 
@@ -208,7 +208,7 @@ public class Debot {
             this.interfaces = interfaces;
 
         }
-        public DebotInfo(String name, String version, String publisher, String key, String author, String support, String hello, String language, String dabi, String icon) {
+        public DebotInfo(String name, String version, String publisher, String caption, String author, String support, String hello, String language, String dabi, String icon) {
 
             this.name = name;
 
@@ -216,7 +216,7 @@ public class Debot {
 
             this.publisher = publisher;
 
-            this.key = key;
+            this.caption = caption;
 
             this.author = author;
 
@@ -231,7 +231,7 @@ public class Debot {
             this.icon = icon;
 
         }
-        public DebotInfo(String name, String version, String publisher, String key, String author, String support, String hello, String language, String dabi) {
+        public DebotInfo(String name, String version, String publisher, String caption, String author, String support, String hello, String language, String dabi) {
 
             this.name = name;
 
@@ -239,7 +239,7 @@ public class Debot {
 
             this.publisher = publisher;
 
-            this.key = key;
+            this.caption = caption;
 
             this.author = author;
 
@@ -252,7 +252,7 @@ public class Debot {
             this.dabi = dabi;
 
         }
-        public DebotInfo(String name, String version, String publisher, String key, String author, String support, String hello, String language) {
+        public DebotInfo(String name, String version, String publisher, String caption, String author, String support, String hello, String language) {
 
             this.name = name;
 
@@ -260,7 +260,7 @@ public class Debot {
 
             this.publisher = publisher;
 
-            this.key = key;
+            this.caption = caption;
 
             this.author = author;
 
@@ -271,7 +271,7 @@ public class Debot {
             this.language = language;
 
         }
-        public DebotInfo(String name, String version, String publisher, String key, String author, String support, String hello) {
+        public DebotInfo(String name, String version, String publisher, String caption, String author, String support, String hello) {
 
             this.name = name;
 
@@ -279,7 +279,7 @@ public class Debot {
 
             this.publisher = publisher;
 
-            this.key = key;
+            this.caption = caption;
 
             this.author = author;
 
@@ -288,7 +288,7 @@ public class Debot {
             this.hello = hello;
 
         }
-        public DebotInfo(String name, String version, String publisher, String key, String author, String support) {
+        public DebotInfo(String name, String version, String publisher, String caption, String author, String support) {
 
             this.name = name;
 
@@ -296,14 +296,14 @@ public class Debot {
 
             this.publisher = publisher;
 
-            this.key = key;
+            this.caption = caption;
 
             this.author = author;
 
             this.support = support;
 
         }
-        public DebotInfo(String name, String version, String publisher, String key, String author) {
+        public DebotInfo(String name, String version, String publisher, String caption, String author) {
 
             this.name = name;
 
@@ -311,12 +311,12 @@ public class Debot {
 
             this.publisher = publisher;
 
-            this.key = key;
+            this.caption = caption;
 
             this.author = author;
 
         }
-        public DebotInfo(String name, String version, String publisher, String key) {
+        public DebotInfo(String name, String version, String publisher, String caption) {
 
             this.name = name;
 
@@ -324,7 +324,7 @@ public class Debot {
 
             this.publisher = publisher;
 
-            this.key = key;
+            this.caption = caption;
 
         }
         public DebotInfo(String name, String version, String publisher) {
@@ -398,19 +398,19 @@ public class Debot {
             this.publisher = value;
         }
 
-        @JsonProperty("key")
-        private String key;
+        @JsonProperty("caption")
+        private String caption;
         /**
          * 
          */
-        public String getKey() {
-            return key;
+        public String getCaption() {
+            return caption;
         }
         /**
          * 
          */
-        public void setKey(String value) {
-            this.key = value;
+        public void setCaption(String value) {
+            this.caption = value;
         }
 
         @JsonProperty("author")
@@ -521,7 +521,7 @@ public class Debot {
 
         @Override
         public String toString() {
-            return "{"+Stream.of((name==null?null:("\"name\":\""+name+"\"")),(version==null?null:("\"version\":\""+version+"\"")),(publisher==null?null:("\"publisher\":\""+publisher+"\"")),(key==null?null:("\"key\":\""+key+"\"")),(author==null?null:("\"author\":\""+author+"\"")),(support==null?null:("\"support\":\""+support+"\"")),(hello==null?null:("\"hello\":\""+hello+"\"")),(language==null?null:("\"language\":\""+language+"\"")),(dabi==null?null:("\"dabi\":\""+dabi+"\"")),(icon==null?null:("\"icon\":\""+icon+"\"")),(interfaces==null?null:("\"interfaces\":\""+Arrays.toString(interfaces)+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
+            return "{"+Stream.of((name==null?null:("\"name\":\""+name+"\"")),(version==null?null:("\"version\":\""+version+"\"")),(publisher==null?null:("\"publisher\":\""+publisher+"\"")),(caption==null?null:("\"caption\":\""+caption+"\"")),(author==null?null:("\"author\":\""+author+"\"")),(support==null?null:("\"support\":\""+support+"\"")),(hello==null?null:("\"hello\":\""+hello+"\"")),(language==null?null:("\"language\":\""+language+"\"")),(dabi==null?null:("\"dabi\":\""+dabi+"\"")),(icon==null?null:("\"icon\":\""+icon+"\"")),(interfaces==null?null:("\"interfaces\":\""+Arrays.toString(interfaces)+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
         }
     }
     /**

@@ -177,6 +177,64 @@ public class Processing {
             return "{"+Stream.of((outMessages==null?null:("\"out_messages\":"+Arrays.toString(outMessages))),(output==null?null:("\"output\":"+output))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
         }
     }
+    /**
+     *  
+     */
+    public static class ResultOfSendMessage  {
+
+        public ResultOfSendMessage(String shardBlockId, String[] sendingEndpoints) {
+
+            this.shardBlockId = shardBlockId;
+
+            this.sendingEndpoints = sendingEndpoints;
+
+        }
+        public ResultOfSendMessage(String shardBlockId) {
+
+            this.shardBlockId = shardBlockId;
+
+        }
+        public ResultOfSendMessage() {
+
+        }
+
+
+        @JsonProperty("shard_block_id")
+        private String shardBlockId;
+        /**
+         * This block id must be used as a parameter of the`wait_for_transaction`.
+         */
+        public String getShardBlockId() {
+            return shardBlockId;
+        }
+        /**
+         * This block id must be used as a parameter of the`wait_for_transaction`.
+         */
+        public void setShardBlockId(String value) {
+            this.shardBlockId = value;
+        }
+
+        @JsonProperty("sending_endpoints")
+        private String[] sendingEndpoints;
+        /**
+         * This list id must be used as a parameter of the`wait_for_transaction`.
+         */
+        public String[] getSendingEndpoints() {
+            return sendingEndpoints;
+        }
+        /**
+         * This list id must be used as a parameter of the`wait_for_transaction`.
+         */
+        public void setSendingEndpoints(String[] value) {
+            this.sendingEndpoints = value;
+        }
+
+
+        @Override
+        public String toString() {
+            return "{"+Stream.of((shardBlockId==null?null:("\"shard_block_id\":\""+shardBlockId+"\"")),(sendingEndpoints==null?null:("\"sending_endpoints\":\""+Arrays.toString(sendingEndpoints)+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
+        }
+    }
     private TONContext context;
 
     public Processing(TONContext context) {
@@ -189,11 +247,10 @@ public class Processing {
     * @param message 
     * @param abi If this parameter is specified and the message has the`expire` header then expiration time will be checked againstthe current time to prevent unnecessary sending of already expired message.<p>The `message already expired` error will be returned in thiscase.<p>Note, that specifying `abi` for ABI compliant contracts isstrongly recommended, so that proper processing strategy can bechosen.
     * @param sendEvents 
-    * @return This block id must be used as a parameter of the`wait_for_transaction`.
     */
-    public CompletableFuture<String> sendMessage(String message, Abi.ABI abi, Boolean sendEvents, Consumer<SendMessageEvent> consumer) {
+    public CompletableFuture<ResultOfSendMessage> sendMessage(String message, Abi.ABI abi, Boolean sendEvents, Consumer<SendMessageEvent> consumer) {
         return context.requestJSONCallback("processing.send_message", "{"+Stream.of((message==null?null:("\"message\":\""+message+"\"")),(abi==null?null:("\"abi\":"+abi)),(sendEvents==null?null:("\"send_events\":"+sendEvents))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}", (event,type)->consumer.accept(event), SendMessageEvent.class)
-            .thenApply(json -> TONContext.convertValue(json.findValue("shard_block_id"), String.class));
+            .thenApply(json -> TONContext.convertValue(json, ResultOfSendMessage.class));
     }
 
    /**
@@ -203,9 +260,10 @@ public class Processing {
     * @param message Encoded with `base64`.
     * @param shardBlockId You must provide the same value as the `send_message` has returned.
     * @param sendEvents 
+    * @param sendingEndpoints You must provide the same value as the `send_message` has returned.
     */
-    public CompletableFuture<ResultOfProcessMessage> waitForTransaction(Abi.ABI abi, String message, String shardBlockId, Boolean sendEvents, Consumer<WaitForTransactionEvent> consumer) {
-        return context.requestJSONCallback("processing.wait_for_transaction", "{"+Stream.of((abi==null?null:("\"abi\":"+abi)),(message==null?null:("\"message\":\""+message+"\"")),(shardBlockId==null?null:("\"shard_block_id\":\""+shardBlockId+"\"")),(sendEvents==null?null:("\"send_events\":"+sendEvents))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}", (event,type)->consumer.accept(event), WaitForTransactionEvent.class)
+    public CompletableFuture<ResultOfProcessMessage> waitForTransaction(Abi.ABI abi, String message, String shardBlockId, Boolean sendEvents, String[] sendingEndpoints, Consumer<WaitForTransactionEvent> consumer) {
+        return context.requestJSONCallback("processing.wait_for_transaction", "{"+Stream.of((abi==null?null:("\"abi\":"+abi)),(message==null?null:("\"message\":\""+message+"\"")),(shardBlockId==null?null:("\"shard_block_id\":\""+shardBlockId+"\"")),(sendEvents==null?null:("\"send_events\":"+sendEvents)),(sendingEndpoints==null?null:("\"sending_endpoints\":\""+Arrays.toString(sendingEndpoints)+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}", (event,type)->consumer.accept(event), WaitForTransactionEvent.class)
             .thenApply(json -> TONContext.convertValue(json, ResultOfProcessMessage.class));
     }
 

@@ -415,6 +415,115 @@ public class Net {
             return "{"+Stream.of("\"type\":\"AggregateCollection\"",(collection==null?null:("\"collection\":\""+collection+"\"")),(filter==null?null:("\"filter\":"+filter)),(fields==null?null:("\"fields\":"+Arrays.toString(fields)))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
         }
     }
+
+    /**
+     *  
+     */
+    public static class QueryCounterparties extends ParamsOfQueryOperation  {
+
+        public QueryCounterparties(String account, String result, Number first, String after) {
+
+            this.account = account;
+
+            this.result = result;
+
+            this.first = first;
+
+            this.after = after;
+
+        }
+        public QueryCounterparties(String account, String result, Number first) {
+
+            this.account = account;
+
+            this.result = result;
+
+            this.first = first;
+
+        }
+        public QueryCounterparties(String account, String result) {
+
+            this.account = account;
+
+            this.result = result;
+
+        }
+        public QueryCounterparties(String account) {
+
+            this.account = account;
+
+        }
+        public QueryCounterparties() {
+
+        }
+
+
+        @JsonProperty("account")
+        private String account;
+        /**
+         * 
+         */
+        public String getAccount() {
+            return account;
+        }
+        /**
+         * 
+         */
+        public void setAccount(String value) {
+            this.account = value;
+        }
+
+        @JsonProperty("result")
+        private String result;
+        /**
+         * 
+         */
+        public String getResult() {
+            return result;
+        }
+        /**
+         * 
+         */
+        public void setResult(String value) {
+            this.result = value;
+        }
+
+        @JsonProperty("first")
+        private Number first;
+        /**
+         * 
+         */
+        public Number getFirst() {
+            return first;
+        }
+        /**
+         * 
+         */
+        public void setFirst(Number value) {
+            this.first = value;
+        }
+
+        @JsonProperty("after")
+        private String after;
+        /**
+         * 
+         */
+        public String getAfter() {
+            return after;
+        }
+        /**
+         * 
+         */
+        public void setAfter(String value) {
+            this.after = value;
+        }
+
+
+        @Override
+        public String toString() {
+            return "{"+Stream.of("\"type\":\"QueryCounterparties\"",(account==null?null:("\"account\":\""+account+"\"")),(result==null?null:("\"result\":\""+result+"\"")),(first==null?null:("\"first\":"+first)),(after==null?null:("\"after\":\""+after+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
+        }
+    }
 }
     /**
      *  
@@ -641,6 +750,19 @@ public class Net {
     public CompletableFuture<Void> setEndpoints(String[] endpoints) {
         return context.requestJSON("net.set_endpoints", "{"+(endpoints==null?"":("\"endpoints\":\""+Arrays.toString(endpoints)+"\""))+"}")
             .thenApply(json -> TONContext.convertValue(json, Void.class));
+    }
+
+   /**
+    * *Attention* this query retrieves data from 'Counterparties' service which is not supported inthe opensource version of DApp Server (and will not be supported) as well as in TON OS SE (will be supported in SE in future),but is always accessible via <a target="_blank" href="TON OS Devnet/Mainnet Clouds">TON OS Devnet/Mainnet Clouds</a>(https://docs.ton.dev/86757ecb2/p/85c869-networks)
+    *
+    * @param account 
+    * @param result 
+    * @param first 
+    * @param after 
+    */
+    public CompletableFuture<Object[]> queryCounterparties(String account, String result, Number first, String after) {
+        return context.requestJSON("net.query_counterparties", "{"+Stream.of((account==null?null:("\"account\":\""+account+"\"")),(result==null?null:("\"result\":\""+result+"\"")),(first==null?null:("\"first\":"+first)),(after==null?null:("\"after\":\""+after+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
+            .thenApply(json -> TONContext.convertValue(json.findValue("result"), Object[].class));
     }
 
 }

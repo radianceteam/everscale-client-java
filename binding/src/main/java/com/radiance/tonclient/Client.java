@@ -123,7 +123,7 @@ public class Client {
      */
     public static class NetworkConfig  {
 
-        public NetworkConfig(String serverAddress, String[] endpoints, Number networkRetriesCount, Number maxReconnectTimeout, Number reconnectTimeout, Number messageRetriesCount, Number messageProcessingTimeout, Number waitForTimeout, Number outOfSyncThreshold, String accessKey) {
+        public NetworkConfig(String serverAddress, String[] endpoints, Number networkRetriesCount, Number maxReconnectTimeout, Number reconnectTimeout, Number messageRetriesCount, Number messageProcessingTimeout, Number waitForTimeout, Number outOfSyncThreshold, Number sendingEndpointCount, String accessKey) {
 
             this.serverAddress = serverAddress;
 
@@ -143,7 +143,32 @@ public class Client {
 
             this.outOfSyncThreshold = outOfSyncThreshold;
 
+            this.sendingEndpointCount = sendingEndpointCount;
+
             this.accessKey = accessKey;
+
+        }
+        public NetworkConfig(String serverAddress, String[] endpoints, Number networkRetriesCount, Number maxReconnectTimeout, Number reconnectTimeout, Number messageRetriesCount, Number messageProcessingTimeout, Number waitForTimeout, Number outOfSyncThreshold, Number sendingEndpointCount) {
+
+            this.serverAddress = serverAddress;
+
+            this.endpoints = endpoints;
+
+            this.networkRetriesCount = networkRetriesCount;
+
+            this.maxReconnectTimeout = maxReconnectTimeout;
+
+            this.reconnectTimeout = reconnectTimeout;
+
+            this.messageRetriesCount = messageRetriesCount;
+
+            this.messageProcessingTimeout = messageProcessingTimeout;
+
+            this.waitForTimeout = waitForTimeout;
+
+            this.outOfSyncThreshold = outOfSyncThreshold;
+
+            this.sendingEndpointCount = sendingEndpointCount;
 
         }
         public NetworkConfig(String serverAddress, String[] endpoints, Number networkRetriesCount, Number maxReconnectTimeout, Number reconnectTimeout, Number messageRetriesCount, Number messageProcessingTimeout, Number waitForTimeout, Number outOfSyncThreshold) {
@@ -403,6 +428,21 @@ public class Client {
             this.outOfSyncThreshold = value;
         }
 
+        @JsonProperty("sending_endpoint_count")
+        private Number sendingEndpointCount;
+        /**
+         * 
+         */
+        public Number getSendingEndpointCount() {
+            return sendingEndpointCount;
+        }
+        /**
+         * 
+         */
+        public void setSendingEndpointCount(Number value) {
+            this.sendingEndpointCount = value;
+        }
+
         @JsonProperty("access_key")
         private String accessKey;
         /**
@@ -421,7 +461,7 @@ public class Client {
 
         @Override
         public String toString() {
-            return "{"+Stream.of((serverAddress==null?null:("\"server_address\":\""+serverAddress+"\"")),(endpoints==null?null:("\"endpoints\":\""+Arrays.toString(endpoints)+"\"")),(networkRetriesCount==null?null:("\"network_retries_count\":"+networkRetriesCount)),(maxReconnectTimeout==null?null:("\"max_reconnect_timeout\":"+maxReconnectTimeout)),(reconnectTimeout==null?null:("\"reconnect_timeout\":"+reconnectTimeout)),(messageRetriesCount==null?null:("\"message_retries_count\":"+messageRetriesCount)),(messageProcessingTimeout==null?null:("\"message_processing_timeout\":"+messageProcessingTimeout)),(waitForTimeout==null?null:("\"wait_for_timeout\":"+waitForTimeout)),(outOfSyncThreshold==null?null:("\"out_of_sync_threshold\":"+outOfSyncThreshold)),(accessKey==null?null:("\"access_key\":\""+accessKey+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
+            return "{"+Stream.of((serverAddress==null?null:("\"server_address\":\""+serverAddress+"\"")),(endpoints==null?null:("\"endpoints\":\""+Arrays.toString(endpoints)+"\"")),(networkRetriesCount==null?null:("\"network_retries_count\":"+networkRetriesCount)),(maxReconnectTimeout==null?null:("\"max_reconnect_timeout\":"+maxReconnectTimeout)),(reconnectTimeout==null?null:("\"reconnect_timeout\":"+reconnectTimeout)),(messageRetriesCount==null?null:("\"message_retries_count\":"+messageRetriesCount)),(messageProcessingTimeout==null?null:("\"message_processing_timeout\":"+messageProcessingTimeout)),(waitForTimeout==null?null:("\"wait_for_timeout\":"+waitForTimeout)),(outOfSyncThreshold==null?null:("\"out_of_sync_threshold\":"+outOfSyncThreshold)),(sendingEndpointCount==null?null:("\"sending_endpoint_count\":"+sendingEndpointCount)),(accessKey==null?null:("\"access_key\":\""+accessKey+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
         }
     }
     /**

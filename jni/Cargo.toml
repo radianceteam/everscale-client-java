@@ -1,6 +1,6 @@
 [package]
 name = "ton-client-jni"
-version = "1.12.0"
+version = "1.14.4"
 authors = ["Igor Vasilev"]
 edition = "2018"
 
