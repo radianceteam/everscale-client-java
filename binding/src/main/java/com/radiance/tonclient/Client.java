@@ -123,7 +123,7 @@ public class Client {
      */
     public static class NetworkConfig  {
 
-        public NetworkConfig(String serverAddress, String[] endpoints, Number networkRetriesCount, Number maxReconnectTimeout, Number reconnectTimeout, Number messageRetriesCount, Number messageProcessingTimeout, Number waitForTimeout, Number outOfSyncThreshold, Number sendingEndpointCount, String accessKey) {
+        public NetworkConfig(String serverAddress, String[] endpoints, Number networkRetriesCount, Number maxReconnectTimeout, Number reconnectTimeout, Number messageRetriesCount, Number messageProcessingTimeout, Number waitForTimeout, Number outOfSyncThreshold, Number sendingEndpointCount, Number latencyDetectionInterval, Number maxLatency, String accessKey) {
 
             this.serverAddress = serverAddress;
 
@@ -145,7 +145,63 @@ public class Client {
 
             this.sendingEndpointCount = sendingEndpointCount;
 
+            this.latencyDetectionInterval = latencyDetectionInterval;
+
+            this.maxLatency = maxLatency;
+
             this.accessKey = accessKey;
+
+        }
+        public NetworkConfig(String serverAddress, String[] endpoints, Number networkRetriesCount, Number maxReconnectTimeout, Number reconnectTimeout, Number messageRetriesCount, Number messageProcessingTimeout, Number waitForTimeout, Number outOfSyncThreshold, Number sendingEndpointCount, Number latencyDetectionInterval, Number maxLatency) {
+
+            this.serverAddress = serverAddress;
+
+            this.endpoints = endpoints;
+
+            this.networkRetriesCount = networkRetriesCount;
+
+            this.maxReconnectTimeout = maxReconnectTimeout;
+
+            this.reconnectTimeout = reconnectTimeout;
+
+            this.messageRetriesCount = messageRetriesCount;
+
+            this.messageProcessingTimeout = messageProcessingTimeout;
+
+            this.waitForTimeout = waitForTimeout;
+
+            this.outOfSyncThreshold = outOfSyncThreshold;
+
+            this.sendingEndpointCount = sendingEndpointCount;
+
+            this.latencyDetectionInterval = latencyDetectionInterval;
+
+            this.maxLatency = maxLatency;
+
+        }
+        public NetworkConfig(String serverAddress, String[] endpoints, Number networkRetriesCount, Number maxReconnectTimeout, Number reconnectTimeout, Number messageRetriesCount, Number messageProcessingTimeout, Number waitForTimeout, Number outOfSyncThreshold, Number sendingEndpointCount, Number latencyDetectionInterval) {
+
+            this.serverAddress = serverAddress;
+
+            this.endpoints = endpoints;
+
+            this.networkRetriesCount = networkRetriesCount;
+
+            this.maxReconnectTimeout = maxReconnectTimeout;
+
+            this.reconnectTimeout = reconnectTimeout;
+
+            this.messageRetriesCount = messageRetriesCount;
+
+            this.messageProcessingTimeout = messageProcessingTimeout;
+
+            this.waitForTimeout = waitForTimeout;
+
+            this.outOfSyncThreshold = outOfSyncThreshold;
+
+            this.sendingEndpointCount = sendingEndpointCount;
+
+            this.latencyDetectionInterval = latencyDetectionInterval;
 
         }
         public NetworkConfig(String serverAddress, String[] endpoints, Number networkRetriesCount, Number maxReconnectTimeout, Number reconnectTimeout, Number messageRetriesCount, Number messageProcessingTimeout, Number waitForTimeout, Number outOfSyncThreshold, Number sendingEndpointCount) {
@@ -341,13 +397,13 @@ public class Client {
         @JsonProperty("max_reconnect_timeout")
         private Number maxReconnectTimeout;
         /**
-         * Default value is 120000 (2 min)
+         * Must be specified in milliseconds. Default is 120000 (2 min).
          */
         public Number getMaxReconnectTimeout() {
             return maxReconnectTimeout;
         }
         /**
-         * Default value is 120000 (2 min)
+         * Must be specified in milliseconds. Default is 120000 (2 min).
          */
         public void setMaxReconnectTimeout(Number value) {
             this.maxReconnectTimeout = value;
@@ -371,13 +427,13 @@ public class Client {
         @JsonProperty("message_retries_count")
         private Number messageRetriesCount;
         /**
-         * 
+         * Default is 5.
          */
         public Number getMessageRetriesCount() {
             return messageRetriesCount;
         }
         /**
-         * 
+         * Default is 5.
          */
         public void setMessageRetriesCount(Number value) {
             this.messageRetriesCount = value;
@@ -386,13 +442,13 @@ public class Client {
         @JsonProperty("message_processing_timeout")
         private Number messageProcessingTimeout;
         /**
-         * 
+         * Must be specified in milliseconds. Default is 40000 (40 sec).
          */
         public Number getMessageProcessingTimeout() {
             return messageProcessingTimeout;
         }
         /**
-         * 
+         * Must be specified in milliseconds. Default is 40000 (40 sec).
          */
         public void setMessageProcessingTimeout(Number value) {
             this.messageProcessingTimeout = value;
@@ -401,13 +457,13 @@ public class Client {
         @JsonProperty("wait_for_timeout")
         private Number waitForTimeout;
         /**
-         * 
+         * Must be specified in milliseconds. Default is 40000 (40 sec).
          */
         public Number getWaitForTimeout() {
             return waitForTimeout;
         }
         /**
-         * 
+         * Must be specified in milliseconds. Default is 40000 (40 sec).
          */
         public void setWaitForTimeout(Number value) {
             this.waitForTimeout = value;
@@ -416,13 +472,13 @@ public class Client {
         @JsonProperty("out_of_sync_threshold")
         private Number outOfSyncThreshold;
         /**
-         * If client's device time is out of sync and difference is more than the threshold then error will occur. Also an error will occur if the specified threshold is more than`message_processing_timeout/2`.The default value is 15 sec.
+         * If client's device time is out of sync and difference is more than the threshold then error will occur. Also an error will occur if the specified threshold is more than`message_processing_timeout/2`.<p>Must be specified in milliseconds. Default is 15000 (15 sec).
          */
         public Number getOutOfSyncThreshold() {
             return outOfSyncThreshold;
         }
         /**
-         * If client's device time is out of sync and difference is more than the threshold then error will occur. Also an error will occur if the specified threshold is more than`message_processing_timeout/2`.The default value is 15 sec.
+         * If client's device time is out of sync and difference is more than the threshold then error will occur. Also an error will occur if the specified threshold is more than`message_processing_timeout/2`.<p>Must be specified in milliseconds. Default is 15000 (15 sec).
          */
         public void setOutOfSyncThreshold(Number value) {
             this.outOfSyncThreshold = value;
@@ -431,28 +487,58 @@ public class Client {
         @JsonProperty("sending_endpoint_count")
         private Number sendingEndpointCount;
         /**
-         * 
+         * Default is 2.
          */
         public Number getSendingEndpointCount() {
             return sendingEndpointCount;
         }
         /**
-         * 
+         * Default is 2.
          */
         public void setSendingEndpointCount(Number value) {
             this.sendingEndpointCount = value;
         }
 
+        @JsonProperty("latency_detection_interval")
+        private Number latencyDetectionInterval;
+        /**
+         * Library periodically checks the current endpoint for blockchain data syncronization latency.If the latency (time-lag) is less then `NetworkConfig.max_latency`then library selects another endpoint.<p>Must be specified in milliseconds. Default is 60000 (1 min).
+         */
+        public Number getLatencyDetectionInterval() {
+            return latencyDetectionInterval;
+        }
+        /**
+         * Library periodically checks the current endpoint for blockchain data syncronization latency.If the latency (time-lag) is less then `NetworkConfig.max_latency`then library selects another endpoint.<p>Must be specified in milliseconds. Default is 60000 (1 min).
+         */
+        public void setLatencyDetectionInterval(Number value) {
+            this.latencyDetectionInterval = value;
+        }
+
+        @JsonProperty("max_latency")
+        private Number maxLatency;
+        /**
+         * Must be specified in milliseconds. Default is 60000 (1 min).
+         */
+        public Number getMaxLatency() {
+            return maxLatency;
+        }
+        /**
+         * Must be specified in milliseconds. Default is 60000 (1 min).
+         */
+        public void setMaxLatency(Number value) {
+            this.maxLatency = value;
+        }
+
         @JsonProperty("access_key")
         private String accessKey;
         /**
-         * At the moment is not used in production
+         * At the moment is not used in production.
          */
         public String getAccessKey() {
             return accessKey;
         }
         /**
-         * At the moment is not used in production
+         * At the moment is not used in production.
          */
         public void setAccessKey(String value) {
             this.accessKey = value;
@@ -461,7 +547,7 @@ public class Client {
 
         @Override
         public String toString() {
-            return "{"+Stream.of((serverAddress==null?null:("\"server_address\":\""+serverAddress+"\"")),(endpoints==null?null:("\"endpoints\":\""+Arrays.toString(endpoints)+"\"")),(networkRetriesCount==null?null:("\"network_retries_count\":"+networkRetriesCount)),(maxReconnectTimeout==null?null:("\"max_reconnect_timeout\":"+maxReconnectTimeout)),(reconnectTimeout==null?null:("\"reconnect_timeout\":"+reconnectTimeout)),(messageRetriesCount==null?null:("\"message_retries_count\":"+messageRetriesCount)),(messageProcessingTimeout==null?null:("\"message_processing_timeout\":"+messageProcessingTimeout)),(waitForTimeout==null?null:("\"wait_for_timeout\":"+waitForTimeout)),(outOfSyncThreshold==null?null:("\"out_of_sync_threshold\":"+outOfSyncThreshold)),(sendingEndpointCount==null?null:("\"sending_endpoint_count\":"+sendingEndpointCount)),(accessKey==null?null:("\"access_key\":\""+accessKey+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
+            return "{"+Stream.of((serverAddress==null?null:("\"server_address\":\""+serverAddress+"\"")),(endpoints==null?null:("\"endpoints\":\""+Arrays.toString(endpoints)+"\"")),(networkRetriesCount==null?null:("\"network_retries_count\":"+networkRetriesCount)),(maxReconnectTimeout==null?null:("\"max_reconnect_timeout\":"+maxReconnectTimeout)),(reconnectTimeout==null?null:("\"reconnect_timeout\":"+reconnectTimeout)),(messageRetriesCount==null?null:("\"message_retries_count\":"+messageRetriesCount)),(messageProcessingTimeout==null?null:("\"message_processing_timeout\":"+messageProcessingTimeout)),(waitForTimeout==null?null:("\"wait_for_timeout\":"+waitForTimeout)),(outOfSyncThreshold==null?null:("\"out_of_sync_threshold\":"+outOfSyncThreshold)),(sendingEndpointCount==null?null:("\"sending_endpoint_count\":"+sendingEndpointCount)),(latencyDetectionInterval==null?null:("\"latency_detection_interval\":"+latencyDetectionInterval)),(maxLatency==null?null:("\"max_latency\":"+maxLatency)),(accessKey==null?null:("\"access_key\":\""+accessKey+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
         }
     }
     /**

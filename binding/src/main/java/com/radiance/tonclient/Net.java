@@ -614,6 +614,64 @@ public class Net {
          */
         AVERAGE
     }
+    /**
+     *  
+     */
+    public static class ResultOfGetEndpoints  {
+
+        public ResultOfGetEndpoints(String query, String[] endpoints) {
+
+            this.query = query;
+
+            this.endpoints = endpoints;
+
+        }
+        public ResultOfGetEndpoints(String query) {
+
+            this.query = query;
+
+        }
+        public ResultOfGetEndpoints() {
+
+        }
+
+
+        @JsonProperty("query")
+        private String query;
+        /**
+         * 
+         */
+        public String getQuery() {
+            return query;
+        }
+        /**
+         * 
+         */
+        public void setQuery(String value) {
+            this.query = value;
+        }
+
+        @JsonProperty("endpoints")
+        private String[] endpoints;
+        /**
+         * 
+         */
+        public String[] getEndpoints() {
+            return endpoints;
+        }
+        /**
+         * 
+         */
+        public void setEndpoints(String[] value) {
+            this.endpoints = value;
+        }
+
+
+        @Override
+        public String toString() {
+            return "{"+Stream.of((query==null?null:("\"query\":\""+query+"\"")),(endpoints==null?null:("\"endpoints\":\""+Arrays.toString(endpoints)+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
+        }
+    }
     private TONContext context;
 
     public Net(TONContext context) {
@@ -750,6 +808,15 @@ public class Net {
     public CompletableFuture<Void> setEndpoints(String[] endpoints) {
         return context.requestJSON("net.set_endpoints", "{"+(endpoints==null?"":("\"endpoints\":\""+Arrays.toString(endpoints)+"\""))+"}")
             .thenApply(json -> TONContext.convertValue(json, Void.class));
+    }
+
+   /**
+    * 
+    *
+    */
+    public CompletableFuture<ResultOfGetEndpoints> getEndpoints() {
+        return context.requestJSON("net.get_endpoints", "{}")
+            .thenApply(json -> TONContext.convertValue(json, ResultOfGetEndpoints.class));
     }
 
    /**
