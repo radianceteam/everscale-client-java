@@ -617,6 +617,436 @@ public class Net {
     /**
      *  
      */
+    public static class TransactionNode  {
+
+        public TransactionNode(String id, String inMsg, String[] outMsgs, String accountAddr, String totalFees, Boolean aborted, Number exitCode) {
+
+            this.id = id;
+
+            this.inMsg = inMsg;
+
+            this.outMsgs = outMsgs;
+
+            this.accountAddr = accountAddr;
+
+            this.totalFees = totalFees;
+
+            this.aborted = aborted;
+
+            this.exitCode = exitCode;
+
+        }
+        public TransactionNode(String id, String inMsg, String[] outMsgs, String accountAddr, String totalFees, Boolean aborted) {
+
+            this.id = id;
+
+            this.inMsg = inMsg;
+
+            this.outMsgs = outMsgs;
+
+            this.accountAddr = accountAddr;
+
+            this.totalFees = totalFees;
+
+            this.aborted = aborted;
+
+        }
+        public TransactionNode(String id, String inMsg, String[] outMsgs, String accountAddr, String totalFees) {
+
+            this.id = id;
+
+            this.inMsg = inMsg;
+
+            this.outMsgs = outMsgs;
+
+            this.accountAddr = accountAddr;
+
+            this.totalFees = totalFees;
+
+        }
+        public TransactionNode(String id, String inMsg, String[] outMsgs, String accountAddr) {
+
+            this.id = id;
+
+            this.inMsg = inMsg;
+
+            this.outMsgs = outMsgs;
+
+            this.accountAddr = accountAddr;
+
+        }
+        public TransactionNode(String id, String inMsg, String[] outMsgs) {
+
+            this.id = id;
+
+            this.inMsg = inMsg;
+
+            this.outMsgs = outMsgs;
+
+        }
+        public TransactionNode(String id, String inMsg) {
+
+            this.id = id;
+
+            this.inMsg = inMsg;
+
+        }
+        public TransactionNode(String id) {
+
+            this.id = id;
+
+        }
+        public TransactionNode() {
+
+        }
+
+
+        @JsonProperty("id")
+        private String id;
+        /**
+         * 
+         */
+        public String getId() {
+            return id;
+        }
+        /**
+         * 
+         */
+        public void setId(String value) {
+            this.id = value;
+        }
+
+        @JsonProperty("in_msg")
+        private String inMsg;
+        /**
+         * 
+         */
+        public String getInMsg() {
+            return inMsg;
+        }
+        /**
+         * 
+         */
+        public void setInMsg(String value) {
+            this.inMsg = value;
+        }
+
+        @JsonProperty("out_msgs")
+        private String[] outMsgs;
+        /**
+         * 
+         */
+        public String[] getOutMsgs() {
+            return outMsgs;
+        }
+        /**
+         * 
+         */
+        public void setOutMsgs(String[] value) {
+            this.outMsgs = value;
+        }
+
+        @JsonProperty("account_addr")
+        private String accountAddr;
+        /**
+         * 
+         */
+        public String getAccountAddr() {
+            return accountAddr;
+        }
+        /**
+         * 
+         */
+        public void setAccountAddr(String value) {
+            this.accountAddr = value;
+        }
+
+        @JsonProperty("total_fees")
+        private String totalFees;
+        /**
+         * 
+         */
+        public String getTotalFees() {
+            return totalFees;
+        }
+        /**
+         * 
+         */
+        public void setTotalFees(String value) {
+            this.totalFees = value;
+        }
+
+        @JsonProperty("aborted")
+        private Boolean aborted;
+        /**
+         * 
+         */
+        public Boolean getAborted() {
+            return aborted;
+        }
+        /**
+         * 
+         */
+        public void setAborted(Boolean value) {
+            this.aborted = value;
+        }
+
+        @JsonProperty("exit_code")
+        private Number exitCode;
+        /**
+         * 
+         */
+        public Number getExitCode() {
+            return exitCode;
+        }
+        /**
+         * 
+         */
+        public void setExitCode(Number value) {
+            this.exitCode = value;
+        }
+
+
+        @Override
+        public String toString() {
+            return "{"+Stream.of((id==null?null:("\"id\":\""+id+"\"")),(inMsg==null?null:("\"in_msg\":\""+inMsg+"\"")),(outMsgs==null?null:("\"out_msgs\":\""+Arrays.toString(outMsgs)+"\"")),(accountAddr==null?null:("\"account_addr\":\""+accountAddr+"\"")),(totalFees==null?null:("\"total_fees\":\""+totalFees+"\"")),(aborted==null?null:("\"aborted\":"+aborted)),(exitCode==null?null:("\"exit_code\":"+exitCode))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
+        }
+    }
+    /**
+     *  
+     */
+    public static class MessageNode  {
+
+        public MessageNode(String id, String srcTransactionId, String dstTransactionId, String src, String dst, String value, Boolean bounce, Abi.DecodedMessageBody decodedBody) {
+
+            this.id = id;
+
+            this.srcTransactionId = srcTransactionId;
+
+            this.dstTransactionId = dstTransactionId;
+
+            this.src = src;
+
+            this.dst = dst;
+
+            this.value = value;
+
+            this.bounce = bounce;
+
+            this.decodedBody = decodedBody;
+
+        }
+        public MessageNode(String id, String srcTransactionId, String dstTransactionId, String src, String dst, String value, Boolean bounce) {
+
+            this.id = id;
+
+            this.srcTransactionId = srcTransactionId;
+
+            this.dstTransactionId = dstTransactionId;
+
+            this.src = src;
+
+            this.dst = dst;
+
+            this.value = value;
+
+            this.bounce = bounce;
+
+        }
+        public MessageNode(String id, String srcTransactionId, String dstTransactionId, String src, String dst, String value) {
+
+            this.id = id;
+
+            this.srcTransactionId = srcTransactionId;
+
+            this.dstTransactionId = dstTransactionId;
+
+            this.src = src;
+
+            this.dst = dst;
+
+            this.value = value;
+
+        }
+        public MessageNode(String id, String srcTransactionId, String dstTransactionId, String src, String dst) {
+
+            this.id = id;
+
+            this.srcTransactionId = srcTransactionId;
+
+            this.dstTransactionId = dstTransactionId;
+
+            this.src = src;
+
+            this.dst = dst;
+
+        }
+        public MessageNode(String id, String srcTransactionId, String dstTransactionId, String src) {
+
+            this.id = id;
+
+            this.srcTransactionId = srcTransactionId;
+
+            this.dstTransactionId = dstTransactionId;
+
+            this.src = src;
+
+        }
+        public MessageNode(String id, String srcTransactionId, String dstTransactionId) {
+
+            this.id = id;
+
+            this.srcTransactionId = srcTransactionId;
+
+            this.dstTransactionId = dstTransactionId;
+
+        }
+        public MessageNode(String id, String srcTransactionId) {
+
+            this.id = id;
+
+            this.srcTransactionId = srcTransactionId;
+
+        }
+        public MessageNode(String id) {
+
+            this.id = id;
+
+        }
+        public MessageNode() {
+
+        }
+
+
+        @JsonProperty("id")
+        private String id;
+        /**
+         * 
+         */
+        public String getId() {
+            return id;
+        }
+        /**
+         * 
+         */
+        public void setId(String value) {
+            this.id = value;
+        }
+
+        @JsonProperty("src_transaction_id")
+        private String srcTransactionId;
+        /**
+         * This field is missing for an external inbound messages.
+         */
+        public String getSrcTransactionId() {
+            return srcTransactionId;
+        }
+        /**
+         * This field is missing for an external inbound messages.
+         */
+        public void setSrcTransactionId(String value) {
+            this.srcTransactionId = value;
+        }
+
+        @JsonProperty("dst_transaction_id")
+        private String dstTransactionId;
+        /**
+         * This field is missing for an external outbound messages.
+         */
+        public String getDstTransactionId() {
+            return dstTransactionId;
+        }
+        /**
+         * This field is missing for an external outbound messages.
+         */
+        public void setDstTransactionId(String value) {
+            this.dstTransactionId = value;
+        }
+
+        @JsonProperty("src")
+        private String src;
+        /**
+         * 
+         */
+        public String getSrc() {
+            return src;
+        }
+        /**
+         * 
+         */
+        public void setSrc(String value) {
+            this.src = value;
+        }
+
+        @JsonProperty("dst")
+        private String dst;
+        /**
+         * 
+         */
+        public String getDst() {
+            return dst;
+        }
+        /**
+         * 
+         */
+        public void setDst(String value) {
+            this.dst = value;
+        }
+
+        @JsonProperty("value")
+        private String value;
+        /**
+         * 
+         */
+        public String getValue() {
+            return value;
+        }
+        /**
+         * 
+         */
+        public void setValue(String value) {
+            this.value = value;
+        }
+
+        @JsonProperty("bounce")
+        private Boolean bounce;
+        /**
+         * 
+         */
+        public Boolean getBounce() {
+            return bounce;
+        }
+        /**
+         * 
+         */
+        public void setBounce(Boolean value) {
+            this.bounce = value;
+        }
+
+        @JsonProperty("decoded_body")
+        private Abi.DecodedMessageBody decodedBody;
+        /**
+         * Library tries to decode message body using provided `params.abi_registry`.This field will be missing if none of the provided abi can be used to decode.
+         */
+        public Abi.DecodedMessageBody getDecodedBody() {
+            return decodedBody;
+        }
+        /**
+         * Library tries to decode message body using provided `params.abi_registry`.This field will be missing if none of the provided abi can be used to decode.
+         */
+        public void setDecodedBody(Abi.DecodedMessageBody value) {
+            this.decodedBody = value;
+        }
+
+
+        @Override
+        public String toString() {
+            return "{"+Stream.of((id==null?null:("\"id\":\""+id+"\"")),(srcTransactionId==null?null:("\"src_transaction_id\":\""+srcTransactionId+"\"")),(dstTransactionId==null?null:("\"dst_transaction_id\":\""+dstTransactionId+"\"")),(src==null?null:("\"src\":\""+src+"\"")),(dst==null?null:("\"dst\":\""+dst+"\"")),(value==null?null:("\"value\":\""+value+"\"")),(bounce==null?null:("\"bounce\":"+bounce)),(decodedBody==null?null:("\"decoded_body\":"+decodedBody))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
+        }
+    }
+    /**
+     *  
+     */
     public static class ResultOfGetEndpoints  {
 
         public ResultOfGetEndpoints(String query, String[] endpoints) {
@@ -670,6 +1100,64 @@ public class Net {
         @Override
         public String toString() {
             return "{"+Stream.of((query==null?null:("\"query\":\""+query+"\"")),(endpoints==null?null:("\"endpoints\":\""+Arrays.toString(endpoints)+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
+        }
+    }
+    /**
+     *  
+     */
+    public static class ResultOfQueryTransactionTree  {
+
+        public ResultOfQueryTransactionTree(MessageNode[] messages, TransactionNode[] transactions) {
+
+            this.messages = messages;
+
+            this.transactions = transactions;
+
+        }
+        public ResultOfQueryTransactionTree(MessageNode[] messages) {
+
+            this.messages = messages;
+
+        }
+        public ResultOfQueryTransactionTree() {
+
+        }
+
+
+        @JsonProperty("messages")
+        private MessageNode[] messages;
+        /**
+         * 
+         */
+        public MessageNode[] getMessages() {
+            return messages;
+        }
+        /**
+         * 
+         */
+        public void setMessages(MessageNode[] value) {
+            this.messages = value;
+        }
+
+        @JsonProperty("transactions")
+        private TransactionNode[] transactions;
+        /**
+         * 
+         */
+        public TransactionNode[] getTransactions() {
+            return transactions;
+        }
+        /**
+         * 
+         */
+        public void setTransactions(TransactionNode[] value) {
+            this.transactions = value;
+        }
+
+
+        @Override
+        public String toString() {
+            return "{"+Stream.of((messages==null?null:("\"messages\":"+Arrays.toString(messages))),(transactions==null?null:("\"transactions\":"+Arrays.toString(transactions)))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
         }
     }
     private TONContext context;
@@ -830,6 +1318,17 @@ public class Net {
     public CompletableFuture<Object[]> queryCounterparties(String account, String result, Number first, String after) {
         return context.requestJSON("net.query_counterparties", "{"+Stream.of((account==null?null:("\"account\":\""+account+"\"")),(result==null?null:("\"result\":\""+result+"\"")),(first==null?null:("\"first\":"+first)),(after==null?null:("\"after\":\""+after+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
             .thenApply(json -> TONContext.convertValue(json.findValue("result"), Object[].class));
+    }
+
+   /**
+    * Performs recursive retrieval of the transactions tree produced by the specific message:in_msg -&gt; dst_transaction -&gt; out_messages -&gt; dst_transaction -&gt; ...<p>All retrieved messages and transactions will be includedinto `result.messages` and `result.transactions` respectively.<p>The retrieval process will stop when the retrieved transaction count is more than 50.<p>It is guaranteed that each message in `result.messages` has the corresponding transactionin the `result.transactions`.<p>But there are no guaranties that all messages from transactions `out_msgs` arepresented in `result.messages`.So the application have to continue retrieval for missing messages if it requires.
+    *
+    * @param inMsg 
+    * @param abiRegistry 
+    */
+    public CompletableFuture<ResultOfQueryTransactionTree> queryTransactionTree(String inMsg, Abi.ABI[] abiRegistry) {
+        return context.requestJSON("net.query_transaction_tree", "{"+Stream.of((inMsg==null?null:("\"in_msg\":\""+inMsg+"\"")),(abiRegistry==null?null:("\"abi_registry\":"+Arrays.toString(abiRegistry)))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
+            .thenApply(json -> TONContext.convertValue(json, ResultOfQueryTransactionTree.class));
     }
 
 }
