@@ -1,5 +1,5 @@
 {
-  "version": "1.16.0",
+  "version": "1.17.0",
   "modules": [
     {
       "name": "client",
@@ -1009,6 +1009,13 @@
               "value": "122",
               "summary": null,
               "description": null
+            },
+            {
+              "name": "EncryptionBoxNotRegistered",
+              "type": "Number",
+              "value": "123",
+              "summary": null,
+              "description": null
             }
           ],
           "summary": null,
@@ -1020,6 +1027,60 @@
           "number_type": "UInt",
           "number_size": 32,
           "summary": null,
+          "description": null
+        },
+        {
+          "name": "EncryptionBoxHandle",
+          "type": "Number",
+          "number_type": "UInt",
+          "number_size": 32,
+          "summary": null,
+          "description": null
+        },
+        {
+          "name": "EncryptionBoxInfo",
+          "type": "Struct",
+          "struct_fields": [
+            {
+              "name": "hdpath",
+              "type": "Optional",
+              "optional_inner": {
+                "type": "String"
+              },
+              "summary": "Derivation path, for instance \"m/44'/396'/0'/0/0\"",
+              "description": null
+            },
+            {
+              "name": "algorithm",
+              "type": "Optional",
+              "optional_inner": {
+                "type": "String"
+              },
+              "summary": "Cryptographic algorithm, used by this encryption box",
+              "description": null
+            },
+            {
+              "name": "options",
+              "type": "Optional",
+              "optional_inner": {
+                "type": "Ref",
+                "ref_name": "Value"
+              },
+              "summary": "Options, depends on algorithm and specific encryption box implementation",
+              "description": null
+            },
+            {
+              "name": "public",
+              "type": "Optional",
+              "optional_inner": {
+                "type": "Ref",
+                "ref_name": "Value"
+              },
+              "summary": "Public information, depends on algorithm",
+              "description": null
+            }
+          ],
+          "summary": "Encryption box information",
           "description": null
         },
         {
@@ -2236,13 +2297,222 @@
           ],
           "summary": null,
           "description": null
+        },
+        {
+          "name": "RegisteredEncryptionBox",
+          "type": "Struct",
+          "struct_fields": [
+            {
+              "name": "handle",
+              "type": "Ref",
+              "ref_name": "crypto.EncryptionBoxHandle",
+              "summary": "Handle of the encryption box",
+              "description": null
+            }
+          ],
+          "summary": null,
+          "description": null
+        },
+        {
+          "name": "ParamsOfAppEncryptionBox",
+          "type": "EnumOfTypes",
+          "enum_types": [
+            {
+              "name": "GetInfo",
+              "type": "Struct",
+              "struct_fields": [],
+              "summary": "Get encryption box info",
+              "description": null
+            },
+            {
+              "name": "Encrypt",
+              "type": "Struct",
+              "struct_fields": [
+                {
+                  "name": "data",
+                  "type": "String",
+                  "summary": "Data, encoded in Base64",
+                  "description": null
+                }
+              ],
+              "summary": "Encrypt data",
+              "description": null
+            },
+            {
+              "name": "Decrypt",
+              "type": "Struct",
+              "struct_fields": [
+                {
+                  "name": "data",
+                  "type": "String",
+                  "summary": "Data, encoded in Base64",
+                  "description": null
+                }
+              ],
+              "summary": "Decrypt data",
+              "description": null
+            }
+          ],
+          "summary": "Encryption box callbacks.",
+          "description": null
+        },
+        {
+          "name": "ResultOfAppEncryptionBox",
+          "type": "EnumOfTypes",
+          "enum_types": [
+            {
+              "name": "GetInfo",
+              "type": "Struct",
+              "struct_fields": [
+                {
+                  "name": "info",
+                  "type": "Ref",
+                  "ref_name": "crypto.EncryptionBoxInfo",
+                  "summary": null,
+                  "description": null
+                }
+              ],
+              "summary": "Result of getting encryption box info",
+              "description": null
+            },
+            {
+              "name": "Encrypt",
+              "type": "Struct",
+              "struct_fields": [
+                {
+                  "name": "data",
+                  "type": "String",
+                  "summary": "Encrypted data, encoded in Base64",
+                  "description": null
+                }
+              ],
+              "summary": "Result of encrypting data",
+              "description": null
+            },
+            {
+              "name": "Decrypt",
+              "type": "Struct",
+              "struct_fields": [
+                {
+                  "name": "data",
+                  "type": "String",
+                  "summary": "Decrypted data, encoded in Base64",
+                  "description": null
+                }
+              ],
+              "summary": "Result of decrypting data",
+              "description": null
+            }
+          ],
+          "summary": "Returning values from signing box callbacks.",
+          "description": null
+        },
+        {
+          "name": "ParamsOfEncryptionBoxGetInfo",
+          "type": "Struct",
+          "struct_fields": [
+            {
+              "name": "encryption_box",
+              "type": "Ref",
+              "ref_name": "crypto.EncryptionBoxHandle",
+              "summary": "Encryption box handle",
+              "description": null
+            }
+          ],
+          "summary": null,
+          "description": null
+        },
+        {
+          "name": "ResultOfEncryptionBoxGetInfo",
+          "type": "Struct",
+          "struct_fields": [
+            {
+              "name": "info",
+              "type": "Ref",
+              "ref_name": "crypto.EncryptionBoxInfo",
+              "summary": "Encryption box information",
+              "description": null
+            }
+          ],
+          "summary": null,
+          "description": null
+        },
+        {
+          "name": "ParamsOfEncryptionBoxEncrypt",
+          "type": "Struct",
+          "struct_fields": [
+            {
+              "name": "encryption_box",
+              "type": "Ref",
+              "ref_name": "crypto.EncryptionBoxHandle",
+              "summary": "Encryption box handle",
+              "description": null
+            },
+            {
+              "name": "data",
+              "type": "String",
+              "summary": "Data to be encrypted, encoded in Base64",
+              "description": null
+            }
+          ],
+          "summary": null,
+          "description": null
+        },
+        {
+          "name": "ResultOfEncryptionBoxEncrypt",
+          "type": "Struct",
+          "struct_fields": [
+            {
+              "name": "data",
+              "type": "String",
+              "summary": "Encrypted data, encoded in Base64",
+              "description": null
+            }
+          ],
+          "summary": null,
+          "description": null
+        },
+        {
+          "name": "ParamsOfEncryptionBoxDecrypt",
+          "type": "Struct",
+          "struct_fields": [
+            {
+              "name": "encryption_box",
+              "type": "Ref",
+              "ref_name": "crypto.EncryptionBoxHandle",
+              "summary": "Encryption box handle",
+              "description": null
+            },
+            {
+              "name": "data",
+              "type": "String",
+              "summary": "Data to be decrypted, encoded in Base64",
+              "description": null
+            }
+          ],
+          "summary": null,
+          "description": null
+        },
+        {
+          "name": "ResultOfEncryptionBoxDecrypt",
+          "type": "Struct",
+          "struct_fields": [
+            {
+              "name": "data",
+              "type": "String",
+              "summary": "Decrypted data, encoded in Base64",
+              "description": null
+            }
+          ],
+          "summary": null,
+          "description": null
         }
       ],
       "functions": [
         {
           "name": "factorize",
-          "summary": "Performs prime factorization – decomposition of a composite number into a product of smaller prime integers (factors). See [https://en.wikipedia.org/wiki/Integer_factorization]",
-          "description": null,
+          "summary": "Integer factorization",
+          "description": "Performs prime factorization – decomposition of a composite number\ninto a product of smaller prime integers (factors).\nSee [https://en.wikipedia.org/wiki/Integer_factorization]",
           "params": [
             {
               "name": "_context",
@@ -2279,8 +2549,8 @@
         },
         {
           "name": "modular_power",
-          "summary": "Performs modular exponentiation for big integers (`base`^`exponent` mod `modulus`). See [https://en.wikipedia.org/wiki/Modular_exponentiation]",
-          "description": null,
+          "summary": "Modular exponentiation",
+          "description": "Performs modular exponentiation for big integers (`base`^`exponent` mod `modulus`).\nSee [https://en.wikipedia.org/wiki/Modular_exponentiation]",
           "params": [
             {
               "name": "_context",
@@ -2614,8 +2884,8 @@
         },
         {
           "name": "scrypt",
-          "summary": "Derives key from `password` and `key` using `scrypt` algorithm. See [https://en.wikipedia.org/wiki/Scrypt].",
-          "description": "# Arguments\n- `log_n` - The log2 of the Scrypt parameter `N`\n- `r` - The Scrypt parameter `r`\n- `p` - The Scrypt parameter `p`\n# Conditions\n- `log_n` must be less than `64`\n- `r` must be greater than `0` and less than or equal to `4294967295`\n- `p` must be greater than `0` and less than `4294967295`\n# Recommended values sufficient for most use-cases\n- `log_n = 15` (`n = 32768`)\n- `r = 8`\n- `p = 1`",
+          "summary": "Perform `scrypt` encryption",
+          "description": "Derives key from `password` and `key` using `scrypt` algorithm.\nSee [https://en.wikipedia.org/wiki/Scrypt].\n\n# Arguments\n- `log_n` - The log2 of the Scrypt parameter `N`\n- `r` - The Scrypt parameter `r`\n- `p` - The Scrypt parameter `p`\n# Conditions\n- `log_n` must be less than `64`\n- `r` must be greater than `0` and less than or equal to `4294967295`\n- `p` must be greater than `0` and less than `4294967295`\n# Recommended values sufficient for most use-cases\n- `log_n = 15` (`n = 32768`)\n- `r = 8`\n- `p = 1`",
           "params": [
             {
               "name": "_context",
@@ -3101,8 +3371,8 @@
         },
         {
           "name": "mnemonic_from_random",
-          "summary": "Generates a random mnemonic from the specified dictionary and word count",
-          "description": null,
+          "summary": "Generates a random mnemonic",
+          "description": "Generates a random mnemonic from the specified dictionary and word count",
           "params": [
             {
               "name": "context",
@@ -3177,8 +3447,8 @@
         },
         {
           "name": "mnemonic_verify",
-          "summary": "The phrase supplied will be checked for word length and validated according to the checksum specified in BIP0039.",
-          "description": null,
+          "summary": "Validates a mnemonic phrase",
+          "description": "The phrase supplied will be checked for word length and validated according to the checksum\nspecified in BIP0039.",
           "params": [
             {
               "name": "context",
@@ -3215,8 +3485,8 @@
         },
         {
           "name": "mnemonic_derive_sign_keys",
-          "summary": "Validates the seed phrase, generates master key and then derives the key pair from the master key and the specified path",
-          "description": null,
+          "summary": "Derives a key pair for signing from the seed phrase",
+          "description": "Validates the seed phrase, generates master key and then derives\nthe key pair from the master key and the specified path",
           "params": [
             {
               "name": "context",
@@ -3673,6 +3943,205 @@
             "generic_args": [
               {
                 "type": "None"
+              }
+            ]
+          },
+          "errors": null
+        },
+        {
+          "name": "register_encryption_box",
+          "summary": "Register an application implemented encryption box.",
+          "description": null,
+          "params": [
+            {
+              "name": "context",
+              "type": "Generic",
+              "generic_name": "Arc",
+              "generic_args": [
+                {
+                  "type": "Ref",
+                  "ref_name": "ClientContext"
+                }
+              ],
+              "summary": null,
+              "description": null
+            },
+            {
+              "name": "app_object",
+              "type": "Generic",
+              "generic_name": "AppObject",
+              "generic_args": [
+                {
+                  "type": "Ref",
+                  "ref_name": "crypto.ParamsOfAppEncryptionBox"
+                },
+                {
+                  "type": "Ref",
+                  "ref_name": "crypto.ResultOfAppEncryptionBox"
+                }
+              ],
+              "summary": null,
+              "description": null
+            }
+          ],
+          "result": {
+            "type": "Generic",
+            "generic_name": "ClientResult",
+            "generic_args": [
+              {
+                "type": "Ref",
+                "ref_name": "crypto.RegisteredEncryptionBox"
+              }
+            ]
+          },
+          "errors": null
+        },
+        {
+          "name": "remove_encryption_box",
+          "summary": "Removes encryption box from SDK",
+          "description": null,
+          "params": [
+            {
+              "name": "context",
+              "type": "Generic",
+              "generic_name": "Arc",
+              "generic_args": [
+                {
+                  "type": "Ref",
+                  "ref_name": "ClientContext"
+                }
+              ],
+              "summary": null,
+              "description": null
+            },
+            {
+              "name": "params",
+              "type": "Ref",
+              "ref_name": "crypto.RegisteredEncryptionBox",
+              "summary": null,
+              "description": null
+            }
+          ],
+          "result": {
+            "type": "Generic",
+            "generic_name": "ClientResult",
+            "generic_args": [
+              {
+                "type": "None"
+              }
+            ]
+          },
+          "errors": null
+        },
+        {
+          "name": "encryption_box_get_info",
+          "summary": "Queries info from the given encryption box",
+          "description": null,
+          "params": [
+            {
+              "name": "context",
+              "type": "Generic",
+              "generic_name": "Arc",
+              "generic_args": [
+                {
+                  "type": "Ref",
+                  "ref_name": "ClientContext"
+                }
+              ],
+              "summary": null,
+              "description": null
+            },
+            {
+              "name": "params",
+              "type": "Ref",
+              "ref_name": "crypto.ParamsOfEncryptionBoxGetInfo",
+              "summary": null,
+              "description": null
+            }
+          ],
+          "result": {
+            "type": "Generic",
+            "generic_name": "ClientResult",
+            "generic_args": [
+              {
+                "type": "Ref",
+                "ref_name": "crypto.ResultOfEncryptionBoxGetInfo"
+              }
+            ]
+          },
+          "errors": null
+        },
+        {
+          "name": "encryption_box_encrypt",
+          "summary": "Encrypts data using given encryption box",
+          "description": null,
+          "params": [
+            {
+              "name": "context",
+              "type": "Generic",
+              "generic_name": "Arc",
+              "generic_args": [
+                {
+                  "type": "Ref",
+                  "ref_name": "ClientContext"
+                }
+              ],
+              "summary": null,
+              "description": null
+            },
+            {
+              "name": "params",
+              "type": "Ref",
+              "ref_name": "crypto.ParamsOfEncryptionBoxEncrypt",
+              "summary": null,
+              "description": null
+            }
+          ],
+          "result": {
+            "type": "Generic",
+            "generic_name": "ClientResult",
+            "generic_args": [
+              {
+                "type": "Ref",
+                "ref_name": "crypto.ResultOfEncryptionBoxEncrypt"
+              }
+            ]
+          },
+          "errors": null
+        },
+        {
+          "name": "encryption_box_decrypt",
+          "summary": "Decrypts data using given encryption box",
+          "description": null,
+          "params": [
+            {
+              "name": "context",
+              "type": "Generic",
+              "generic_name": "Arc",
+              "generic_args": [
+                {
+                  "type": "Ref",
+                  "ref_name": "ClientContext"
+                }
+              ],
+              "summary": null,
+              "description": null
+            },
+            {
+              "name": "params",
+              "type": "Ref",
+              "ref_name": "crypto.ParamsOfEncryptionBoxDecrypt",
+              "summary": null,
+              "description": null
+            }
+          ],
+          "result": {
+            "type": "Generic",
+            "generic_name": "ClientResult",
+            "generic_args": [
+              {
+                "type": "Ref",
+                "ref_name": "crypto.ResultOfEncryptionBoxDecrypt"
               }
             ]
           },
@@ -6661,7 +7130,7 @@
                 }
               },
               "summary": "The list of endpoints to which the message was sent.",
-              "description": "You must provide the same value as the `send_message` has returned."
+              "description": "Use this field to get more informative errors.\nProvide the same value as the `send_message` has returned.\nIf the message was not delivered (expired), SDK will log the endpoint URLs, used for its sending."
             }
           ],
           "summary": null,
@@ -8655,6 +9124,17 @@
               },
               "summary": "List of contract ABIs that will be used to decode message bodies. Library will try to decode each returned message body using any ABI from the registry.",
               "description": null
+            },
+            {
+              "name": "timeout",
+              "type": "Optional",
+              "optional_inner": {
+                "type": "Number",
+                "number_type": "UInt",
+                "number_size": 32
+              },
+              "summary": "Timeout used to limit waiting time for the missing messages and transaction.",
+              "description": "If some of the following messages and transactions are missing yet\nThe maximum waiting time is regulated by this option.\n\nDefault value is 60000 (1 min)."
             }
           ],
           "summary": null,

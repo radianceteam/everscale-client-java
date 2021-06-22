@@ -262,6 +262,214 @@ public class Crypto {
         }
     }
 }
+    public static abstract class ParamsOfAppEncryptionBox {
+
+        public static final GetInfo GetInfo = new GetInfo();
+
+    /**
+     *  
+     */
+    public static class GetInfo extends ParamsOfAppEncryptionBox  {
+
+        public GetInfo() {
+
+        }
+
+
+
+        @Override
+        public String toString() {
+            return "{"+"\"type\":\"GetInfo\""+"}";
+        }
+    }
+
+    /**
+     *  
+     */
+    public static class Encrypt extends ParamsOfAppEncryptionBox  {
+
+        public Encrypt(String data) {
+
+            this.data = data;
+
+        }
+        public Encrypt() {
+
+        }
+
+
+        @JsonProperty("data")
+        private String data;
+        /**
+         * 
+         */
+        public String getData() {
+            return data;
+        }
+        /**
+         * 
+         */
+        public void setData(String value) {
+            this.data = value;
+        }
+
+
+        @Override
+        public String toString() {
+            return "{"+Stream.of("\"type\":\"Encrypt\"",(data==null?null:("\"data\":\""+data+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
+        }
+    }
+
+    /**
+     *  
+     */
+    public static class Decrypt extends ParamsOfAppEncryptionBox  {
+
+        public Decrypt(String data) {
+
+            this.data = data;
+
+        }
+        public Decrypt() {
+
+        }
+
+
+        @JsonProperty("data")
+        private String data;
+        /**
+         * 
+         */
+        public String getData() {
+            return data;
+        }
+        /**
+         * 
+         */
+        public void setData(String value) {
+            this.data = value;
+        }
+
+
+        @Override
+        public String toString() {
+            return "{"+Stream.of("\"type\":\"Decrypt\"",(data==null?null:("\"data\":\""+data+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
+        }
+    }
+}
+    public static abstract class ResultOfAppEncryptionBox {
+
+    /**
+     *  
+     */
+    public static class GetInfo extends ResultOfAppEncryptionBox  {
+
+        public GetInfo(Object info) {
+
+            this.info = info;
+
+        }
+        public GetInfo() {
+
+        }
+
+
+        @JsonProperty("info")
+        private Object info;
+        /**
+         * 
+         */
+        public Object getInfo() {
+            return info;
+        }
+        /**
+         * 
+         */
+        public void setInfo(Object value) {
+            this.info = value;
+        }
+
+
+        @Override
+        public String toString() {
+            return "{"+Stream.of("\"type\":\"GetInfo\"",(info==null?null:("\"info\":"+info))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
+        }
+    }
+
+    /**
+     *  
+     */
+    public static class Encrypt extends ResultOfAppEncryptionBox  {
+
+        public Encrypt(String data) {
+
+            this.data = data;
+
+        }
+        public Encrypt() {
+
+        }
+
+
+        @JsonProperty("data")
+        private String data;
+        /**
+         * 
+         */
+        public String getData() {
+            return data;
+        }
+        /**
+         * 
+         */
+        public void setData(String value) {
+            this.data = value;
+        }
+
+
+        @Override
+        public String toString() {
+            return "{"+Stream.of("\"type\":\"Encrypt\"",(data==null?null:("\"data\":\""+data+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
+        }
+    }
+
+    /**
+     *  
+     */
+    public static class Decrypt extends ResultOfAppEncryptionBox  {
+
+        public Decrypt(String data) {
+
+            this.data = data;
+
+        }
+        public Decrypt() {
+
+        }
+
+
+        @JsonProperty("data")
+        private String data;
+        /**
+         * 
+         */
+        public String getData() {
+            return data;
+        }
+        /**
+         * 
+         */
+        public void setData(String value) {
+            this.data = value;
+        }
+
+
+        @Override
+        public String toString() {
+            return "{"+Stream.of("\"type\":\"Decrypt\"",(data==null?null:("\"data\":\""+data+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
+        }
+    }
+}
     private TONContext context;
 
     public Crypto(TONContext context) {
@@ -269,7 +477,7 @@ public class Crypto {
     }
 
    /**
-    * 
+    * Performs prime factorization – decomposition of a composite numberinto a product of smaller prime integers (factors).See <a target="_blank" href="https://en.wikipedia.org/wiki/Integer_factorization">https://en.wikipedia.org/wiki/Integer_factorization</a>
     *
     * @param composite 
     */
@@ -279,7 +487,7 @@ public class Crypto {
     }
 
    /**
-    * 
+    * Performs modular exponentiation for big integers (`base`^`exponent` mod `modulus`).See <a target="_blank" href="https://en.wikipedia.org/wiki/Modular_exponentiation">https://en.wikipedia.org/wiki/Modular_exponentiation</a>
     *
     * @param base 
     * @param exponent 
@@ -374,7 +582,7 @@ public class Crypto {
     }
 
    /**
-    * # Arguments- `log_n` - The log2 of the Scrypt parameter `N`- `r` - The Scrypt parameter `r`- `p` - The Scrypt parameter `p`# Conditions- `log_n` must be less than `64`- `r` must be greater than `0` and less than or equal to `4294967295`- `p` must be greater than `0` and less than `4294967295`# Recommended values sufficient for most use-cases- `log_n = 15` (`n = 32768`)- `r = 8`- `p = 1`
+    * Derives key from `password` and `key` using `scrypt` algorithm.See <a target="_blank" href="https://en.wikipedia.org/wiki/Scrypt">https://en.wikipedia.org/wiki/Scrypt</a>.<p># Arguments- `log_n` - The log2 of the Scrypt parameter `N`- `r` - The Scrypt parameter `r`- `p` - The Scrypt parameter `p`# Conditions- `log_n` must be less than `64`- `r` must be greater than `0` and less than or equal to `4294967295`- `p` must be greater than `0` and less than `4294967295`# Recommended values sufficient for most use-cases- `log_n = 15` (`n = 32768`)- `r = 8`- `p = 1`
     *
     * @param password 
     * @param salt 
@@ -524,7 +732,7 @@ public class Crypto {
     }
 
    /**
-    * 
+    * Generates a random mnemonic from the specified dictionary and word count
     *
     * @param dictionary 
     * @param wordCount 
@@ -547,7 +755,7 @@ public class Crypto {
     }
 
    /**
-    * 
+    * The phrase supplied will be checked for word length and validated according to the checksumspecified in BIP0039.
     *
     * @param phrase 
     * @param dictionary 
@@ -559,7 +767,7 @@ public class Crypto {
     }
 
    /**
-    * 
+    * Validates the seed phrase, generates master key and then derivesthe key pair from the master key and the specified path
     *
     * @param phrase 
     * @param path 
@@ -727,6 +935,110 @@ public class Crypto {
     public CompletableFuture<Void> removeSigningBox(Integer handle) {
         return context.requestJSON("crypto.remove_signing_box", "{"+(handle==null?"":("\"handle\":"+handle))+"}")
             .thenApply(json -> TONContext.convertValue(json, Void.class));
+    }
+
+   /**
+    * 
+    *
+    * @param appObject 
+    */
+    public CompletableFuture<Integer> registerEncryptionBox(AppEncryptionBox appObject) {
+        return context.requestJSONCallback("crypto.register_encryption_box", "{}", (params,type) -> {
+                Map data = (Map)(type==3?((Map)params).get("request_data"):params);
+                switch ((String)data.remove("type")) {
+
+                    case "GetInfo":
+                        try {
+                            appObject.getInfo().whenComplete((res,ex) -> {
+                                new Client(context).resolveAppRequest(
+                                    (Integer)((Map)params).get("app_request_id"),
+                                    ex==null?
+                                        new Client.AppRequestResult.Ok(new ResultOfAppEncryptionBox.GetInfo(res)):
+                                        new Client.AppRequestResult.Error(ex.getMessage())
+                                );
+                            });
+                        } catch (Exception e) {
+                            e.printStackTrace(System.out);
+                        }
+                        break;
+
+                    case "Encrypt":
+                        try {
+                            ParamsOfAppEncryptionBox.Encrypt p = new ObjectMapper().convertValue(data, ParamsOfAppEncryptionBox.Encrypt.class);
+                            appObject.encrypt(p.getData()).whenComplete((res,ex) -> {
+                                new Client(context).resolveAppRequest(
+                                    (Integer)((Map)params).get("app_request_id"),
+                                    ex==null?
+                                        new Client.AppRequestResult.Ok(new ResultOfAppEncryptionBox.Encrypt(res)):
+                                        new Client.AppRequestResult.Error(ex.getMessage())
+                                );
+                            });
+                        } catch (Exception e) {
+                            e.printStackTrace(System.out);
+                        }
+                        break;
+
+                    case "Decrypt":
+                        try {
+                            ParamsOfAppEncryptionBox.Decrypt p = new ObjectMapper().convertValue(data, ParamsOfAppEncryptionBox.Decrypt.class);
+                            appObject.decrypt(p.getData()).whenComplete((res,ex) -> {
+                                new Client(context).resolveAppRequest(
+                                    (Integer)((Map)params).get("app_request_id"),
+                                    ex==null?
+                                        new Client.AppRequestResult.Ok(new ResultOfAppEncryptionBox.Decrypt(res)):
+                                        new Client.AppRequestResult.Error(ex.getMessage())
+                                );
+                            });
+                        } catch (Exception e) {
+                            e.printStackTrace(System.out);
+                        }
+                        break;
+
+                }
+            }, Object.class)
+            .thenApply(json -> TONContext.convertValue(json.findValue("handle"), Integer.class));
+    }
+
+   /**
+    * 
+    *
+    * @param handle 
+    */
+    public CompletableFuture<Void> removeEncryptionBox(Integer handle) {
+        return context.requestJSON("crypto.remove_encryption_box", "{"+(handle==null?"":("\"handle\":"+handle))+"}")
+            .thenApply(json -> TONContext.convertValue(json, Void.class));
+    }
+
+   /**
+    * 
+    *
+    * @param encryptionBox 
+    */
+    public CompletableFuture<Object> encryptionBoxGetInfo(Integer encryptionBox) {
+        return context.requestJSON("crypto.encryption_box_get_info", "{"+(encryptionBox==null?"":("\"encryption_box\":"+encryptionBox))+"}")
+            .thenApply(json -> TONContext.convertValue(json.findValue("info"), Object.class));
+    }
+
+   /**
+    * 
+    *
+    * @param encryptionBox 
+    * @param data 
+    */
+    public CompletableFuture<String> encryptionBoxEncrypt(Integer encryptionBox, String data) {
+        return context.requestJSON("crypto.encryption_box_encrypt", "{"+Stream.of((encryptionBox==null?null:("\"encryption_box\":"+encryptionBox)),(data==null?null:("\"data\":\""+data+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
+            .thenApply(json -> TONContext.convertValue(json.findValue("data"), String.class));
+    }
+
+   /**
+    * 
+    *
+    * @param encryptionBox 
+    * @param data 
+    */
+    public CompletableFuture<String> encryptionBoxDecrypt(Integer encryptionBox, String data) {
+        return context.requestJSON("crypto.encryption_box_decrypt", "{"+Stream.of((encryptionBox==null?null:("\"encryption_box\":"+encryptionBox)),(data==null?null:("\"data\":\""+data+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
+            .thenApply(json -> TONContext.convertValue(json.findValue("data"), String.class));
     }
 
 }
