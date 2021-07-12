@@ -1382,4 +1382,15 @@ public class Abi {
             .thenApply(json -> TONContext.convertValue(json, ResultOfEncodeAccount.class));
     }
 
+   /**
+    * Note: this feature requires ABI 2.1 or higher.
+    *
+    * @param abi 
+    * @param data Must be encoded with base64
+    */
+    public CompletableFuture<Object> decodeAccountData(ABI abi, String data) {
+        return context.requestJSON("abi.decode_account_data", "{"+Stream.of((abi==null?null:("\"abi\":"+abi)),(data==null?null:("\"data\":\""+data+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
+            .thenApply(json -> TONContext.convertValue(json.findValue("data"), Object.class));
+    }
+
 }

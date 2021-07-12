@@ -1160,6 +1160,88 @@ public class Net {
             return "{"+Stream.of((messages==null?null:("\"messages\":"+Arrays.toString(messages))),(transactions==null?null:("\"transactions\":"+Arrays.toString(transactions)))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
         }
     }
+    /**
+     *  
+     */
+    public static class ResultOfIteratorNext  {
+
+        public ResultOfIteratorNext(Object[] items, Boolean hasMore, Object resumeState) {
+
+            this.items = items;
+
+            this.hasMore = hasMore;
+
+            this.resumeState = resumeState;
+
+        }
+        public ResultOfIteratorNext(Object[] items, Boolean hasMore) {
+
+            this.items = items;
+
+            this.hasMore = hasMore;
+
+        }
+        public ResultOfIteratorNext(Object[] items) {
+
+            this.items = items;
+
+        }
+        public ResultOfIteratorNext() {
+
+        }
+
+
+        @JsonProperty("items")
+        private Object[] items;
+        /**
+         * Note that `iterator_next` can return an empty items and `has_more` equals to `true`.In this case the application have to continue iteration.Such situation can take place when there is no data yet butthe requested `end_time` is not reached.
+         */
+        public Object[] getItems() {
+            return items;
+        }
+        /**
+         * Note that `iterator_next` can return an empty items and `has_more` equals to `true`.In this case the application have to continue iteration.Such situation can take place when there is no data yet butthe requested `end_time` is not reached.
+         */
+        public void setItems(Object[] value) {
+            this.items = value;
+        }
+
+        @JsonProperty("has_more")
+        private Boolean hasMore;
+        /**
+         * 
+         */
+        public Boolean getHasMore() {
+            return hasMore;
+        }
+        /**
+         * 
+         */
+        public void setHasMore(Boolean value) {
+            this.hasMore = value;
+        }
+
+        @JsonProperty("resume_state")
+        private Object resumeState;
+        /**
+         * This field is returned only if the `return_resume_state` parameteris specified.<p>Note that `resume_state` corresponds to the iteration positionafter the returned items.
+         */
+        public Object getResumeState() {
+            return resumeState;
+        }
+        /**
+         * This field is returned only if the `return_resume_state` parameteris specified.<p>Note that `resume_state` corresponds to the iteration positionafter the returned items.
+         */
+        public void setResumeState(Object value) {
+            this.resumeState = value;
+        }
+
+
+        @Override
+        public String toString() {
+            return "{"+Stream.of((items==null?null:("\"items\":"+Arrays.toString(items))),(hasMore==null?null:("\"has_more\":"+hasMore)),(resumeState==null?null:("\"resume_state\":"+resumeState))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
+        }
+    }
     private TONContext context;
 
     public Net(TONContext context) {
@@ -1330,6 +1412,81 @@ public class Net {
     public CompletableFuture<ResultOfQueryTransactionTree> queryTransactionTree(String inMsg, Abi.ABI[] abiRegistry, Number timeout) {
         return context.requestJSON("net.query_transaction_tree", "{"+Stream.of((inMsg==null?null:("\"in_msg\":\""+inMsg+"\"")),(abiRegistry==null?null:("\"abi_registry\":"+Arrays.toString(abiRegistry))),(timeout==null?null:("\"timeout\":"+timeout))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
             .thenApply(json -> TONContext.convertValue(json, ResultOfQueryTransactionTree.class));
+    }
+
+   /**
+    * Block iterator uses robust iteration methods that guaranties that everyblock in the specified range isn't missed or iterated twice.<p>Iterated range can be reduced with some filters:- `start_time` – the bottom time range. Only blocks with `gen_utime`more or equal to this value is iterated. If this parameter is omitted then there isno bottom time edge, so all blocks since zero state is iterated.- `end_time` – the upper time range. Only blocks with `gen_utime`less then this value is iterated. If this parameter is omitted then there isno upper time edge, so iterator never finishes.- `shard_filter` – workchains and shard prefixes that reduce the set of interestingblocks. Block conforms to the shard filter if it belongs to the filter workchainand the first bits of block's `shard` fields matches to the shard prefix.Only blocks with suitable shard are iterated.<p>Items iterated is a JSON objects with block data. The minimal set of returnedfields is:```textidgen_utimeworkchain_idshardafter_splitafter_mergeprev_ref {    root_hash}prev_alt_ref {    root_hash}```Application can request additional fields in the `result` parameter.<p>Application should call the `remove_iterator` when iterator is no longer required.
+    *
+    * @param startTime If the application specifies this parameter then the iterationincludes blocks with `gen_utime` &gt;= `start_time`.Otherwise the iteration starts from zero state.<p>Must be specified in seconds.
+    * @param endTime If the application specifies this parameter then the iterationincludes blocks with `gen_utime` &lt; `end_time`.Otherwise the iteration never stops.<p>Must be specified in seconds.
+    * @param shardFilter If the application specifies this parameter and it is not the empty arraythen the iteration will include items related to accounts that belongs tothe specified shard prefixes.Shard prefix must be represented as a string "workchain:prefix".Where `workchain` is a signed integer and the `prefix` if a hexadecimalrepresentation if the 64-bit unsigned integer with tagged shard prefix.For example: "0:3800000000000000".
+    * @param result List of the fields that must be returned for iterated items.This field is the same as the `result` parameter ofthe `query_collection` function.Note that iterated items can contains additional fields that arenot requested in the `result`.
+    * @return Must be removed using `remove_iterator`when it is no more needed for the application.
+    */
+    public CompletableFuture<Number> createBlockIterator(Number startTime, Number endTime, String[] shardFilter, String result) {
+        return context.requestJSON("net.create_block_iterator", "{"+Stream.of((startTime==null?null:("\"start_time\":"+startTime)),(endTime==null?null:("\"end_time\":"+endTime)),(shardFilter==null?null:("\"shard_filter\":\""+Arrays.toString(shardFilter)+"\"")),(result==null?null:("\"result\":\""+result+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
+            .thenApply(json -> TONContext.convertValue(json.findValue("handle"), Number.class));
+    }
+
+   /**
+    * The iterator stays exactly at the same position where the `resume_state` was catched.<p>Application should call the `remove_iterator` when iterator is no longer required.
+    *
+    * @param resumeState Same as value returned from `iterator_next`.
+    * @return Must be removed using `remove_iterator`when it is no more needed for the application.
+    */
+    public CompletableFuture<Number> resumeBlockIterator(Object resumeState) {
+        return context.requestJSON("net.resume_block_iterator", "{"+(resumeState==null?"":("\"resume_state\":"+resumeState))+"}")
+            .thenApply(json -> TONContext.convertValue(json.findValue("handle"), Number.class));
+    }
+
+   /**
+    * Transaction iterator uses robust iteration methods that guaranty that everytransaction in the specified range isn't missed or iterated twice.<p>Iterated range can be reduced with some filters:- `start_time` – the bottom time range. Only transactions with `now`more or equal to this value are iterated. If this parameter is omitted then there isno bottom time edge, so all the transactions since zero state are iterated.- `end_time` – the upper time range. Only transactions with `now`less then this value are iterated. If this parameter is omitted then there isno upper time edge, so iterator never finishes.- `shard_filter` – workchains and shard prefixes that reduce the set of interestingaccounts. Account address conforms to the shard filter ifit belongs to the filter workchain and the first bits of address match tothe shard prefix. Only transactions with suitable account addresses are iterated.- `accounts_filter` – set of account addresses whose transactions must be iterated.Note that accounts filter can conflict with shard filter so application must combinethese filters carefully.<p>Iterated item is a JSON objects with transaction data. The minimal set of returnedfields is:```textidaccount_addrnowbalance_delta(format:DEC)bounce { bounce_type }in_message {    id    value(format:DEC)    msg_type    src}out_messages {    id    value(format:DEC)    msg_type    dst}```Application can request an additional fields in the `result` parameter.<p>Another parameter that affects on the returned fields is the `include_transfers`.When this parameter is `true` the iterator computes and adds `transfer` field containinglist of the useful `TransactionTransfer` objects.Each transfer is calculated from the particular message related to the transactionand has the following structure:- message – source message identifier.- isBounced – indicates that the transaction is bounced, which means the value will be returned back to the sender.- isDeposit – indicates that this transfer is the deposit (true) or withdraw (false).- counterparty – account address of the transfer source or destination depending on `isDeposit`.- value – amount of nano tokens transferred. The value is represented as a decimal stringbecause the actual value can be more precise than the JSON number can represent. Applicationmust use this string carefully – conversion to number can follow to loose of precision.<p>Application should call the `remove_iterator` when iterator is no longer required.
+    *
+    * @param startTime If the application specifies this parameter then the iterationincludes blocks with `gen_utime` &gt;= `start_time`.Otherwise the iteration starts from zero state.<p>Must be specified in seconds.
+    * @param endTime If the application specifies this parameter then the iterationincludes blocks with `gen_utime` &lt; `end_time`.Otherwise the iteration never stops.<p>Must be specified in seconds.
+    * @param shardFilter If the application specifies this parameter and it is not an empty arraythen the iteration will include items related to accounts that belongs tothe specified shard prefixes.Shard prefix must be represented as a string "workchain:prefix".Where `workchain` is a signed integer and the `prefix` if a hexadecimalrepresentation if the 64-bit unsigned integer with tagged shard prefix.For example: "0:3800000000000000".Account address conforms to the shard filter ifit belongs to the filter workchain and the first bits of address match tothe shard prefix. Only transactions with suitable account addresses are iterated.
+    * @param accountsFilter Application can specify the list of accounts for whichit wants to iterate transactions.<p>If this parameter is missing or an empty list then the library iteratestransactions for all accounts that pass the shard filter.<p>Note that the library doesn't detect conflicts between the account filter and the shard filterif both are specified.So it is an application responsibility to specify the correct filter combination.
+    * @param result List of the fields that must be returned for iterated items.This field is the same as the `result` parameter ofthe `query_collection` function.Note that iterated items can contain additional fields that arenot requested in the `result`.
+    * @param includeTransfers If this parameter is `true` then each transaction contains field`transfers` with list of transfer. See more about this structure in function description.
+    * @return Must be removed using `remove_iterator`when it is no more needed for the application.
+    */
+    public CompletableFuture<Number> createTransactionIterator(Number startTime, Number endTime, String[] shardFilter, String[] accountsFilter, String result, Boolean includeTransfers) {
+        return context.requestJSON("net.create_transaction_iterator", "{"+Stream.of((startTime==null?null:("\"start_time\":"+startTime)),(endTime==null?null:("\"end_time\":"+endTime)),(shardFilter==null?null:("\"shard_filter\":\""+Arrays.toString(shardFilter)+"\"")),(accountsFilter==null?null:("\"accounts_filter\":\""+Arrays.toString(accountsFilter)+"\"")),(result==null?null:("\"result\":\""+result+"\"")),(includeTransfers==null?null:("\"include_transfers\":"+includeTransfers))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
+            .thenApply(json -> TONContext.convertValue(json.findValue("handle"), Number.class));
+    }
+
+   /**
+    * The iterator stays exactly at the same position where the `resume_state` was caught.Note that `resume_state` doesn't store the account filter. If the application requiresto use the same account filter as it was when the iterator was created then the applicationmust pass the account filter again in `accounts_filter` parameter.<p>Application should call the `remove_iterator` when iterator is no longer required.
+    *
+    * @param resumeState Same as value returned from `iterator_next`.
+    * @param accountsFilter Application can specify the list of accounts for whichit wants to iterate transactions.<p>If this parameter is missing or an empty list then the library iteratestransactions for all accounts that passes the shard filter.<p>Note that the library doesn't detect conflicts between the account filter and the shard filterif both are specified.So it is the application's responsibility to specify the correct filter combination.
+    * @return Must be removed using `remove_iterator`when it is no more needed for the application.
+    */
+    public CompletableFuture<Number> resumeTransactionIterator(Object resumeState, String[] accountsFilter) {
+        return context.requestJSON("net.resume_transaction_iterator", "{"+Stream.of((resumeState==null?null:("\"resume_state\":"+resumeState)),(accountsFilter==null?null:("\"accounts_filter\":\""+Arrays.toString(accountsFilter)+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
+            .thenApply(json -> TONContext.convertValue(json.findValue("handle"), Number.class));
+    }
+
+   /**
+    * In addition to available items this function returns the `has_more` flagindicating that the iterator isn't reach the end of the iterated range yet.<p>This function can return the empty list of available items butindicates that there are more items is available.This situation appears when the iterator doesn't reach iterated rangebut database doesn't contains available items yet.<p>If application requests resume state in `return_resume_state` parameterthen this function returns `resume_state` that can be used later toresume the iteration from the position after returned items.<p>The structure of the items returned depends on the iterator used.See the description to the appropriated iterator creation function.
+    *
+    * @param iterator 
+    * @param limit If value is missing or is less than 1 the library uses 1.
+    * @param returnResumeState 
+    */
+    public CompletableFuture<ResultOfIteratorNext> iteratorNext(Number iterator, Number limit, Boolean returnResumeState) {
+        return context.requestJSON("net.iterator_next", "{"+Stream.of((iterator==null?null:("\"iterator\":"+iterator)),(limit==null?null:("\"limit\":"+limit)),(returnResumeState==null?null:("\"return_resume_state\":"+returnResumeState))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
+            .thenApply(json -> TONContext.convertValue(json, ResultOfIteratorNext.class));
+    }
+
+   /**
+    * Frees all resources allocated in library to serve iterator.<p>Application always should call the `remove_iterator` when iteratoris no longer required.
+    *
+    * @param handle Must be removed using `remove_iterator`when it is no more needed for the application.
+    */
+    public CompletableFuture<Void> removeIterator(Number handle) {
+        return context.requestJSON("net.remove_iterator", "{"+(handle==null?"":("\"handle\":"+handle))+"}")
+            .thenApply(json -> TONContext.convertValue(json, Void.class));
     }
 
 }
