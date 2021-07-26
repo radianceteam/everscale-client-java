@@ -10,7 +10,7 @@ import static org.junit.Assert.*;
 
 public class ProcessingTest extends TestBase {
 
-    @Test
+    //@Test
     public void testWaitMessage() throws Exception {
         Crypto.KeyPair keys = crypto.generateRandomSignKeys().get();
         Abi.ABI abi = eventsAbi;

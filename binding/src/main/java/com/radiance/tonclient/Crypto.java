@@ -598,7 +598,7 @@ public class Crypto {
     }
 
    /**
-    * 
+    * **NOTE:** In the result the secret key is actually the concatenationof secret and public keys (128 symbols hex string) by design of <a target="_blank" href="NaCL](http://nacl.cr.yp.to/sign.html).See also [the stackexchange question">NaCL](http://nacl.cr.yp.to/sign.html).See also [the stackexchange question</a>(https://crypto.stackexchange.com/questions/54353/).
     *
     * @param secretKey 
     */

@@ -185,7 +185,7 @@ public class DebotTest extends TestBase {
         return new TestBrowser(context, debotFuture.get(), targetFuture.get(), keys);
     }
 
-    @Test
+    //@Test
     public void testDebotGoto() throws Exception {
         try {
         TestBrowser browser = initDebot();

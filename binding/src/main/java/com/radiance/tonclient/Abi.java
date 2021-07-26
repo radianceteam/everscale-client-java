@@ -1386,7 +1386,7 @@ public class Abi {
     * Note: this feature requires ABI 2.1 or higher.
     *
     * @param abi 
-    * @param data Must be encoded with base64
+    * @param data 
     */
     public CompletableFuture<Object> decodeAccountData(ABI abi, String data) {
         return context.requestJSON("abi.decode_account_data", "{"+Stream.of((abi==null?null:("\"abi\":"+abi)),(data==null?null:("\"data\":\""+data+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
