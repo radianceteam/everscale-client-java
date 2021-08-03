@@ -11,6 +11,7 @@ crate-type = ["cdylib"]
 [dependencies]
 jni = "0.18.0"
 lazy_static = "1.1.0"
+parking_lot = "0.11"
 ton_client = { path = "../target/TON-SDK/ton_client" }
 
 
