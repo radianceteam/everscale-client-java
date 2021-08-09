@@ -20,7 +20,7 @@ public class Sender {
 
     public CompletableFuture<Void> sendMoney(String senderAddress, KeyPair senderKeys, String receipientAddress) throws Exception {
         TONContext ctx = TONContext.create(new ClientConfig(
-            new NetworkConfig("https://net.ton.dev/graphql")
+            new NetworkConfig("https://net1.ton.dev/")
         ));
 
         Abi abi = new Abi(ctx);

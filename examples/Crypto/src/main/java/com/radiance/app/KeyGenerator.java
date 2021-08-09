@@ -8,7 +8,7 @@ public class KeyGenerator {
     private Crypto crypto;
 
     public KeyGenerator() throws TONException {
-        context = TONContext.create("{\"network\": {\"server_address\": \"net.ton.dev\"}}");
+        context = TONContext.create("{\"network\": {\"server_address\": \"net1.ton.dev\"}}");
         crypto = new Crypto(context);
     }
 

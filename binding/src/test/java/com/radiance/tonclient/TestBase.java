@@ -39,7 +39,7 @@ public abstract class TestBase {
     public static void init() throws Exception {
         System.getProperties().setProperty("java.util.logging.SimpleFormatter.format", "%4$s: %5$s%n");
 
-        //context = TONContext.create("{\"network\": {\"server_address\": \"net.ton.dev\"}}");
+        //context = TONContext.create("{\"network\": {\"server_address\": \"net1.ton.dev\"}}");
         context = TONContext.create("{\"network\": {\"server_address\": \"http://localhost\"}}");
         client = new Client(context);
         crypto = new Crypto(context);
