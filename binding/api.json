@@ -1,5 +1,5 @@
 {
-  "version": "1.20.1",
+  "version": "1.21.2",
   "modules": [
     {
       "name": "client",
@@ -1034,6 +1034,48 @@
               "value": "123",
               "summary": null,
               "description": null
+            },
+            {
+              "name": "InvalidIvSize",
+              "type": "Number",
+              "value": "124",
+              "summary": null,
+              "description": null
+            },
+            {
+              "name": "UnsupportedCipherMode",
+              "type": "Number",
+              "value": "125",
+              "summary": null,
+              "description": null
+            },
+            {
+              "name": "CannotCreateCipher",
+              "type": "Number",
+              "value": "126",
+              "summary": null,
+              "description": null
+            },
+            {
+              "name": "EncryptDataError",
+              "type": "Number",
+              "value": "127",
+              "summary": null,
+              "description": null
+            },
+            {
+              "name": "DecryptDataError",
+              "type": "Number",
+              "value": "128",
+              "summary": null,
+              "description": null
+            },
+            {
+              "name": "IvRequired",
+              "type": "Number",
+              "value": "129",
+              "summary": null,
+              "description": null
             }
           ],
           "summary": null,
@@ -1099,6 +1141,113 @@
             }
           ],
           "summary": "Encryption box information",
+          "description": null
+        },
+        {
+          "name": "EncryptionAlgorithm",
+          "type": "EnumOfTypes",
+          "enum_types": [
+            {
+              "name": "AES",
+              "type": "Ref",
+              "ref_name": "crypto.AesParams",
+              "summary": null,
+              "description": null
+            }
+          ],
+          "summary": null,
+          "description": null
+        },
+        {
+          "name": "CipherMode",
+          "type": "EnumOfConsts",
+          "enum_consts": [
+            {
+              "name": "CBC",
+              "type": "None",
+              "summary": null,
+              "description": null
+            },
+            {
+              "name": "CFB",
+              "type": "None",
+              "summary": null,
+              "description": null
+            },
+            {
+              "name": "CTR",
+              "type": "None",
+              "summary": null,
+              "description": null
+            },
+            {
+              "name": "ECB",
+              "type": "None",
+              "summary": null,
+              "description": null
+            },
+            {
+              "name": "OFB",
+              "type": "None",
+              "summary": null,
+              "description": null
+            }
+          ],
+          "summary": null,
+          "description": null
+        },
+        {
+          "name": "AesParams",
+          "type": "Struct",
+          "struct_fields": [
+            {
+              "name": "mode",
+              "type": "Ref",
+              "ref_name": "crypto.CipherMode",
+              "summary": null,
+              "description": null
+            },
+            {
+              "name": "key",
+              "type": "String",
+              "summary": null,
+              "description": null
+            },
+            {
+              "name": "iv",
+              "type": "Optional",
+              "optional_inner": {
+                "type": "String"
+              },
+              "summary": null,
+              "description": null
+            }
+          ],
+          "summary": null,
+          "description": null
+        },
+        {
+          "name": "AesInfo",
+          "type": "Struct",
+          "struct_fields": [
+            {
+              "name": "mode",
+              "type": "Ref",
+              "ref_name": "crypto.CipherMode",
+              "summary": null,
+              "description": null
+            },
+            {
+              "name": "iv",
+              "type": "Optional",
+              "optional_inner": {
+                "type": "String"
+              },
+              "summary": null,
+              "description": null
+            }
+          ],
+          "summary": null,
           "description": null
         },
         {
@@ -2483,8 +2632,8 @@
             {
               "name": "data",
               "type": "String",
-              "summary": "Encrypted data, encoded in Base64",
-              "description": null
+              "summary": "Encrypted data, encoded in Base64.",
+              "description": "Padded to cipher block size"
             }
           ],
           "summary": null,
@@ -2518,7 +2667,22 @@
             {
               "name": "data",
               "type": "String",
-              "summary": "Decrypted data, encoded in Base64",
+              "summary": "Decrypted data, encoded in Base64.",
+              "description": null
+            }
+          ],
+          "summary": null,
+          "description": null
+        },
+        {
+          "name": "ParamsOfCreateEncryptionBox",
+          "type": "Struct",
+          "struct_fields": [
+            {
+              "name": "algorithm",
+              "type": "Ref",
+              "ref_name": "crypto.EncryptionAlgorithm",
+              "summary": "Encryption algorithm specifier including cipher parameters (key, IV, etc)",
               "description": null
             }
           ],
@@ -4091,8 +4255,8 @@
         },
         {
           "name": "encryption_box_encrypt",
-          "summary": "Encrypts data using given encryption box",
-          "description": null,
+          "summary": "Encrypts data using given encryption box Note.",
+          "description": "Block cipher algorithms pad data to cipher block size so encrypted data can be longer then original data. Client should store the original data size after encryption and use it after\ndecryption to retrieve the original data from decrypted data.",
           "params": [
             {
               "name": "context",
@@ -4129,8 +4293,8 @@
         },
         {
           "name": "encryption_box_decrypt",
-          "summary": "Decrypts data using given encryption box",
-          "description": null,
+          "summary": "Decrypts data using given encryption box Note.",
+          "description": "Block cipher algorithms pad data to cipher block size so encrypted data can be longer then original data. Client should store the original data size after encryption and use it after\ndecryption to retrieve the original data from decrypted data.",
           "params": [
             {
               "name": "context",
@@ -4160,6 +4324,44 @@
               {
                 "type": "Ref",
                 "ref_name": "crypto.ResultOfEncryptionBoxDecrypt"
+              }
+            ]
+          },
+          "errors": null
+        },
+        {
+          "name": "create_encryption_box",
+          "summary": "Creates encryption box with specified algorithm",
+          "description": null,
+          "params": [
+            {
+              "name": "context",
+              "type": "Generic",
+              "generic_name": "Arc",
+              "generic_args": [
+                {
+                  "type": "Ref",
+                  "ref_name": "ClientContext"
+                }
+              ],
+              "summary": null,
+              "description": null
+            },
+            {
+              "name": "params",
+              "type": "Ref",
+              "ref_name": "crypto.ParamsOfCreateEncryptionBox",
+              "summary": null,
+              "description": null
+            }
+          ],
+          "result": {
+            "type": "Generic",
+            "generic_name": "ClientResult",
+            "generic_args": [
+              {
+                "type": "Ref",
+                "ref_name": "crypto.RegisteredEncryptionBox"
               }
             ]
           },
@@ -6894,7 +7096,7 @@
               "name": "WillFetchFirstBlock",
               "type": "Struct",
               "struct_fields": [],
-              "summary": "Notifies the app that the current shard block will be fetched from the network.",
+              "summary": "Notifies the application that the account's current shard block will be fetched from the network. This step is performed before the message sending so that sdk knows starting from which block it will search for the transaction.",
               "description": "Fetched block will be used later in waiting phase."
             },
             {
@@ -6909,8 +7111,8 @@
                   "description": null
                 }
               ],
-              "summary": "Notifies the app that the client has failed to fetch current shard block.",
-              "description": "Message processing has finished."
+              "summary": "Notifies the app that the client has failed to fetch the account's current shard block.",
+              "description": "This may happen due to the network issues. Receiving this event means that message processing will not proceed -\nmessage was not sent, and Developer can try to run `process_message` again,\nin the hope that the connection is restored."
             },
             {
               "name": "WillSend",
@@ -6935,7 +7137,7 @@
                   "description": null
                 }
               ],
-              "summary": "Notifies the app that the message will be sent to the network.",
+              "summary": "Notifies the app that the message will be sent to the network. This event means that the account's current shard block was successfully fetched and the message was successfully created (`abi.encode_message` function was executed successfully).",
               "description": null
             },
             {
@@ -6961,8 +7163,8 @@
                   "description": null
                 }
               ],
-              "summary": "Notifies the app that the message was sent to the network.",
-              "description": null
+              "summary": "Notifies the app that the message was sent to the network, i.e `processing.send_message` was successfuly executed. Now, the message is in the blockchain. If Application exits at this phase, Developer needs to proceed with processing after the application is restored with `wait_for_transaction` function, passing shard_block_id and message from this event.",
+              "description": "Do not forget to specify abi of your contract as well, it is crucial for proccessing. See `processing.wait_for_transaction` documentation."
             },
             {
               "name": "SendFailed",
@@ -6995,7 +7197,7 @@
                 }
               ],
               "summary": "Notifies the app that the sending operation was failed with network error.",
-              "description": "Nevertheless the processing will be continued at the waiting\nphase because the message possibly has been delivered to the\nnode."
+              "description": "Nevertheless the processing will be continued at the waiting\nphase because the message possibly has been delivered to the\nnode.\nIf Application exits at this phase, Developer needs to proceed with processing\nafter the application is restored with `wait_for_transaction` function, passing\nshard_block_id and message from this event. Do not forget to specify abi of your contract\nas well, it is crucial for proccessing. See `processing.wait_for_transaction` documentation."
             },
             {
               "name": "WillFetchNextBlock",
@@ -7021,7 +7223,7 @@
                 }
               ],
               "summary": "Notifies the app that the next shard block will be fetched from the network.",
-              "description": "Event can occurs more than one time due to block walking\nprocedure."
+              "description": "Event can occurs more than one time due to block walking\nprocedure.\nIf Application exits at this phase, Developer needs to proceed with processing\nafter the application is restored with `wait_for_transaction` function, passing\nshard_block_id and message from this event. Do not forget to specify abi of your contract\nas well, it is crucial for proccessing. See `processing.wait_for_transaction` documentation."
             },
             {
               "name": "FetchNextBlockFailed",
@@ -7053,8 +7255,8 @@
                   "description": null
                 }
               ],
-              "summary": "Notifies the app that the next block can't be fetched due to error.",
-              "description": "Processing will be continued after `network_resume_timeout`."
+              "summary": "Notifies the app that the next block can't be fetched.",
+              "description": "If no block was fetched within `NetworkConfig.wait_for_timeout` then processing stops.\nThis may happen when the shard stops, or there are other network issues.\nIn this case Developer should resume message processing with `wait_for_transaction`, passing shard_block_id,\nmessage and contract abi to it. Note that passing ABI is crucial, because it will influence the processing strategy.\n\nAnother way to tune this is to specify long timeout in `NetworkConfig.wait_for_timeout`"
             },
             {
               "name": "MessageExpired",
@@ -7080,8 +7282,8 @@
                   "description": null
                 }
               ],
-              "summary": "Notifies the app that the message was expired.",
-              "description": "Event occurs for contracts which ABI includes header \"expire\"\n\nProcessing will be continued from encoding phase after\n`expiration_retries_timeout`."
+              "summary": "Notifies the app that the message was not executed within expire timeout on-chain and will never be because it is already expired. The expiration timeout can be configured with `AbiConfig` parameters.",
+              "description": "This event occurs only for the contracts which ABI includes \"expire\" header.\n\nIf Application specifies `NetworkConfig.message_retries_count` > 0, then `process_message`\nwill perform retries: will create a new message and send it again and repeat it untill it reaches\nthe maximum retries count or receives a successful result.  All the processing\nevents will be repeated."
             }
           ],
           "summary": null,
@@ -8417,7 +8619,7 @@
         {
           "name": "run_executor",
           "summary": "Emulates all the phases of contract execution locally",
-          "description": "Performs all the phases of contract execution on Transaction Executor -\nthe same component that is used on Validator Nodes.\n\nCan be used for contract debugging, to find out the reason why a message was not delivered successfully.\nValidators throw away the failed external inbound messages (if they failed bedore `ACCEPT`) in the real network.\nThis is why these messages are impossible to debug in the real network.\nWith the help of run_executor you can do that. In fact, `process_message` function\nperforms local check with `run_executor` if there was no transaction as a result of processing\nand returns the error, if there is one.\n\nAnother use case to use `run_executor` is to estimate fees for message execution.\nSet  `AccountForExecutor::Account.unlimited_balance`\nto `true` so that emulation will not depend on the actual balance.\nThis may be needed to calculate deploy fees for an account that does not exist yet.\nJSON with fees is in `fees` field of the result.\n\nOne more use case - you can produce the sequence of operations,\nthus emulating the sequential contract calls locally.\nAnd so on.\n\nTransaction executor requires account BOC (bag of cells) as a parameter.\nTo get the account BOC - use `net.query` method to download it from GraphQL API\n(field `boc` of `account`) or generate it with `abi.encode_account` method.\n\nAlso it requires message BOC. To get the message BOC - use `abi.encode_message` or `abi.encode_internal_message`.\n\nIf you need this emulation to be as precise as possible (for instance - emulate transaction\nwith particular lt in particular block or use particular blockchain config,\nin case you want to download it from a particular key block - then specify `ParamsOfRunExecutor` parameter.\n\nIf you need to see the aborted transaction as a result, not as an error, set `skip_transaction_check` to `true`.",
+          "description": "Performs all the phases of contract execution on Transaction Executor -\nthe same component that is used on Validator Nodes.\n\nCan be used for contract debugging, to find out the reason why a message was not delivered successfully.\nValidators throw away the failed external inbound messages (if they failed bedore `ACCEPT`) in the real network.\nThis is why these messages are impossible to debug in the real network.\nWith the help of run_executor you can do that. In fact, `process_message` function\nperforms local check with `run_executor` if there was no transaction as a result of processing\nand returns the error, if there is one.\n\nAnother use case to use `run_executor` is to estimate fees for message execution.\nSet  `AccountForExecutor::Account.unlimited_balance`\nto `true` so that emulation will not depend on the actual balance.\nThis may be needed to calculate deploy fees for an account that does not exist yet.\nJSON with fees is in `fees` field of the result.\n\nOne more use case - you can produce the sequence of operations,\nthus emulating the sequential contract calls locally.\nAnd so on.\n\nTransaction executor requires account BOC (bag of cells) as a parameter.\nTo get the account BOC - use `net.query` method to download it from GraphQL API\n(field `boc` of `account`) or generate it with `abi.encode_account` method.\n\nAlso it requires message BOC. To get the message BOC - use `abi.encode_message` or `abi.encode_internal_message`.\n\nIf you need this emulation to be as precise as possible (for instance - emulate transaction\nwith particular lt in particular block or use particular blockchain config,\ndownloaded from a particular key block - then specify `execution_options` parameter.\n\nIf you need to see the aborted transaction as a result, not as an error, set `skip_transaction_check` to `true`.",
           "params": [
             {
               "name": "context",

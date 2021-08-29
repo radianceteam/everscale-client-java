@@ -12,6 +12,91 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 public class Crypto {
 
+    public static abstract class EncryptionAlgorithm {
+
+    /**
+     *  
+     */
+    public static class AES extends EncryptionAlgorithm  {
+
+        public AES(Object mode, String key, String iv) {
+
+            this.mode = mode;
+
+            this.key = key;
+
+            this.iv = iv;
+
+        }
+        public AES(Object mode, String key) {
+
+            this.mode = mode;
+
+            this.key = key;
+
+        }
+        public AES(Object mode) {
+
+            this.mode = mode;
+
+        }
+        public AES() {
+
+        }
+
+
+        @JsonProperty("mode")
+        private Object mode;
+        /**
+         * 
+         */
+        public Object getMode() {
+            return mode;
+        }
+        /**
+         * 
+         */
+        public void setMode(Object value) {
+            this.mode = value;
+        }
+
+        @JsonProperty("key")
+        private String key;
+        /**
+         * 
+         */
+        public String getKey() {
+            return key;
+        }
+        /**
+         * 
+         */
+        public void setKey(String value) {
+            this.key = value;
+        }
+
+        @JsonProperty("iv")
+        private String iv;
+        /**
+         * 
+         */
+        public String getIv() {
+            return iv;
+        }
+        /**
+         * 
+         */
+        public void setIv(String value) {
+            this.iv = value;
+        }
+
+
+        @Override
+        public String toString() {
+            return "{"+Stream.of("\"type\":\"AES\"",(mode==null?null:("\"mode\":"+mode)),(key==null?null:("\"key\":\""+key+"\"")),(iv==null?null:("\"iv\":\""+iv+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
+        }
+    }
+}
     /**
      *  
      */
@@ -1020,10 +1105,11 @@ public class Crypto {
     }
 
    /**
-    * 
+    * Block cipher algorithms pad data to cipher block size so encrypted data can be longer then original data. Client should store the original data size after encryption and use it afterdecryption to retrieve the original data from decrypted data.
     *
     * @param encryptionBox 
     * @param data 
+    * @return Padded to cipher block size
     */
     public CompletableFuture<String> encryptionBoxEncrypt(Integer encryptionBox, String data) {
         return context.requestJSON("crypto.encryption_box_encrypt", "{"+Stream.of((encryptionBox==null?null:("\"encryption_box\":"+encryptionBox)),(data==null?null:("\"data\":\""+data+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
@@ -1031,7 +1117,7 @@ public class Crypto {
     }
 
    /**
-    * 
+    * Block cipher algorithms pad data to cipher block size so encrypted data can be longer then original data. Client should store the original data size after encryption and use it afterdecryption to retrieve the original data from decrypted data.
     *
     * @param encryptionBox 
     * @param data 
@@ -1039,6 +1125,16 @@ public class Crypto {
     public CompletableFuture<String> encryptionBoxDecrypt(Integer encryptionBox, String data) {
         return context.requestJSON("crypto.encryption_box_decrypt", "{"+Stream.of((encryptionBox==null?null:("\"encryption_box\":"+encryptionBox)),(data==null?null:("\"data\":\""+data+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
             .thenApply(json -> TONContext.convertValue(json.findValue("data"), String.class));
+    }
+
+   /**
+    * 
+    *
+    * @param algorithm 
+    */
+    public CompletableFuture<Integer> createEncryptionBox(EncryptionAlgorithm algorithm) {
+        return context.requestJSON("crypto.create_encryption_box", "{"+(algorithm==null?"":("\"algorithm\":"+algorithm))+"}")
+            .thenApply(json -> TONContext.convertValue(json.findValue("handle"), Integer.class));
     }
 
 }
