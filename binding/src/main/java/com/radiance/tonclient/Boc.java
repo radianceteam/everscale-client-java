@@ -240,6 +240,172 @@ public class Boc {
         }
     }
 }
+    /**
+     *  
+     */
+    public static class ResultOfDecodeTvc  {
+
+        public ResultOfDecodeTvc(String code, String data, String library, Boolean tick, Boolean tock, Number splitDepth) {
+
+            this.code = code;
+
+            this.data = data;
+
+            this.library = library;
+
+            this.tick = tick;
+
+            this.tock = tock;
+
+            this.splitDepth = splitDepth;
+
+        }
+        public ResultOfDecodeTvc(String code, String data, String library, Boolean tick, Boolean tock) {
+
+            this.code = code;
+
+            this.data = data;
+
+            this.library = library;
+
+            this.tick = tick;
+
+            this.tock = tock;
+
+        }
+        public ResultOfDecodeTvc(String code, String data, String library, Boolean tick) {
+
+            this.code = code;
+
+            this.data = data;
+
+            this.library = library;
+
+            this.tick = tick;
+
+        }
+        public ResultOfDecodeTvc(String code, String data, String library) {
+
+            this.code = code;
+
+            this.data = data;
+
+            this.library = library;
+
+        }
+        public ResultOfDecodeTvc(String code, String data) {
+
+            this.code = code;
+
+            this.data = data;
+
+        }
+        public ResultOfDecodeTvc(String code) {
+
+            this.code = code;
+
+        }
+        public ResultOfDecodeTvc() {
+
+        }
+
+
+        @JsonProperty("code")
+        private String code;
+        /**
+         * 
+         */
+        public String getCode() {
+            return code;
+        }
+        /**
+         * 
+         */
+        public void setCode(String value) {
+            this.code = value;
+        }
+
+        @JsonProperty("data")
+        private String data;
+        /**
+         * 
+         */
+        public String getData() {
+            return data;
+        }
+        /**
+         * 
+         */
+        public void setData(String value) {
+            this.data = value;
+        }
+
+        @JsonProperty("library")
+        private String library;
+        /**
+         * 
+         */
+        public String getLibrary() {
+            return library;
+        }
+        /**
+         * 
+         */
+        public void setLibrary(String value) {
+            this.library = value;
+        }
+
+        @JsonProperty("tick")
+        private Boolean tick;
+        /**
+         * Specifies the contract ability to handle tick transactions
+         */
+        public Boolean getTick() {
+            return tick;
+        }
+        /**
+         * Specifies the contract ability to handle tick transactions
+         */
+        public void setTick(Boolean value) {
+            this.tick = value;
+        }
+
+        @JsonProperty("tock")
+        private Boolean tock;
+        /**
+         * Specifies the contract ability to handle tock transactions
+         */
+        public Boolean getTock() {
+            return tock;
+        }
+        /**
+         * Specifies the contract ability to handle tock transactions
+         */
+        public void setTock(Boolean value) {
+            this.tock = value;
+        }
+
+        @JsonProperty("split_depth")
+        private Number splitDepth;
+        /**
+         * 
+         */
+        public Number getSplitDepth() {
+            return splitDepth;
+        }
+        /**
+         * 
+         */
+        public void setSplitDepth(Number value) {
+            this.splitDepth = value;
+        }
+
+
+        @Override
+        public String toString() {
+            return "{"+Stream.of((code==null?null:("\"code\":\""+code+"\"")),(data==null?null:("\"data\":\""+data+"\"")),(library==null?null:("\"library\":\""+library+"\"")),(tick==null?null:("\"tick\":"+tick)),(tock==null?null:("\"tock\":"+tock)),(splitDepth==null?null:("\"split_depth\":"+splitDepth))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
+        }
+    }
     private TONContext context;
 
     public Boc(TONContext context) {
@@ -369,6 +535,68 @@ public class Boc {
     public CompletableFuture<String> encodeBoc(BuilderOp[] builder, BocCacheType bocCache) {
         return context.requestJSON("boc.encode_boc", "{"+Stream.of((builder==null?null:("\"builder\":"+Arrays.toString(builder))),(bocCache==null?null:("\"boc_cache\":"+bocCache))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
             .thenApply(json -> TONContext.convertValue(json.findValue("boc"), String.class));
+    }
+
+   /**
+    * 
+    *
+    * @param code 
+    * @param bocCache 
+    * @return BOC encoded as base64 or BOC handle
+    */
+    public CompletableFuture<String> getCodeSalt(String code, BocCacheType bocCache) {
+        return context.requestJSON("boc.get_code_salt", "{"+Stream.of((code==null?null:("\"code\":\""+code+"\"")),(bocCache==null?null:("\"boc_cache\":"+bocCache))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
+            .thenApply(json -> TONContext.convertValue(json.findValue("salt"), String.class));
+    }
+
+   /**
+    * Returns the new contract code with salt.
+    *
+    * @param code 
+    * @param salt BOC encoded as base64 or BOC handle
+    * @param bocCache 
+    * @return BOC encoded as base64 or BOC handle
+    */
+    public CompletableFuture<String> setCodeSalt(String code, String salt, BocCacheType bocCache) {
+        return context.requestJSON("boc.set_code_salt", "{"+Stream.of((code==null?null:("\"code\":\""+code+"\"")),(salt==null?null:("\"salt\":\""+salt+"\"")),(bocCache==null?null:("\"boc_cache\":"+bocCache))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
+            .thenApply(json -> TONContext.convertValue(json.findValue("code"), String.class));
+    }
+
+   /**
+    * 
+    *
+    * @param tvc 
+    * @param bocCache 
+    */
+    public CompletableFuture<ResultOfDecodeTvc> decodeTvc(String tvc, BocCacheType bocCache) {
+        return context.requestJSON("boc.decode_tvc", "{"+Stream.of((tvc==null?null:("\"tvc\":\""+tvc+"\"")),(bocCache==null?null:("\"boc_cache\":"+bocCache))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
+            .thenApply(json -> TONContext.convertValue(json, ResultOfDecodeTvc.class));
+    }
+
+   /**
+    * 
+    *
+    * @param code 
+    * @param data 
+    * @param library 
+    * @param tick Specifies the contract ability to handle tick transactions
+    * @param tock Specifies the contract ability to handle tock transactions
+    * @param splitDepth 
+    * @param bocCache 
+    */
+    public CompletableFuture<String> encodeTvc(String code, String data, String library, Boolean tick, Boolean tock, Number splitDepth, BocCacheType bocCache) {
+        return context.requestJSON("boc.encode_tvc", "{"+Stream.of((code==null?null:("\"code\":\""+code+"\"")),(data==null?null:("\"data\":\""+data+"\"")),(library==null?null:("\"library\":\""+library+"\"")),(tick==null?null:("\"tick\":"+tick)),(tock==null?null:("\"tock\":"+tock)),(splitDepth==null?null:("\"split_depth\":"+splitDepth)),(bocCache==null?null:("\"boc_cache\":"+bocCache))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
+            .thenApply(json -> TONContext.convertValue(json.findValue("tvc"), String.class));
+    }
+
+   /**
+    * 
+    *
+    * @param code 
+    */
+    public CompletableFuture<String> getCompilerVersion(String code) {
+        return context.requestJSON("boc.get_compiler_version", "{"+(code==null?"":("\"code\":\""+code+"\""))+"}")
+            .thenApply(json -> TONContext.convertValue(json.findValue("version"), String.class));
     }
 
 }

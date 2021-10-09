@@ -1267,6 +1267,64 @@ public class Abi {
             return "{"+Stream.of((account==null?null:("\"account\":\""+account+"\"")),(id==null?null:("\"id\":\""+id+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
         }
     }
+    /**
+     *  
+     */
+    public static class ResultOfDecodeInitialData  {
+
+        public ResultOfDecodeInitialData(Object initialData, String initialPubkey) {
+
+            this.initialData = initialData;
+
+            this.initialPubkey = initialPubkey;
+
+        }
+        public ResultOfDecodeInitialData(Object initialData) {
+
+            this.initialData = initialData;
+
+        }
+        public ResultOfDecodeInitialData() {
+
+        }
+
+
+        @JsonProperty("initial_data")
+        private Object initialData;
+        /**
+         * Initial data is decoded if `abi` input parameter is provided
+         */
+        public Object getInitialData() {
+            return initialData;
+        }
+        /**
+         * Initial data is decoded if `abi` input parameter is provided
+         */
+        public void setInitialData(Object value) {
+            this.initialData = value;
+        }
+
+        @JsonProperty("initial_pubkey")
+        private String initialPubkey;
+        /**
+         * 
+         */
+        public String getInitialPubkey() {
+            return initialPubkey;
+        }
+        /**
+         * 
+         */
+        public void setInitialPubkey(String value) {
+            this.initialPubkey = value;
+        }
+
+
+        @Override
+        public String toString() {
+            return "{"+Stream.of((initialData==null?null:("\"initial_data\":"+initialData)),(initialPubkey==null?null:("\"initial_pubkey\":\""+initialPubkey+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
+        }
+    }
     private TONContext context;
 
     public Abi(TONContext context) {
@@ -1391,6 +1449,31 @@ public class Abi {
     public CompletableFuture<Object> decodeAccountData(ABI abi, String data) {
         return context.requestJSON("abi.decode_account_data", "{"+Stream.of((abi==null?null:("\"abi\":"+abi)),(data==null?null:("\"data\":\""+data+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
             .thenApply(json -> TONContext.convertValue(json.findValue("data"), Object.class));
+    }
+
+   /**
+    * 
+    *
+    * @param abi 
+    * @param data 
+    * @param initialData `abi` parameter should be provided to set initial data
+    * @param initialPubkey 
+    * @param bocCache 
+    */
+    public CompletableFuture<String> updateInitialData(ABI abi, String data, Object initialData, String initialPubkey, Boc.BocCacheType bocCache) {
+        return context.requestJSON("abi.update_initial_data", "{"+Stream.of((abi==null?null:("\"abi\":"+abi)),(data==null?null:("\"data\":\""+data+"\"")),(initialData==null?null:("\"initial_data\":"+initialData)),(initialPubkey==null?null:("\"initial_pubkey\":\""+initialPubkey+"\"")),(bocCache==null?null:("\"boc_cache\":"+bocCache))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
+            .thenApply(json -> TONContext.convertValue(json.findValue("data"), String.class));
+    }
+
+   /**
+    * 
+    *
+    * @param abi Initial data is decoded if this parameter is provided
+    * @param data 
+    */
+    public CompletableFuture<ResultOfDecodeInitialData> decodeInitialData(ABI abi, String data) {
+        return context.requestJSON("abi.decode_initial_data", "{"+Stream.of((abi==null?null:("\"abi\":"+abi)),(data==null?null:("\"data\":\""+data+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
+            .thenApply(json -> TONContext.convertValue(json, ResultOfDecodeInitialData.class));
     }
 
 }
