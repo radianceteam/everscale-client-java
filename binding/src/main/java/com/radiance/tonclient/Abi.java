@@ -798,6 +798,88 @@ public class Abi {
     /**
      *  
      */
+    public static class AbiParam  {
+
+        public AbiParam(String name, String type, AbiParam[] components) {
+
+            this.name = name;
+
+            this.type = type;
+
+            this.components = components;
+
+        }
+        public AbiParam(String name, String type) {
+
+            this.name = name;
+
+            this.type = type;
+
+        }
+        public AbiParam(String name) {
+
+            this.name = name;
+
+        }
+        public AbiParam() {
+
+        }
+
+
+        @JsonProperty("name")
+        private String name;
+        /**
+         * 
+         */
+        public String getName() {
+            return name;
+        }
+        /**
+         * 
+         */
+        public void setName(String value) {
+            this.name = value;
+        }
+
+        @JsonProperty("type")
+        private String type;
+        /**
+         * 
+         */
+        public String getType() {
+            return type;
+        }
+        /**
+         * 
+         */
+        public void setType(String value) {
+            this.type = value;
+        }
+
+        @JsonProperty("components")
+        private AbiParam[] components;
+        /**
+         * 
+         */
+        public AbiParam[] getComponents() {
+            return components;
+        }
+        /**
+         * 
+         */
+        public void setComponents(AbiParam[] value) {
+            this.components = value;
+        }
+
+
+        @Override
+        public String toString() {
+            return "{"+Stream.of((name==null?null:("\"name\":\""+name+"\"")),(type==null?null:("\"type\":\""+type+"\"")),(components==null?null:("\"components\":"+Arrays.toString(components)))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
+        }
+    }
+    /**
+     *  
+     */
     public static class ResultOfEncodeMessageBody  {
 
         public ResultOfEncodeMessageBody(String body, String dataToSign) {
@@ -1474,6 +1556,18 @@ public class Abi {
     public CompletableFuture<ResultOfDecodeInitialData> decodeInitialData(ABI abi, String data) {
         return context.requestJSON("abi.decode_initial_data", "{"+Stream.of((abi==null?null:("\"abi\":"+abi)),(data==null?null:("\"data\":\""+data+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
             .thenApply(json -> TONContext.convertValue(json, ResultOfDecodeInitialData.class));
+    }
+
+   /**
+    * Solidity functions use ABI types for <a target="_blank" href="builder encoding">builder encoding</a>(https://github.com/tonlabs/TON-Solidity-Compiler/blob/master/API.md#tvmbuilderstore).The simplest way to decode such a BOC is to use ABI decoding.ABI has it own rules for fields layout in cells so manually encodedBOC can not be described in terms of ABI rules.<p>To solve this problem we introduce a new ABI type `Ref(&lt;ParamType&gt;)`which allows to store `ParamType` ABI parameter in cell reference and, thus,decode manually encoded BOCs. This type is available only in `decode_boc` functionand will not be available in ABI messages encoding until it is included into some ABI revision.<p>Such BOC descriptions covers most users needs. If someone wants to decode some BOC whichcan not be described by these rules (i.e. BOC with TLB containing constructors of flagsdefining some parsing conditions) then they can decode the fields up to fork condition,check the parsed data manually, expand the parsing schema and then decode the whole BOCwith the full schema.
+    *
+    * @param params 
+    * @param boc 
+    * @param allowPartial 
+    */
+    public CompletableFuture<Object> decodeBoc(AbiParam[] params, String boc, Boolean allowPartial) {
+        return context.requestJSON("abi.decode_boc", "{"+Stream.of((params==null?null:("\"params\":"+Arrays.toString(params))),(boc==null?null:("\"boc\":\""+boc+"\"")),(allowPartial==null?null:("\"allow_partial\":"+allowPartial))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
+            .thenApply(json -> TONContext.convertValue(json.findValue("data"), Object.class));
     }
 
 }

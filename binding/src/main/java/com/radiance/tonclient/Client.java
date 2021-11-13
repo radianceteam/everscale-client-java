@@ -15,6 +15,34 @@ public class Client {
      */
     public static class ClientConfig  {
 
+        public ClientConfig(NetworkConfig network, CryptoConfig crypto, AbiConfig abi, BocConfig boc, ProofsConfig proofs, String localStoragePath) {
+
+            this.network = network;
+
+            this.crypto = crypto;
+
+            this.abi = abi;
+
+            this.boc = boc;
+
+            this.proofs = proofs;
+
+            this.localStoragePath = localStoragePath;
+
+        }
+        public ClientConfig(NetworkConfig network, CryptoConfig crypto, AbiConfig abi, BocConfig boc, ProofsConfig proofs) {
+
+            this.network = network;
+
+            this.crypto = crypto;
+
+            this.abi = abi;
+
+            this.boc = boc;
+
+            this.proofs = proofs;
+
+        }
         public ClientConfig(NetworkConfig network, CryptoConfig crypto, AbiConfig abi, BocConfig boc) {
 
             this.network = network;
@@ -112,10 +140,40 @@ public class Client {
             this.boc = value;
         }
 
+        @JsonProperty("proofs")
+        private ProofsConfig proofs;
+        /**
+         * 
+         */
+        public ProofsConfig getProofs() {
+            return proofs;
+        }
+        /**
+         * 
+         */
+        public void setProofs(ProofsConfig value) {
+            this.proofs = value;
+        }
+
+        @JsonProperty("local_storage_path")
+        private String localStoragePath;
+        /**
+         * 
+         */
+        public String getLocalStoragePath() {
+            return localStoragePath;
+        }
+        /**
+         * 
+         */
+        public void setLocalStoragePath(String value) {
+            this.localStoragePath = value;
+        }
+
 
         @Override
         public String toString() {
-            return "{"+Stream.of((network==null?null:("\"network\":"+network)),(crypto==null?null:("\"crypto\":"+crypto)),(abi==null?null:("\"abi\":"+abi)),(boc==null?null:("\"boc\":"+boc))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
+            return "{"+Stream.of((network==null?null:("\"network\":"+network)),(crypto==null?null:("\"crypto\":"+crypto)),(abi==null?null:("\"abi\":"+abi)),(boc==null?null:("\"boc\":"+boc)),(proofs==null?null:("\"proofs\":"+proofs)),(localStoragePath==null?null:("\"local_storage_path\":\""+localStoragePath+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
         }
     }
     /**
@@ -794,6 +852,42 @@ public class Client {
         @Override
         public String toString() {
             return "{"+(cacheMaxSize==null?"":("\"cache_max_size\":"+cacheMaxSize))+"}";
+        }
+    }
+    /**
+     *  
+     */
+    public static class ProofsConfig  {
+
+        public ProofsConfig(Boolean cacheInLocalStorage) {
+
+            this.cacheInLocalStorage = cacheInLocalStorage;
+
+        }
+        public ProofsConfig() {
+
+        }
+
+
+        @JsonProperty("cache_in_local_storage")
+        private Boolean cacheInLocalStorage;
+        /**
+         * Default is `true`. If this value is set to `true`, downloaded proofs and master-chain BOCs are saved into thepersistent local storage (e.g. file system for native environments or browser's IndexedDBfor the web); otherwise all the data is cached only in memory in current client's contextand will be lost after destruction of the client.
+         */
+        public Boolean getCacheInLocalStorage() {
+            return cacheInLocalStorage;
+        }
+        /**
+         * Default is `true`. If this value is set to `true`, downloaded proofs and master-chain BOCs are saved into thepersistent local storage (e.g. file system for native environments or browser's IndexedDBfor the web); otherwise all the data is cached only in memory in current client's contextand will be lost after destruction of the client.
+         */
+        public void setCacheInLocalStorage(Boolean value) {
+            this.cacheInLocalStorage = value;
+        }
+
+
+        @Override
+        public String toString() {
+            return "{"+(cacheInLocalStorage==null?"":("\"cache_in_local_storage\":"+cacheInLocalStorage))+"}";
         }
     }
     /**

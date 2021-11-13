@@ -245,11 +245,44 @@ public class Boc {
      */
     public static class ResultOfDecodeTvc  {
 
-        public ResultOfDecodeTvc(String code, String data, String library, Boolean tick, Boolean tock, Number splitDepth) {
+        public ResultOfDecodeTvc(String code, String codeHash, Number codeDepth, String data, String dataHash, Number dataDepth, String library, Boolean tick, Boolean tock, Number splitDepth, String compilerVersion) {
 
             this.code = code;
 
+            this.codeHash = codeHash;
+
+            this.codeDepth = codeDepth;
+
             this.data = data;
+
+            this.dataHash = dataHash;
+
+            this.dataDepth = dataDepth;
+
+            this.library = library;
+
+            this.tick = tick;
+
+            this.tock = tock;
+
+            this.splitDepth = splitDepth;
+
+            this.compilerVersion = compilerVersion;
+
+        }
+        public ResultOfDecodeTvc(String code, String codeHash, Number codeDepth, String data, String dataHash, Number dataDepth, String library, Boolean tick, Boolean tock, Number splitDepth) {
+
+            this.code = code;
+
+            this.codeHash = codeHash;
+
+            this.codeDepth = codeDepth;
+
+            this.data = data;
+
+            this.dataHash = dataHash;
+
+            this.dataDepth = dataDepth;
 
             this.library = library;
 
@@ -260,11 +293,19 @@ public class Boc {
             this.splitDepth = splitDepth;
 
         }
-        public ResultOfDecodeTvc(String code, String data, String library, Boolean tick, Boolean tock) {
+        public ResultOfDecodeTvc(String code, String codeHash, Number codeDepth, String data, String dataHash, Number dataDepth, String library, Boolean tick, Boolean tock) {
 
             this.code = code;
 
+            this.codeHash = codeHash;
+
+            this.codeDepth = codeDepth;
+
             this.data = data;
+
+            this.dataHash = dataHash;
+
+            this.dataDepth = dataDepth;
 
             this.library = library;
 
@@ -273,31 +314,95 @@ public class Boc {
             this.tock = tock;
 
         }
-        public ResultOfDecodeTvc(String code, String data, String library, Boolean tick) {
+        public ResultOfDecodeTvc(String code, String codeHash, Number codeDepth, String data, String dataHash, Number dataDepth, String library, Boolean tick) {
 
             this.code = code;
 
+            this.codeHash = codeHash;
+
+            this.codeDepth = codeDepth;
+
             this.data = data;
+
+            this.dataHash = dataHash;
+
+            this.dataDepth = dataDepth;
 
             this.library = library;
 
             this.tick = tick;
 
         }
-        public ResultOfDecodeTvc(String code, String data, String library) {
+        public ResultOfDecodeTvc(String code, String codeHash, Number codeDepth, String data, String dataHash, Number dataDepth, String library) {
 
             this.code = code;
 
+            this.codeHash = codeHash;
+
+            this.codeDepth = codeDepth;
+
             this.data = data;
+
+            this.dataHash = dataHash;
+
+            this.dataDepth = dataDepth;
 
             this.library = library;
 
         }
-        public ResultOfDecodeTvc(String code, String data) {
+        public ResultOfDecodeTvc(String code, String codeHash, Number codeDepth, String data, String dataHash, Number dataDepth) {
 
             this.code = code;
 
+            this.codeHash = codeHash;
+
+            this.codeDepth = codeDepth;
+
             this.data = data;
+
+            this.dataHash = dataHash;
+
+            this.dataDepth = dataDepth;
+
+        }
+        public ResultOfDecodeTvc(String code, String codeHash, Number codeDepth, String data, String dataHash) {
+
+            this.code = code;
+
+            this.codeHash = codeHash;
+
+            this.codeDepth = codeDepth;
+
+            this.data = data;
+
+            this.dataHash = dataHash;
+
+        }
+        public ResultOfDecodeTvc(String code, String codeHash, Number codeDepth, String data) {
+
+            this.code = code;
+
+            this.codeHash = codeHash;
+
+            this.codeDepth = codeDepth;
+
+            this.data = data;
+
+        }
+        public ResultOfDecodeTvc(String code, String codeHash, Number codeDepth) {
+
+            this.code = code;
+
+            this.codeHash = codeHash;
+
+            this.codeDepth = codeDepth;
+
+        }
+        public ResultOfDecodeTvc(String code, String codeHash) {
+
+            this.code = code;
+
+            this.codeHash = codeHash;
 
         }
         public ResultOfDecodeTvc(String code) {
@@ -325,6 +430,36 @@ public class Boc {
             this.code = value;
         }
 
+        @JsonProperty("code_hash")
+        private String codeHash;
+        /**
+         * 
+         */
+        public String getCodeHash() {
+            return codeHash;
+        }
+        /**
+         * 
+         */
+        public void setCodeHash(String value) {
+            this.codeHash = value;
+        }
+
+        @JsonProperty("code_depth")
+        private Number codeDepth;
+        /**
+         * 
+         */
+        public Number getCodeDepth() {
+            return codeDepth;
+        }
+        /**
+         * 
+         */
+        public void setCodeDepth(Number value) {
+            this.codeDepth = value;
+        }
+
         @JsonProperty("data")
         private String data;
         /**
@@ -338,6 +473,36 @@ public class Boc {
          */
         public void setData(String value) {
             this.data = value;
+        }
+
+        @JsonProperty("data_hash")
+        private String dataHash;
+        /**
+         * 
+         */
+        public String getDataHash() {
+            return dataHash;
+        }
+        /**
+         * 
+         */
+        public void setDataHash(String value) {
+            this.dataHash = value;
+        }
+
+        @JsonProperty("data_depth")
+        private Number dataDepth;
+        /**
+         * 
+         */
+        public Number getDataDepth() {
+            return dataDepth;
+        }
+        /**
+         * 
+         */
+        public void setDataDepth(Number value) {
+            this.dataDepth = value;
         }
 
         @JsonProperty("library")
@@ -400,10 +565,25 @@ public class Boc {
             this.splitDepth = value;
         }
 
+        @JsonProperty("compiler_version")
+        private String compilerVersion;
+        /**
+         * 
+         */
+        public String getCompilerVersion() {
+            return compilerVersion;
+        }
+        /**
+         * 
+         */
+        public void setCompilerVersion(String value) {
+            this.compilerVersion = value;
+        }
+
 
         @Override
         public String toString() {
-            return "{"+Stream.of((code==null?null:("\"code\":\""+code+"\"")),(data==null?null:("\"data\":\""+data+"\"")),(library==null?null:("\"library\":\""+library+"\"")),(tick==null?null:("\"tick\":"+tick)),(tock==null?null:("\"tock\":"+tock)),(splitDepth==null?null:("\"split_depth\":"+splitDepth))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
+            return "{"+Stream.of((code==null?null:("\"code\":\""+code+"\"")),(codeHash==null?null:("\"code_hash\":\""+codeHash+"\"")),(codeDepth==null?null:("\"code_depth\":"+codeDepth)),(data==null?null:("\"data\":\""+data+"\"")),(dataHash==null?null:("\"data_hash\":\""+dataHash+"\"")),(dataDepth==null?null:("\"data_depth\":"+dataDepth)),(library==null?null:("\"library\":\""+library+"\"")),(tick==null?null:("\"tick\":"+tick)),(tock==null?null:("\"tock\":"+tock)),(splitDepth==null?null:("\"split_depth\":"+splitDepth)),(compilerVersion==null?null:("\"compiler_version\":\""+compilerVersion+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
         }
     }
     private TONContext context;
@@ -482,6 +662,16 @@ public class Boc {
     public CompletableFuture<String> getBocHash(String boc) {
         return context.requestJSON("boc.get_boc_hash", "{"+(boc==null?"":("\"boc\":\""+boc+"\""))+"}")
             .thenApply(json -> TONContext.convertValue(json.findValue("hash"), String.class));
+    }
+
+   /**
+    * 
+    *
+    * @param boc 
+    */
+    public CompletableFuture<Number> getBocDepth(String boc) {
+        return context.requestJSON("boc.get_boc_depth", "{"+(boc==null?"":("\"boc\":\""+boc+"\""))+"}")
+            .thenApply(json -> TONContext.convertValue(json.findValue("depth"), Number.class));
     }
 
    /**

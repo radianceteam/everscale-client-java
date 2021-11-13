@@ -48,17 +48,8 @@ dependencies = [
 ]
 
 [[package]]
-name = "ansi_term"
-version = "0.11.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ee49baf6cb617b853aa8d93bf420db2383fab46d314482ca2803b40d5fde979b"
-dependencies = [
- "winapi 0.3.9",
-]
-
-[[package]]
 name = "api_derive"
-version = "1.23.0"
+version = "1.25.0"
 dependencies = [
  "api_info",
  "quote",
@@ -68,7 +59,7 @@ dependencies = [
 
 [[package]]
 name = "api_info"
-version = "1.23.0"
+version = "1.25.0"
 dependencies = [
  "serde",
  "serde_derive",
@@ -145,6 +136,15 @@ name = "base64"
 version = "0.13.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "904dfeac50f3cdaba28fc6f57fdcddb75f49ed61346676a78c4ffe55877802fd"
+
+[[package]]
+name = "bincode"
+version = "1.3.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b1f45e9417d87227c7a56d22e471c6206462cba514c7590c09aff4cf6d1ddcad"
+dependencies = [
+ "serde",
+]
 
 [[package]]
 name = "bitflags"
@@ -417,12 +417,6 @@ name = "debug-helper"
 version = "0.3.12"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "76fbd10dce159c002b9c688ae8ab7cd531151e185e0ad360f4bfea3b0eede3a8"
-
-[[package]]
-name = "difference"
-version = "2.0.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "524cbf6897b527295dff137cec09ecf3a05f4fddffd7dfcd1585403449e74198"
 
 [[package]]
 name = "digest"
@@ -712,6 +706,12 @@ dependencies = [
 
 [[package]]
 name = "hashbrown"
+version = "0.9.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d7afe4a420e3fe79967a00898cc1f4db7c8a49a9333a29f8a4bd76a253d5cd04"
+
+[[package]]
+name = "hashbrown"
 version = "0.11.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ab5ef0d4909ef3724cc8cce6ccc8572c5c817592e9285f5464f8e86f8bd3726e"
@@ -779,6 +779,15 @@ dependencies = [
  "digest 0.9.0",
  "generic-array 0.14.4",
  "hmac 0.8.1",
+]
+
+[[package]]
+name = "home"
+version = "0.5.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2456aef2e6b6a9784192ae780c0f15bc57df0e918585282325e8c8ac27737654"
+dependencies = [
+ "winapi 0.3.9",
 ]
 
 [[package]]
@@ -870,12 +879,12 @@ checksum = "4161ceaf2f41b6cd3f6502f5da085d4ad4393a51e0c70ed2fce1d5698d798fae"
 
 [[package]]
 name = "indexmap"
-version = "1.7.0"
+version = "1.6.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "bc633605454125dec4b66843673f01c7df2b89479b32e0ed634e43a91cff62a5"
+checksum = "824845a0bf897a9042383849b02c1bc219c2383772efcd5c6f9766fa4b81aef3"
 dependencies = [
  "autocfg",
- "hashbrown",
+ "hashbrown 0.9.1",
 ]
 
 [[package]]
@@ -1057,7 +1066,7 @@ version = "0.6.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7ea2d928b485416e8908cff2d97d621db22b27f7b3b6729e438bcf42c671ba91"
 dependencies = [
- "hashbrown",
+ "hashbrown 0.11.2",
 ]
 
 [[package]]
@@ -1501,16 +1510,6 @@ name = "ppv-lite86"
 version = "0.2.15"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ed0cfbc8191465bed66e1718596ee0b0b35d5ee1f41c5df2189d0fe8bde535ba"
-
-[[package]]
-name = "pretty_assertions"
-version = "0.5.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3a029430f0d744bc3d15dd474d591bed2402b645d024583082b9f63bb936dac6"
-dependencies = [
- "ansi_term",
- "difference",
-]
 
 [[package]]
 name = "proc-macro-hack"
@@ -2104,7 +2103,7 @@ dependencies = [
 
 [[package]]
 name = "ton-client-jni"
-version = "1.24.0"
+version = "1.25.0"
 dependencies = [
  "jni",
  "lazy_static",
@@ -2114,8 +2113,8 @@ dependencies = [
 
 [[package]]
 name = "ton_abi"
-version = "2.1.1"
-source = "git+https://github.com/tonlabs/ton-labs-abi.git?tag=2.1.1#0ee8aaef9e6647a2abd4e271da13df2fab80c489"
+version = "2.1.4"
+source = "git+https://github.com/tonlabs/ton-labs-abi.git?tag=2.1.4#e8f907cc338face131d84b9dbc2b0414b7c4006f"
 dependencies = [
  "base64 0.10.1",
  "byteorder",
@@ -2126,7 +2125,6 @@ dependencies = [
  "hex 0.3.2",
  "num-bigint 0.2.6",
  "num-traits",
- "pretty_assertions",
  "serde",
  "serde_derive",
  "serde_json",
@@ -2137,8 +2135,8 @@ dependencies = [
 
 [[package]]
 name = "ton_block"
-version = "1.7.27"
-source = "git+https://github.com/tonlabs/ton-labs-block.git?tag=1.7.27#057949071a50e267bc0680166ac1c71b8f35fac7"
+version = "1.7.28"
+source = "git+https://github.com/tonlabs/ton-labs-block.git?tag=1.7.28#993d77425f9f8aeb4e40c9b2681bb04532489230"
 dependencies = [
  "base64 0.10.1",
  "clear_on_drop",
@@ -2157,8 +2155,8 @@ dependencies = [
 
 [[package]]
 name = "ton_block_json"
-version = "0.6.24"
-source = "git+https://github.com/tonlabs/ton-labs-block-json.git?tag=0.6.24#8240d038fc2a6ed7a7b2616b78342de8f84453d3"
+version = "0.6.25"
+source = "git+https://github.com/tonlabs/ton-labs-block-json.git?tag=0.6.25#c2ee836078eb15809dd4e5df070b72fd68a284b6"
 dependencies = [
  "base64 0.11.0",
  "failure",
@@ -2174,7 +2172,7 @@ dependencies = [
 
 [[package]]
 name = "ton_client"
-version = "1.23.0"
+version = "1.25.0"
 dependencies = [
  "aes",
  "api_derive",
@@ -2182,6 +2180,7 @@ dependencies = [
  "async-trait",
  "base58",
  "base64 0.10.1",
+ "bincode",
  "block-modes",
  "byteorder",
  "chacha20",
@@ -2192,6 +2191,8 @@ dependencies = [
  "futures",
  "hex 0.3.2",
  "hmac 0.11.0",
+ "home",
+ "indexmap",
  "lazy_static",
  "libsecp256k1",
  "lockfree",
@@ -2226,14 +2227,15 @@ dependencies = [
 
 [[package]]
 name = "ton_executor"
-version = "1.15.31"
-source = "git+https://github.com/tonlabs/ton-labs-executor.git?tag=1.15.31#156bbe101182029d036da74106a3c1755913bbe9"
+version = "1.15.33"
+source = "git+https://github.com/tonlabs/ton-labs-executor.git?tag=1.15.33#c651e2051ffd6592c23867f62ae58f5c7575a703"
 dependencies = [
  "base64 0.10.1",
  "clear_on_drop",
  "failure",
  "lazy_static",
  "log",
+ "rand 0.8.4",
  "ton_block",
  "ton_labs_assembler",
  "ton_types",
@@ -2242,8 +2244,8 @@ dependencies = [
 
 [[package]]
 name = "ton_labs_assembler"
-version = "1.2.24"
-source = "git+https://github.com/tonlabs/ton-labs-assembler.git?tag=1.2.24#91aba62d92db942d1290ea2164943760062ad9fc"
+version = "1.2.25"
+source = "git+https://github.com/tonlabs/ton-labs-assembler.git?tag=1.2.25#60e5d3aff02aa5c0aba8061b6a3a96ad02e46ef9"
 dependencies = [
  "failure",
  "hex 0.4.3",
@@ -2257,7 +2259,7 @@ dependencies = [
 
 [[package]]
 name = "ton_sdk"
-version = "1.22.0"
+version = "1.25.0"
 dependencies = [
  "api_derive",
  "api_info",
@@ -2283,8 +2285,8 @@ dependencies = [
 
 [[package]]
 name = "ton_types"
-version = "1.10.10"
-source = "git+https://github.com/tonlabs/ton-labs-types.git?tag=1.10.10#fb1262a2445681b239f7c5a1f57d0200f1cab789"
+version = "1.10.11"
+source = "git+https://github.com/tonlabs/ton-labs-types.git?tag=1.10.11#e0ce6c625ba86f599f5d27a41990007b27400c07"
 dependencies = [
  "base64 0.13.0",
  "crc",
@@ -2303,8 +2305,8 @@ dependencies = [
 
 [[package]]
 name = "ton_vm"
-version = "1.8.19"
-source = "git+https://github.com/tonlabs/ton-labs-vm.git?tag=1.8.19#469df4dd6b50e87f2ef6fe683282633805897cde"
+version = "1.8.20"
+source = "git+https://github.com/tonlabs/ton-labs-vm.git?tag=1.8.20#56c4af48f9cc66f34594d5521428bfcc7f81e093"
 dependencies = [
  "ed25519",
  "ed25519-dalek",
