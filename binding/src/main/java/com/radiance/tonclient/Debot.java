@@ -183,6 +183,33 @@ public class Debot {
      */
     public static class DebotInfo  {
 
+        public DebotInfo(String name, String version, String publisher, String caption, String author, String support, String hello, String language, String dabi, String icon, String[] interfaces, String dabiVersion) {
+
+            this.name = name;
+
+            this.version = version;
+
+            this.publisher = publisher;
+
+            this.caption = caption;
+
+            this.author = author;
+
+            this.support = support;
+
+            this.hello = hello;
+
+            this.language = language;
+
+            this.dabi = dabi;
+
+            this.icon = icon;
+
+            this.interfaces = interfaces;
+
+            this.dabiVersion = dabiVersion;
+
+        }
         public DebotInfo(String name, String version, String publisher, String caption, String author, String support, String hello, String language, String dabi, String icon, String[] interfaces) {
 
             this.name = name;
@@ -518,10 +545,25 @@ public class Debot {
             this.interfaces = value;
         }
 
+        @JsonProperty("dabiVersion")
+        private String dabiVersion;
+        /**
+         * 
+         */
+        public String getDabiVersion() {
+            return dabiVersion;
+        }
+        /**
+         * 
+         */
+        public void setDabiVersion(String value) {
+            this.dabiVersion = value;
+        }
+
 
         @Override
         public String toString() {
-            return "{"+Stream.of((name==null?null:("\"name\":\""+name+"\"")),(version==null?null:("\"version\":\""+version+"\"")),(publisher==null?null:("\"publisher\":\""+publisher+"\"")),(caption==null?null:("\"caption\":\""+caption+"\"")),(author==null?null:("\"author\":\""+author+"\"")),(support==null?null:("\"support\":\""+support+"\"")),(hello==null?null:("\"hello\":\""+hello+"\"")),(language==null?null:("\"language\":\""+language+"\"")),(dabi==null?null:("\"dabi\":\""+dabi+"\"")),(icon==null?null:("\"icon\":\""+icon+"\"")),(interfaces==null?null:("\"interfaces\":\""+Arrays.toString(interfaces)+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
+            return "{"+Stream.of((name==null?null:("\"name\":\""+name+"\"")),(version==null?null:("\"version\":\""+version+"\"")),(publisher==null?null:("\"publisher\":\""+publisher+"\"")),(caption==null?null:("\"caption\":\""+caption+"\"")),(author==null?null:("\"author\":\""+author+"\"")),(support==null?null:("\"support\":\""+support+"\"")),(hello==null?null:("\"hello\":\""+hello+"\"")),(language==null?null:("\"language\":\""+language+"\"")),(dabi==null?null:("\"dabi\":\""+dabi+"\"")),(icon==null?null:("\"icon\":\""+icon+"\"")),(interfaces==null?null:("\"interfaces\":\""+Arrays.toString(interfaces)+"\"")),(dabiVersion==null?null:("\"dabiVersion\":\""+dabiVersion+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
         }
     }
     /**
