@@ -3,7 +3,7 @@
 tondir=target/TON-SDK
 
 projectdir=`pwd`
-branch=1.26.0
+branch=1.26.1
 #`git rev-parse --abbrev-ref HEAD`
 
 [ -d "$tondir" ] || git clone --single-branch --branch $branch https://github.com/tonlabs/TON-SDK.git $tondir
