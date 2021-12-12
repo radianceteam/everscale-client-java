@@ -1548,6 +1548,19 @@ public class Abi {
     }
 
    /**
+    * This function is analogue of `tvm.buildDataInit` function in Solidity.
+    *
+    * @param abi 
+    * @param initialData `abi` parameter should be provided to set initial data
+    * @param initialPubkey 
+    * @param bocCache 
+    */
+    public CompletableFuture<String> encodeInitialData(ABI abi, Object initialData, String initialPubkey, Boc.BocCacheType bocCache) {
+        return context.requestJSON("abi.encode_initial_data", "{"+Stream.of((abi==null?null:("\"abi\":"+abi)),(initialData==null?null:("\"initial_data\":"+initialData)),(initialPubkey==null?null:("\"initial_pubkey\":\""+initialPubkey+"\"")),(bocCache==null?null:("\"boc_cache\":"+bocCache))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
+            .thenApply(json -> TONContext.convertValue(json.findValue("data"), String.class));
+    }
+
+   /**
     * 
     *
     * @param abi Initial data is decoded if this parameter is provided
