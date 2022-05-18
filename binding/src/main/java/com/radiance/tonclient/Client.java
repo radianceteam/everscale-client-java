@@ -181,7 +181,7 @@ public class Client {
      */
     public static class NetworkConfig  {
 
-        public NetworkConfig(String serverAddress, String[] endpoints, Number networkRetriesCount, Number maxReconnectTimeout, Number reconnectTimeout, Number messageRetriesCount, Number messageProcessingTimeout, Number waitForTimeout, Number outOfSyncThreshold, Number sendingEndpointCount, Number latencyDetectionInterval, Number maxLatency, Number queryTimeout, String accessKey) {
+        public NetworkConfig(String serverAddress, String[] endpoints, Number networkRetriesCount, Number maxReconnectTimeout, Number reconnectTimeout, Number messageRetriesCount, Number messageProcessingTimeout, Number waitForTimeout, Number outOfSyncThreshold, Number sendingEndpointCount, Number latencyDetectionInterval, Number maxLatency, Number queryTimeout, NetworkQueriesProtocol queriesProtocol, Number firstRempStatusTimeout, Number nextRempStatusTimeout, String accessKey) {
 
             this.serverAddress = serverAddress;
 
@@ -209,7 +209,112 @@ public class Client {
 
             this.queryTimeout = queryTimeout;
 
+            this.queriesProtocol = queriesProtocol;
+
+            this.firstRempStatusTimeout = firstRempStatusTimeout;
+
+            this.nextRempStatusTimeout = nextRempStatusTimeout;
+
             this.accessKey = accessKey;
+
+        }
+        public NetworkConfig(String serverAddress, String[] endpoints, Number networkRetriesCount, Number maxReconnectTimeout, Number reconnectTimeout, Number messageRetriesCount, Number messageProcessingTimeout, Number waitForTimeout, Number outOfSyncThreshold, Number sendingEndpointCount, Number latencyDetectionInterval, Number maxLatency, Number queryTimeout, NetworkQueriesProtocol queriesProtocol, Number firstRempStatusTimeout, Number nextRempStatusTimeout) {
+
+            this.serverAddress = serverAddress;
+
+            this.endpoints = endpoints;
+
+            this.networkRetriesCount = networkRetriesCount;
+
+            this.maxReconnectTimeout = maxReconnectTimeout;
+
+            this.reconnectTimeout = reconnectTimeout;
+
+            this.messageRetriesCount = messageRetriesCount;
+
+            this.messageProcessingTimeout = messageProcessingTimeout;
+
+            this.waitForTimeout = waitForTimeout;
+
+            this.outOfSyncThreshold = outOfSyncThreshold;
+
+            this.sendingEndpointCount = sendingEndpointCount;
+
+            this.latencyDetectionInterval = latencyDetectionInterval;
+
+            this.maxLatency = maxLatency;
+
+            this.queryTimeout = queryTimeout;
+
+            this.queriesProtocol = queriesProtocol;
+
+            this.firstRempStatusTimeout = firstRempStatusTimeout;
+
+            this.nextRempStatusTimeout = nextRempStatusTimeout;
+
+        }
+        public NetworkConfig(String serverAddress, String[] endpoints, Number networkRetriesCount, Number maxReconnectTimeout, Number reconnectTimeout, Number messageRetriesCount, Number messageProcessingTimeout, Number waitForTimeout, Number outOfSyncThreshold, Number sendingEndpointCount, Number latencyDetectionInterval, Number maxLatency, Number queryTimeout, NetworkQueriesProtocol queriesProtocol, Number firstRempStatusTimeout) {
+
+            this.serverAddress = serverAddress;
+
+            this.endpoints = endpoints;
+
+            this.networkRetriesCount = networkRetriesCount;
+
+            this.maxReconnectTimeout = maxReconnectTimeout;
+
+            this.reconnectTimeout = reconnectTimeout;
+
+            this.messageRetriesCount = messageRetriesCount;
+
+            this.messageProcessingTimeout = messageProcessingTimeout;
+
+            this.waitForTimeout = waitForTimeout;
+
+            this.outOfSyncThreshold = outOfSyncThreshold;
+
+            this.sendingEndpointCount = sendingEndpointCount;
+
+            this.latencyDetectionInterval = latencyDetectionInterval;
+
+            this.maxLatency = maxLatency;
+
+            this.queryTimeout = queryTimeout;
+
+            this.queriesProtocol = queriesProtocol;
+
+            this.firstRempStatusTimeout = firstRempStatusTimeout;
+
+        }
+        public NetworkConfig(String serverAddress, String[] endpoints, Number networkRetriesCount, Number maxReconnectTimeout, Number reconnectTimeout, Number messageRetriesCount, Number messageProcessingTimeout, Number waitForTimeout, Number outOfSyncThreshold, Number sendingEndpointCount, Number latencyDetectionInterval, Number maxLatency, Number queryTimeout, NetworkQueriesProtocol queriesProtocol) {
+
+            this.serverAddress = serverAddress;
+
+            this.endpoints = endpoints;
+
+            this.networkRetriesCount = networkRetriesCount;
+
+            this.maxReconnectTimeout = maxReconnectTimeout;
+
+            this.reconnectTimeout = reconnectTimeout;
+
+            this.messageRetriesCount = messageRetriesCount;
+
+            this.messageProcessingTimeout = messageProcessingTimeout;
+
+            this.waitForTimeout = waitForTimeout;
+
+            this.outOfSyncThreshold = outOfSyncThreshold;
+
+            this.sendingEndpointCount = sendingEndpointCount;
+
+            this.latencyDetectionInterval = latencyDetectionInterval;
+
+            this.maxLatency = maxLatency;
+
+            this.queryTimeout = queryTimeout;
+
+            this.queriesProtocol = queriesProtocol;
 
         }
         public NetworkConfig(String serverAddress, String[] endpoints, Number networkRetriesCount, Number maxReconnectTimeout, Number reconnectTimeout, Number messageRetriesCount, Number messageProcessingTimeout, Number waitForTimeout, Number outOfSyncThreshold, Number sendingEndpointCount, Number latencyDetectionInterval, Number maxLatency, Number queryTimeout) {
@@ -456,13 +561,13 @@ public class Client {
         @JsonProperty("endpoints")
         private String[] endpoints;
         /**
-         * Any correct URL format can be specified, including IP addresses This parameter is prevailing over `server_address`.
+         * Any correct URL format can be specified, including IP addresses. This parameter is prevailing over `server_address`.Check the full list of <a target="_blank" href="supported network endpoints">supported network endpoints</a>(../ton-os-api/networks.md).
          */
         public String[] getEndpoints() {
             return endpoints;
         }
         /**
-         * Any correct URL format can be specified, including IP addresses This parameter is prevailing over `server_address`.
+         * Any correct URL format can be specified, including IP addresses. This parameter is prevailing over `server_address`.Check the full list of <a target="_blank" href="supported network endpoints">supported network endpoints</a>(../ton-os-api/networks.md).
          */
         public void setEndpoints(String[] value) {
             this.endpoints = value;
@@ -576,13 +681,13 @@ public class Client {
         @JsonProperty("sending_endpoint_count")
         private Number sendingEndpointCount;
         /**
-         * Default is 2.
+         * Default is 1.
          */
         public Number getSendingEndpointCount() {
             return sendingEndpointCount;
         }
         /**
-         * Default is 2.
+         * Default is 1.
          */
         public void setSendingEndpointCount(Number value) {
             this.sendingEndpointCount = value;
@@ -633,6 +738,51 @@ public class Client {
             this.queryTimeout = value;
         }
 
+        @JsonProperty("queries_protocol")
+        private NetworkQueriesProtocol queriesProtocol;
+        /**
+         * `HTTP` or `WS`. Default is `HTTP`.
+         */
+        public NetworkQueriesProtocol getQueriesProtocol() {
+            return queriesProtocol;
+        }
+        /**
+         * `HTTP` or `WS`. Default is `HTTP`.
+         */
+        public void setQueriesProtocol(NetworkQueriesProtocol value) {
+            this.queriesProtocol = value;
+        }
+
+        @JsonProperty("first_remp_status_timeout")
+        private Number firstRempStatusTimeout;
+        /**
+         * First REMP status awaiting timeout. If no status recieved during the timeout than fallback transaction scenario is activated.<p>Must be specified in milliseconds. Default is 1000 (1 sec).
+         */
+        public Number getFirstRempStatusTimeout() {
+            return firstRempStatusTimeout;
+        }
+        /**
+         * First REMP status awaiting timeout. If no status recieved during the timeout than fallback transaction scenario is activated.<p>Must be specified in milliseconds. Default is 1000 (1 sec).
+         */
+        public void setFirstRempStatusTimeout(Number value) {
+            this.firstRempStatusTimeout = value;
+        }
+
+        @JsonProperty("next_remp_status_timeout")
+        private Number nextRempStatusTimeout;
+        /**
+         * Subsequent REMP status awaiting timeout. If no status recieved during the timeout than fallback transaction scenario is activated.<p>Must be specified in milliseconds. Default is 5000 (5 sec).
+         */
+        public Number getNextRempStatusTimeout() {
+            return nextRempStatusTimeout;
+        }
+        /**
+         * Subsequent REMP status awaiting timeout. If no status recieved during the timeout than fallback transaction scenario is activated.<p>Must be specified in milliseconds. Default is 5000 (5 sec).
+         */
+        public void setNextRempStatusTimeout(Number value) {
+            this.nextRempStatusTimeout = value;
+        }
+
         @JsonProperty("access_key")
         private String accessKey;
         /**
@@ -651,8 +801,24 @@ public class Client {
 
         @Override
         public String toString() {
-            return "{"+Stream.of((serverAddress==null?null:("\"server_address\":\""+serverAddress+"\"")),(endpoints==null?null:("\"endpoints\":\""+Arrays.toString(endpoints)+"\"")),(networkRetriesCount==null?null:("\"network_retries_count\":"+networkRetriesCount)),(maxReconnectTimeout==null?null:("\"max_reconnect_timeout\":"+maxReconnectTimeout)),(reconnectTimeout==null?null:("\"reconnect_timeout\":"+reconnectTimeout)),(messageRetriesCount==null?null:("\"message_retries_count\":"+messageRetriesCount)),(messageProcessingTimeout==null?null:("\"message_processing_timeout\":"+messageProcessingTimeout)),(waitForTimeout==null?null:("\"wait_for_timeout\":"+waitForTimeout)),(outOfSyncThreshold==null?null:("\"out_of_sync_threshold\":"+outOfSyncThreshold)),(sendingEndpointCount==null?null:("\"sending_endpoint_count\":"+sendingEndpointCount)),(latencyDetectionInterval==null?null:("\"latency_detection_interval\":"+latencyDetectionInterval)),(maxLatency==null?null:("\"max_latency\":"+maxLatency)),(queryTimeout==null?null:("\"query_timeout\":"+queryTimeout)),(accessKey==null?null:("\"access_key\":\""+accessKey+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
+            return "{"+Stream.of((serverAddress==null?null:("\"server_address\":\""+serverAddress+"\"")),(endpoints==null?null:("\"endpoints\":\""+Arrays.toString(endpoints)+"\"")),(networkRetriesCount==null?null:("\"network_retries_count\":"+networkRetriesCount)),(maxReconnectTimeout==null?null:("\"max_reconnect_timeout\":"+maxReconnectTimeout)),(reconnectTimeout==null?null:("\"reconnect_timeout\":"+reconnectTimeout)),(messageRetriesCount==null?null:("\"message_retries_count\":"+messageRetriesCount)),(messageProcessingTimeout==null?null:("\"message_processing_timeout\":"+messageProcessingTimeout)),(waitForTimeout==null?null:("\"wait_for_timeout\":"+waitForTimeout)),(outOfSyncThreshold==null?null:("\"out_of_sync_threshold\":"+outOfSyncThreshold)),(sendingEndpointCount==null?null:("\"sending_endpoint_count\":"+sendingEndpointCount)),(latencyDetectionInterval==null?null:("\"latency_detection_interval\":"+latencyDetectionInterval)),(maxLatency==null?null:("\"max_latency\":"+maxLatency)),(queryTimeout==null?null:("\"query_timeout\":"+queryTimeout)),(queriesProtocol==null?null:("\"queries_protocol\":"+queriesProtocol)),(firstRempStatusTimeout==null?null:("\"first_remp_status_timeout\":"+firstRempStatusTimeout)),(nextRempStatusTimeout==null?null:("\"next_remp_status_timeout\":"+nextRempStatusTimeout)),(accessKey==null?null:("\"access_key\":\""+accessKey+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
         }
+    }
+
+    /**
+     *  
+     */
+    public enum NetworkQueriesProtocol {
+        
+        /**
+         * 
+         */
+        HTTP,
+
+        /**
+         * 
+         */
+        WS
     }
     /**
      *  

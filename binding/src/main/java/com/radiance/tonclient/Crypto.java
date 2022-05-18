@@ -96,6 +96,523 @@ public class Crypto {
             return "{"+Stream.of("\"type\":\"AES\"",(mode==null?null:("\"mode\":"+mode)),(key==null?null:("\"key\":\""+key+"\"")),(iv==null?null:("\"iv\":\""+iv+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
         }
     }
+
+    /**
+     *  
+     */
+    public static class ChaCha20 extends EncryptionAlgorithm  {
+
+        public ChaCha20(String key, String nonce) {
+
+            this.key = key;
+
+            this.nonce = nonce;
+
+        }
+        public ChaCha20(String key) {
+
+            this.key = key;
+
+        }
+        public ChaCha20() {
+
+        }
+
+
+        @JsonProperty("key")
+        private String key;
+        /**
+         * Must be encoded with `hex`.
+         */
+        public String getKey() {
+            return key;
+        }
+        /**
+         * Must be encoded with `hex`.
+         */
+        public void setKey(String value) {
+            this.key = value;
+        }
+
+        @JsonProperty("nonce")
+        private String nonce;
+        /**
+         * Must be encoded with `hex`.
+         */
+        public String getNonce() {
+            return nonce;
+        }
+        /**
+         * Must be encoded with `hex`.
+         */
+        public void setNonce(String value) {
+            this.nonce = value;
+        }
+
+
+        @Override
+        public String toString() {
+            return "{"+Stream.of("\"type\":\"ChaCha20\"",(key==null?null:("\"key\":\""+key+"\"")),(nonce==null?null:("\"nonce\":\""+nonce+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
+        }
+    }
+
+    /**
+     *  
+     */
+    public static class NaclBox extends EncryptionAlgorithm  {
+
+        public NaclBox(String theirPublic, String secretKey, String nonce) {
+
+            this.theirPublic = theirPublic;
+
+            this.secretKey = secretKey;
+
+            this.nonce = nonce;
+
+        }
+        public NaclBox(String theirPublic, String secretKey) {
+
+            this.theirPublic = theirPublic;
+
+            this.secretKey = secretKey;
+
+        }
+        public NaclBox(String theirPublic) {
+
+            this.theirPublic = theirPublic;
+
+        }
+        public NaclBox() {
+
+        }
+
+
+        @JsonProperty("their_public")
+        private String theirPublic;
+        /**
+         * Must be encoded with `hex`.
+         */
+        public String getTheirPublic() {
+            return theirPublic;
+        }
+        /**
+         * Must be encoded with `hex`.
+         */
+        public void setTheirPublic(String value) {
+            this.theirPublic = value;
+        }
+
+        @JsonProperty("secret")
+        private String secretKey;
+        /**
+         * Must be encoded with `hex`.
+         */
+        public String getSecret() {
+            return secretKey;
+        }
+        /**
+         * Must be encoded with `hex`.
+         */
+        public void setSecret(String value) {
+            this.secretKey = value;
+        }
+
+        @JsonProperty("nonce")
+        private String nonce;
+        /**
+         * Must be encoded with `hex`.
+         */
+        public String getNonce() {
+            return nonce;
+        }
+        /**
+         * Must be encoded with `hex`.
+         */
+        public void setNonce(String value) {
+            this.nonce = value;
+        }
+
+
+        @Override
+        public String toString() {
+            return "{"+Stream.of("\"type\":\"NaclBox\"",(theirPublic==null?null:("\"their_public\":\""+theirPublic+"\"")),(secretKey==null?null:("\"secret\":\""+secretKey+"\"")),(nonce==null?null:("\"nonce\":\""+nonce+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
+        }
+    }
+
+    /**
+     *  
+     */
+    public static class NaclSecretBox extends EncryptionAlgorithm  {
+
+        public NaclSecretBox(String key, String nonce) {
+
+            this.key = key;
+
+            this.nonce = nonce;
+
+        }
+        public NaclSecretBox(String key) {
+
+            this.key = key;
+
+        }
+        public NaclSecretBox() {
+
+        }
+
+
+        @JsonProperty("key")
+        private String key;
+        /**
+         * 
+         */
+        public String getKey() {
+            return key;
+        }
+        /**
+         * 
+         */
+        public void setKey(String value) {
+            this.key = value;
+        }
+
+        @JsonProperty("nonce")
+        private String nonce;
+        /**
+         * 
+         */
+        public String getNonce() {
+            return nonce;
+        }
+        /**
+         * 
+         */
+        public void setNonce(String value) {
+            this.nonce = value;
+        }
+
+
+        @Override
+        public String toString() {
+            return "{"+Stream.of("\"type\":\"NaclSecretBox\"",(key==null?null:("\"key\":\""+key+"\"")),(nonce==null?null:("\"nonce\":\""+nonce+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
+        }
+    }
+}
+    public static abstract class CryptoBoxSecret {
+
+    /**
+     *  This type should be used upon the first wallet initialization, all further initializationsshould use `EncryptedSecret` type instead.<p>Get `encrypted_secret` with `get_crypto_box_info` function and store it on your side.
+     */
+    public static class RandomSeedPhrase extends CryptoBoxSecret  {
+
+        public RandomSeedPhrase(Number dictionary, Number wordcount) {
+
+            this.dictionary = dictionary;
+
+            this.wordcount = wordcount;
+
+        }
+        public RandomSeedPhrase(Number dictionary) {
+
+            this.dictionary = dictionary;
+
+        }
+        public RandomSeedPhrase() {
+
+        }
+
+
+        @JsonProperty("dictionary")
+        private Number dictionary;
+        /**
+         * 
+         */
+        public Number getDictionary() {
+            return dictionary;
+        }
+        /**
+         * 
+         */
+        public void setDictionary(Number value) {
+            this.dictionary = value;
+        }
+
+        @JsonProperty("wordcount")
+        private Number wordcount;
+        /**
+         * 
+         */
+        public Number getWordcount() {
+            return wordcount;
+        }
+        /**
+         * 
+         */
+        public void setWordcount(Number value) {
+            this.wordcount = value;
+        }
+
+
+        @Override
+        public String toString() {
+            return "{"+Stream.of("\"type\":\"RandomSeedPhrase\"",(dictionary==null?null:("\"dictionary\":"+dictionary)),(wordcount==null?null:("\"wordcount\":"+wordcount))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
+        }
+    }
+
+    /**
+     *  This type should be used only upon the first wallet initialization, all furtherinitializations should use `EncryptedSecret` type instead.<p>Get `encrypted_secret` with `get_crypto_box_info` function and store it on your side.
+     */
+    public static class PredefinedSeedPhrase extends CryptoBoxSecret  {
+
+        public PredefinedSeedPhrase(String phrase, Number dictionary, Number wordcount) {
+
+            this.phrase = phrase;
+
+            this.dictionary = dictionary;
+
+            this.wordcount = wordcount;
+
+        }
+        public PredefinedSeedPhrase(String phrase, Number dictionary) {
+
+            this.phrase = phrase;
+
+            this.dictionary = dictionary;
+
+        }
+        public PredefinedSeedPhrase(String phrase) {
+
+            this.phrase = phrase;
+
+        }
+        public PredefinedSeedPhrase() {
+
+        }
+
+
+        @JsonProperty("phrase")
+        private String phrase;
+        /**
+         * 
+         */
+        public String getPhrase() {
+            return phrase;
+        }
+        /**
+         * 
+         */
+        public void setPhrase(String value) {
+            this.phrase = value;
+        }
+
+        @JsonProperty("dictionary")
+        private Number dictionary;
+        /**
+         * 
+         */
+        public Number getDictionary() {
+            return dictionary;
+        }
+        /**
+         * 
+         */
+        public void setDictionary(Number value) {
+            this.dictionary = value;
+        }
+
+        @JsonProperty("wordcount")
+        private Number wordcount;
+        /**
+         * 
+         */
+        public Number getWordcount() {
+            return wordcount;
+        }
+        /**
+         * 
+         */
+        public void setWordcount(Number value) {
+            this.wordcount = value;
+        }
+
+
+        @Override
+        public String toString() {
+            return "{"+Stream.of("\"type\":\"PredefinedSeedPhrase\"",(phrase==null?null:("\"phrase\":\""+phrase+"\"")),(dictionary==null?null:("\"dictionary\":"+dictionary)),(wordcount==null?null:("\"wordcount\":"+wordcount))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
+        }
+    }
+
+    /**
+     *  It is an object, containing seed phrase or private key, encrypted with`secret_encryption_salt` and password from `password_provider`.<p>Note that if you want to change salt or password provider, then you need to reinitializethe wallet with `PredefinedSeedPhrase`, then get `EncryptedSecret` via `get_crypto_box_info`,store it somewhere, and only after that initialize the wallet with `EncryptedSecret` type.
+     */
+    public static class EncryptedSecret extends CryptoBoxSecret  {
+
+        public EncryptedSecret(String encryptedSecret) {
+
+            this.encryptedSecret = encryptedSecret;
+
+        }
+        public EncryptedSecret() {
+
+        }
+
+
+        @JsonProperty("encrypted_secret")
+        private String encryptedSecret;
+        /**
+         * 
+         */
+        public String getEncryptedSecret() {
+            return encryptedSecret;
+        }
+        /**
+         * 
+         */
+        public void setEncryptedSecret(String value) {
+            this.encryptedSecret = value;
+        }
+
+
+        @Override
+        public String toString() {
+            return "{"+Stream.of("\"type\":\"EncryptedSecret\"",(encryptedSecret==null?null:("\"encrypted_secret\":\""+encryptedSecret+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
+        }
+    }
+}
+    public static abstract class BoxEncryptionAlgorithm {
+
+    /**
+     *  
+     */
+    public static class ChaCha20 extends BoxEncryptionAlgorithm  {
+
+        public ChaCha20(String nonce) {
+
+            this.nonce = nonce;
+
+        }
+        public ChaCha20() {
+
+        }
+
+
+        @JsonProperty("nonce")
+        private String nonce;
+        /**
+         * Must be encoded with `hex`.
+         */
+        public String getNonce() {
+            return nonce;
+        }
+        /**
+         * Must be encoded with `hex`.
+         */
+        public void setNonce(String value) {
+            this.nonce = value;
+        }
+
+
+        @Override
+        public String toString() {
+            return "{"+Stream.of("\"type\":\"ChaCha20\"",(nonce==null?null:("\"nonce\":\""+nonce+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
+        }
+    }
+
+    /**
+     *  
+     */
+    public static class NaclBox extends BoxEncryptionAlgorithm  {
+
+        public NaclBox(String theirPublic, String nonce) {
+
+            this.theirPublic = theirPublic;
+
+            this.nonce = nonce;
+
+        }
+        public NaclBox(String theirPublic) {
+
+            this.theirPublic = theirPublic;
+
+        }
+        public NaclBox() {
+
+        }
+
+
+        @JsonProperty("their_public")
+        private String theirPublic;
+        /**
+         * Must be encoded with `hex`.
+         */
+        public String getTheirPublic() {
+            return theirPublic;
+        }
+        /**
+         * Must be encoded with `hex`.
+         */
+        public void setTheirPublic(String value) {
+            this.theirPublic = value;
+        }
+
+        @JsonProperty("nonce")
+        private String nonce;
+        /**
+         * Must be encoded with `hex`.
+         */
+        public String getNonce() {
+            return nonce;
+        }
+        /**
+         * Must be encoded with `hex`.
+         */
+        public void setNonce(String value) {
+            this.nonce = value;
+        }
+
+
+        @Override
+        public String toString() {
+            return "{"+Stream.of("\"type\":\"NaclBox\"",(theirPublic==null?null:("\"their_public\":\""+theirPublic+"\"")),(nonce==null?null:("\"nonce\":\""+nonce+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
+        }
+    }
+
+    /**
+     *  
+     */
+    public static class NaclSecretBox extends BoxEncryptionAlgorithm  {
+
+        public NaclSecretBox(String nonce) {
+
+            this.nonce = nonce;
+
+        }
+        public NaclSecretBox() {
+
+        }
+
+
+        @JsonProperty("nonce")
+        private String nonce;
+        /**
+         * 
+         */
+        public String getNonce() {
+            return nonce;
+        }
+        /**
+         * 
+         */
+        public void setNonce(String value) {
+            this.nonce = value;
+        }
+
+
+        @Override
+        public String toString() {
+            return "{"+Stream.of("\"type\":\"NaclSecretBox\"",(nonce==null?null:("\"nonce\":\""+nonce+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
+        }
+    }
 }
     /**
      *  
@@ -211,6 +728,88 @@ public class Crypto {
         @Override
         public String toString() {
             return "{"+Stream.of((signed==null?null:("\"signed\":\""+signed+"\"")),(signature==null?null:("\"signature\":\""+signature+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
+        }
+    }
+    /**
+     *  
+     */
+    public static class ResultOfGetCryptoBoxSeedPhrase  {
+
+        public ResultOfGetCryptoBoxSeedPhrase(String phrase, Number dictionary, Number wordcount) {
+
+            this.phrase = phrase;
+
+            this.dictionary = dictionary;
+
+            this.wordcount = wordcount;
+
+        }
+        public ResultOfGetCryptoBoxSeedPhrase(String phrase, Number dictionary) {
+
+            this.phrase = phrase;
+
+            this.dictionary = dictionary;
+
+        }
+        public ResultOfGetCryptoBoxSeedPhrase(String phrase) {
+
+            this.phrase = phrase;
+
+        }
+        public ResultOfGetCryptoBoxSeedPhrase() {
+
+        }
+
+
+        @JsonProperty("phrase")
+        private String phrase;
+        /**
+         * 
+         */
+        public String getPhrase() {
+            return phrase;
+        }
+        /**
+         * 
+         */
+        public void setPhrase(String value) {
+            this.phrase = value;
+        }
+
+        @JsonProperty("dictionary")
+        private Number dictionary;
+        /**
+         * 
+         */
+        public Number getDictionary() {
+            return dictionary;
+        }
+        /**
+         * 
+         */
+        public void setDictionary(Number value) {
+            this.dictionary = value;
+        }
+
+        @JsonProperty("wordcount")
+        private Number wordcount;
+        /**
+         * 
+         */
+        public Number getWordcount() {
+            return wordcount;
+        }
+        /**
+         * 
+         */
+        public void setWordcount(Number value) {
+            this.wordcount = value;
+        }
+
+
+        @Override
+        public String toString() {
+            return "{"+Stream.of((phrase==null?null:("\"phrase\":\""+phrase+"\"")),(dictionary==null?null:("\"dictionary\":"+dictionary)),(wordcount==null?null:("\"wordcount\":"+wordcount))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
         }
     }
     public static abstract class ParamsOfAppSigningBox {
@@ -930,6 +1529,82 @@ public class Crypto {
     public CompletableFuture<String> chacha20(String data, String key, String nonce) {
         return context.requestJSON("crypto.chacha20", "{"+Stream.of((data==null?null:("\"data\":\""+data+"\"")),(key==null?null:("\"key\":\""+key+"\"")),(nonce==null?null:("\"nonce\":\""+nonce+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
             .thenApply(json -> TONContext.convertValue(json.findValue("data"), String.class));
+    }
+
+   /**
+    * Crypto Box is a root crypto object, that encapsulates some secret (seed phrase usually)in encrypted form and acts as a factory for all crypto primitives used in SDK:keys for signing and encryption, derived from this secret.<p>Crypto Box encrypts original Seed Phrase with salt and password that is retrievedfrom `password_provider` callback, implemented on Application side.<p>When used, decrypted secret shows up in core library's memory for a very short periodof time and then is immediately overwritten with zeroes.
+    *
+    * @param secretEncryptionSalt 
+    * @param secretKey 
+    */
+    public CompletableFuture<Integer> createCryptoBox(String secretEncryptionSalt, CryptoBoxSecret secretKey) {
+        return context.requestJSON("crypto.create_crypto_box", "{"+Stream.of((secretEncryptionSalt==null?null:("\"secret_encryption_salt\":\""+secretEncryptionSalt+"\"")),(secretKey==null?null:("\"secret\":"+secretKey))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
+            .thenApply(json -> TONContext.convertValue(json.findValue("handle"), Integer.class));
+    }
+
+   /**
+    * 
+    *
+    * @param handle 
+    */
+    public CompletableFuture<Void> removeCryptoBox(Integer handle) {
+        return context.requestJSON("crypto.remove_crypto_box", "{"+(handle==null?"":("\"handle\":"+handle))+"}")
+            .thenApply(json -> TONContext.convertValue(json, Void.class));
+    }
+
+   /**
+    * 
+    *
+    * @param handle 
+    */
+    public CompletableFuture<String> getCryptoBoxInfo(Integer handle) {
+        return context.requestJSON("crypto.get_crypto_box_info", "{"+(handle==null?"":("\"handle\":"+handle))+"}")
+            .thenApply(json -> TONContext.convertValue(json.findValue("encrypted_secret"), String.class));
+    }
+
+   /**
+    * Attention! Store this data in your application for a very short period of time and overwrite it with zeroes ASAP.
+    *
+    * @param handle 
+    */
+    public CompletableFuture<ResultOfGetCryptoBoxSeedPhrase> getCryptoBoxSeedPhrase(Integer handle) {
+        return context.requestJSON("crypto.get_crypto_box_seed_phrase", "{"+(handle==null?"":("\"handle\":"+handle))+"}")
+            .thenApply(json -> TONContext.convertValue(json, ResultOfGetCryptoBoxSeedPhrase.class));
+    }
+
+   /**
+    * 
+    *
+    * @param handle 
+    * @param hdpath By default, Everscale HD path is used.
+    * @param secretLifetime 
+    */
+    public CompletableFuture<Integer> getSigningBoxFromCryptoBox(Number handle, String hdpath, Number secretLifetime) {
+        return context.requestJSON("crypto.get_signing_box_from_crypto_box", "{"+Stream.of((handle==null?null:("\"handle\":"+handle)),(hdpath==null?null:("\"hdpath\":\""+hdpath+"\"")),(secretLifetime==null?null:("\"secret_lifetime\":"+secretLifetime))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
+            .thenApply(json -> TONContext.convertValue(json.findValue("handle"), Integer.class));
+    }
+
+   /**
+    * Derives encryption keypair from cryptobox secret and hdpath andstores it in cache for `secret_lifetime`or until explicitly cleared by `clear_crypto_box_secret_cache` method.If `secret_lifetime` is not specified - overwrites encryption secret with zeroes immediately afterencryption operation.
+    *
+    * @param handle 
+    * @param hdpath By default, Everscale HD path is used.
+    * @param algorithm 
+    * @param secretLifetime 
+    */
+    public CompletableFuture<Integer> getEncryptionBoxFromCryptoBox(Number handle, String hdpath, BoxEncryptionAlgorithm algorithm, Number secretLifetime) {
+        return context.requestJSON("crypto.get_encryption_box_from_crypto_box", "{"+Stream.of((handle==null?null:("\"handle\":"+handle)),(hdpath==null?null:("\"hdpath\":\""+hdpath+"\"")),(algorithm==null?null:("\"algorithm\":"+algorithm)),(secretLifetime==null?null:("\"secret_lifetime\":"+secretLifetime))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
+            .thenApply(json -> TONContext.convertValue(json.findValue("handle"), Integer.class));
+    }
+
+   /**
+    * 
+    *
+    * @param handle 
+    */
+    public CompletableFuture<Void> clearCryptoBoxSecretCache(Integer handle) {
+        return context.requestJSON("crypto.clear_crypto_box_secret_cache", "{"+(handle==null?"":("\"handle\":"+handle))+"}")
+            .thenApply(json -> TONContext.convertValue(json, Void.class));
     }
 
    /**

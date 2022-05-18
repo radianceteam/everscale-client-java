@@ -1,5 +1,5 @@
 {
-  "version": "1.28.0",
+  "version": "1.33.1",
   "modules": [
     {
       "name": "client",
@@ -365,7 +365,7 @@
               "optional_inner": {
                 "type": "String"
               },
-              "summary": "DApp Server public address. For instance, for `net.ton.dev/graphql` GraphQL endpoint the server address will be net.ton.dev",
+              "summary": "**This field is deprecated, but left for backward-compatibility.** DApp Server public address.",
               "description": null
             },
             {
@@ -378,7 +378,7 @@
                 }
               },
               "summary": "List of DApp Server addresses.",
-              "description": "Any correct URL format can be specified, including IP addresses This parameter is prevailing over `server_address`."
+              "description": "Any correct URL format can be specified, including IP addresses. This parameter is prevailing over `server_address`.\nCheck the full list of [supported network endpoints](../ton-os-api/networks.md)."
             },
             {
               "name": "network_retries_count",
@@ -466,7 +466,7 @@
                 "number_size": 8
               },
               "summary": "Maximum number of randomly chosen endpoints the library uses to broadcast a message.",
-              "description": "Default is 2."
+              "description": "Default is 1."
             },
             {
               "name": "latency_detection_interval",
@@ -502,6 +502,38 @@
               "description": "Is is used when no timeout specified for the request to limit the answer waiting time. If no answer received during the timeout requests ends with\nerror.\n\nMust be specified in milliseconds. Default is 60000 (1 min)."
             },
             {
+              "name": "queries_protocol",
+              "type": "Optional",
+              "optional_inner": {
+                "type": "Ref",
+                "ref_name": "client.NetworkQueriesProtocol"
+              },
+              "summary": "Queries protocol.",
+              "description": "`HTTP` or `WS`. \nDefault is `HTTP`."
+            },
+            {
+              "name": "first_remp_status_timeout",
+              "type": "Optional",
+              "optional_inner": {
+                "type": "Number",
+                "number_type": "UInt",
+                "number_size": 32
+              },
+              "summary": "UNSTABLE.",
+              "description": "First REMP status awaiting timeout. If no status recieved during the timeout than fallback transaction scenario is activated.\n\nMust be specified in milliseconds. Default is 1000 (1 sec)."
+            },
+            {
+              "name": "next_remp_status_timeout",
+              "type": "Optional",
+              "optional_inner": {
+                "type": "Number",
+                "number_type": "UInt",
+                "number_size": 32
+              },
+              "summary": "UNSTABLE.",
+              "description": "Subsequent REMP status awaiting timeout. If no status recieved during the timeout than fallback transaction scenario is activated.\n\nMust be specified in milliseconds. Default is 5000 (5 sec)."
+            },
+            {
               "name": "access_key",
               "type": "Optional",
               "optional_inner": {
@@ -512,6 +544,26 @@
             }
           ],
           "summary": null,
+          "description": null
+        },
+        {
+          "name": "NetworkQueriesProtocol",
+          "type": "EnumOfConsts",
+          "enum_consts": [
+            {
+              "name": "HTTP",
+              "type": "None",
+              "summary": "Each GraphQL query uses separate HTTP request.",
+              "description": null
+            },
+            {
+              "name": "WS",
+              "type": "None",
+              "summary": "All GraphQL queries will be served using single web socket connection.",
+              "description": null
+            }
+          ],
+          "summary": "Network protocol used to perform GraphQL queries.",
           "description": null
         },
         {
@@ -1119,6 +1171,41 @@
               "value": "129",
               "summary": null,
               "description": null
+            },
+            {
+              "name": "CryptoBoxNotRegistered",
+              "type": "Number",
+              "value": "130",
+              "summary": null,
+              "description": null
+            },
+            {
+              "name": "InvalidCryptoBoxType",
+              "type": "Number",
+              "value": "131",
+              "summary": null,
+              "description": null
+            },
+            {
+              "name": "CryptoBoxSecretSerializationError",
+              "type": "Number",
+              "value": "132",
+              "summary": null,
+              "description": null
+            },
+            {
+              "name": "CryptoBoxSecretDeserializationError",
+              "type": "Number",
+              "value": "133",
+              "summary": null,
+              "description": null
+            },
+            {
+              "name": "InvalidNonceSize",
+              "type": "Number",
+              "value": "134",
+              "summary": null,
+              "description": null
             }
           ],
           "summary": null,
@@ -1183,7 +1270,7 @@
               "description": null
             }
           ],
-          "summary": "Encryption box information",
+          "summary": "Encryption box information.",
           "description": null
         },
         {
@@ -1193,7 +1280,28 @@
             {
               "name": "AES",
               "type": "Ref",
-              "ref_name": "crypto.AesParams",
+              "ref_name": "crypto.AesParamsEB",
+              "summary": null,
+              "description": null
+            },
+            {
+              "name": "ChaCha20",
+              "type": "Ref",
+              "ref_name": "crypto.ChaCha20ParamsEB",
+              "summary": null,
+              "description": null
+            },
+            {
+              "name": "NaclBox",
+              "type": "Ref",
+              "ref_name": "crypto.NaclBoxParamsEB",
+              "summary": null,
+              "description": null
+            },
+            {
+              "name": "NaclSecretBox",
+              "type": "Ref",
+              "ref_name": "crypto.NaclSecretBoxParamsEB",
               "summary": null,
               "description": null
             }
@@ -1240,7 +1348,7 @@
           "description": null
         },
         {
-          "name": "AesParams",
+          "name": "AesParamsEB",
           "type": "Struct",
           "struct_fields": [
             {
@@ -1287,6 +1395,233 @@
                 "type": "String"
               },
               "summary": null,
+              "description": null
+            }
+          ],
+          "summary": null,
+          "description": null
+        },
+        {
+          "name": "ChaCha20ParamsEB",
+          "type": "Struct",
+          "struct_fields": [
+            {
+              "name": "key",
+              "type": "String",
+              "summary": "256-bit key.",
+              "description": "Must be encoded with `hex`."
+            },
+            {
+              "name": "nonce",
+              "type": "String",
+              "summary": "96-bit nonce.",
+              "description": "Must be encoded with `hex`."
+            }
+          ],
+          "summary": null,
+          "description": null
+        },
+        {
+          "name": "NaclBoxParamsEB",
+          "type": "Struct",
+          "struct_fields": [
+            {
+              "name": "their_public",
+              "type": "String",
+              "summary": "256-bit key.",
+              "description": "Must be encoded with `hex`."
+            },
+            {
+              "name": "secret",
+              "type": "String",
+              "summary": "256-bit key.",
+              "description": "Must be encoded with `hex`."
+            },
+            {
+              "name": "nonce",
+              "type": "String",
+              "summary": "96-bit nonce.",
+              "description": "Must be encoded with `hex`."
+            }
+          ],
+          "summary": null,
+          "description": null
+        },
+        {
+          "name": "NaclSecretBoxParamsEB",
+          "type": "Struct",
+          "struct_fields": [
+            {
+              "name": "key",
+              "type": "String",
+              "summary": "Secret key - unprefixed 0-padded to 64 symbols hex string",
+              "description": null
+            },
+            {
+              "name": "nonce",
+              "type": "String",
+              "summary": "Nonce in `hex`",
+              "description": null
+            }
+          ],
+          "summary": null,
+          "description": null
+        },
+        {
+          "name": "CryptoBoxSecret",
+          "type": "EnumOfTypes",
+          "enum_types": [
+            {
+              "name": "RandomSeedPhrase",
+              "type": "Struct",
+              "struct_fields": [
+                {
+                  "name": "dictionary",
+                  "type": "Number",
+                  "number_type": "UInt",
+                  "number_size": 8,
+                  "summary": null,
+                  "description": null
+                },
+                {
+                  "name": "wordcount",
+                  "type": "Number",
+                  "number_type": "UInt",
+                  "number_size": 8,
+                  "summary": null,
+                  "description": null
+                }
+              ],
+              "summary": "Creates Crypto Box from a random seed phrase. This option can be used if a developer doesn't want the seed phrase to leave the core library's memory, where it is stored encrypted.",
+              "description": "This type should be used upon the first wallet initialization, all further initializations\nshould use `EncryptedSecret` type instead.\n\nGet `encrypted_secret` with `get_crypto_box_info` function and store it on your side."
+            },
+            {
+              "name": "PredefinedSeedPhrase",
+              "type": "Struct",
+              "struct_fields": [
+                {
+                  "name": "phrase",
+                  "type": "String",
+                  "summary": null,
+                  "description": null
+                },
+                {
+                  "name": "dictionary",
+                  "type": "Number",
+                  "number_type": "UInt",
+                  "number_size": 8,
+                  "summary": null,
+                  "description": null
+                },
+                {
+                  "name": "wordcount",
+                  "type": "Number",
+                  "number_type": "UInt",
+                  "number_size": 8,
+                  "summary": null,
+                  "description": null
+                }
+              ],
+              "summary": "Restores crypto box instance from an existing seed phrase. This type should be used when Crypto Box is initialized from a seed phrase, entered by a user.",
+              "description": "This type should be used only upon the first wallet initialization, all further\ninitializations should use `EncryptedSecret` type instead.\n\nGet `encrypted_secret` with `get_crypto_box_info` function and store it on your side."
+            },
+            {
+              "name": "EncryptedSecret",
+              "type": "Struct",
+              "struct_fields": [
+                {
+                  "name": "encrypted_secret",
+                  "type": "String",
+                  "summary": "It is an object, containing encrypted seed phrase or private key (now we support only seed phrase).",
+                  "description": null
+                }
+              ],
+              "summary": "Use this type for wallet reinitializations, when you already have `encrypted_secret` on hands. To get `encrypted_secret`, use `get_crypto_box_info` function after you initialized your crypto box for the first time.",
+              "description": "It is an object, containing seed phrase or private key, encrypted with\n`secret_encryption_salt` and password from `password_provider`.\n\nNote that if you want to change salt or password provider, then you need to reinitialize\nthe wallet with `PredefinedSeedPhrase`, then get `EncryptedSecret` via `get_crypto_box_info`,\nstore it somewhere, and only after that initialize the wallet with `EncryptedSecret` type."
+            }
+          ],
+          "summary": "Crypto Box Secret.",
+          "description": null
+        },
+        {
+          "name": "CryptoBoxHandle",
+          "type": "Number",
+          "number_type": "UInt",
+          "number_size": 32,
+          "summary": null,
+          "description": null
+        },
+        {
+          "name": "BoxEncryptionAlgorithm",
+          "type": "EnumOfTypes",
+          "enum_types": [
+            {
+              "name": "ChaCha20",
+              "type": "Ref",
+              "ref_name": "crypto.ChaCha20ParamsCB",
+              "summary": null,
+              "description": null
+            },
+            {
+              "name": "NaclBox",
+              "type": "Ref",
+              "ref_name": "crypto.NaclBoxParamsCB",
+              "summary": null,
+              "description": null
+            },
+            {
+              "name": "NaclSecretBox",
+              "type": "Ref",
+              "ref_name": "crypto.NaclSecretBoxParamsCB",
+              "summary": null,
+              "description": null
+            }
+          ],
+          "summary": null,
+          "description": null
+        },
+        {
+          "name": "ChaCha20ParamsCB",
+          "type": "Struct",
+          "struct_fields": [
+            {
+              "name": "nonce",
+              "type": "String",
+              "summary": "96-bit nonce.",
+              "description": "Must be encoded with `hex`."
+            }
+          ],
+          "summary": null,
+          "description": null
+        },
+        {
+          "name": "NaclBoxParamsCB",
+          "type": "Struct",
+          "struct_fields": [
+            {
+              "name": "their_public",
+              "type": "String",
+              "summary": "256-bit key.",
+              "description": "Must be encoded with `hex`."
+            },
+            {
+              "name": "nonce",
+              "type": "String",
+              "summary": "96-bit nonce.",
+              "description": "Must be encoded with `hex`."
+            }
+          ],
+          "summary": null,
+          "description": null
+        },
+        {
+          "name": "NaclSecretBoxParamsCB",
+          "type": "Struct",
+          "struct_fields": [
+            {
+              "name": "nonce",
+              "type": "String",
+              "summary": "Nonce in `hex`",
               "description": null
             }
           ],
@@ -1850,7 +2185,7 @@
             {
               "name": "nonce",
               "type": "String",
-              "summary": null,
+              "summary": "Nonce",
               "description": null
             },
             {
@@ -1928,7 +2263,7 @@
             {
               "name": "key",
               "type": "String",
-              "summary": "Public key - unprefixed 0-padded to 64 symbols hex string",
+              "summary": "Secret key - unprefixed 0-padded to 64 symbols hex string",
               "description": null
             }
           ],
@@ -2380,6 +2715,172 @@
           "description": null
         },
         {
+          "name": "ParamsOfCreateCryptoBox",
+          "type": "Struct",
+          "struct_fields": [
+            {
+              "name": "secret_encryption_salt",
+              "type": "String",
+              "summary": "Salt used for secret encryption. For example, a mobile device can use device ID as salt.",
+              "description": null
+            },
+            {
+              "name": "secret",
+              "type": "Ref",
+              "ref_name": "crypto.CryptoBoxSecret",
+              "summary": "Cryptobox secret",
+              "description": null
+            }
+          ],
+          "summary": null,
+          "description": null
+        },
+        {
+          "name": "RegisteredCryptoBox",
+          "type": "Struct",
+          "struct_fields": [
+            {
+              "name": "handle",
+              "type": "Ref",
+              "ref_name": "crypto.CryptoBoxHandle",
+              "summary": null,
+              "description": null
+            }
+          ],
+          "summary": null,
+          "description": null
+        },
+        {
+          "name": "ParamsOfAppPasswordProvider",
+          "type": "EnumOfTypes",
+          "enum_types": [
+            {
+              "name": "GetPassword",
+              "type": "Struct",
+              "struct_fields": [
+                {
+                  "name": "encryption_public_key",
+                  "type": "String",
+                  "summary": "Temporary library pubkey, that is used on application side for password encryption, along with application temporary private key and nonce. Used for password decryption on library side.",
+                  "description": null
+                }
+              ],
+              "summary": null,
+              "description": null
+            }
+          ],
+          "summary": "Interface that provides a callback that returns an encrypted password, used for cryptobox secret encryption",
+          "description": "To secure the password while passing it from application to the library,\nthe library generates a temporary key pair, passes the pubkey\nto the passwordProvider, decrypts the received password with private key,\nand deletes the key pair right away.\n\nApplication should generate a temporary nacl_box_keypair\nand encrypt the password with naclbox function using nacl_box_keypair.secret\nand encryption_public_key keys + nonce = 24-byte prefix of encryption_public_key."
+        },
+        {
+          "name": "ResultOfAppPasswordProvider",
+          "type": "EnumOfTypes",
+          "enum_types": [
+            {
+              "name": "GetPassword",
+              "type": "Struct",
+              "struct_fields": [
+                {
+                  "name": "encrypted_password",
+                  "type": "String",
+                  "summary": "Password, encrypted and encoded to base64. Crypto box uses this password to decrypt its secret (seed phrase).",
+                  "description": null
+                },
+                {
+                  "name": "app_encryption_pubkey",
+                  "type": "String",
+                  "summary": "Hex encoded public key of a temporary key pair, used for password encryption on application side.",
+                  "description": "Used together with `encryption_public_key` to decode `encrypted_password`."
+                }
+              ],
+              "summary": null,
+              "description": null
+            }
+          ],
+          "summary": null,
+          "description": null
+        },
+        {
+          "name": "ResultOfGetCryptoBoxInfo",
+          "type": "Struct",
+          "struct_fields": [
+            {
+              "name": "encrypted_secret",
+              "type": "String",
+              "summary": "Secret (seed phrase) encrypted with salt and password.",
+              "description": null
+            }
+          ],
+          "summary": null,
+          "description": null
+        },
+        {
+          "name": "ResultOfGetCryptoBoxSeedPhrase",
+          "type": "Struct",
+          "struct_fields": [
+            {
+              "name": "phrase",
+              "type": "String",
+              "summary": null,
+              "description": null
+            },
+            {
+              "name": "dictionary",
+              "type": "Number",
+              "number_type": "UInt",
+              "number_size": 8,
+              "summary": null,
+              "description": null
+            },
+            {
+              "name": "wordcount",
+              "type": "Number",
+              "number_type": "UInt",
+              "number_size": 8,
+              "summary": null,
+              "description": null
+            }
+          ],
+          "summary": null,
+          "description": null
+        },
+        {
+          "name": "ParamsOfGetSigningBoxFromCryptoBox",
+          "type": "Struct",
+          "struct_fields": [
+            {
+              "name": "handle",
+              "type": "Number",
+              "number_type": "UInt",
+              "number_size": 32,
+              "summary": "Crypto Box Handle.",
+              "description": null
+            },
+            {
+              "name": "hdpath",
+              "type": "Optional",
+              "optional_inner": {
+                "type": "String"
+              },
+              "summary": "HD key derivation path.",
+              "description": "By default, Everscale HD path is used."
+            },
+            {
+              "name": "secret_lifetime",
+              "type": "Optional",
+              "optional_inner": {
+                "type": "Number",
+                "number_type": "UInt",
+                "number_size": 32
+              },
+              "summary": "Store derived secret for this lifetime (in ms). The timer starts after each signing box operation. Secrets will be deleted immediately after each signing box operation, if this value is not set.",
+              "description": null
+            }
+          ],
+          "summary": null,
+          "description": null
+        },
+        {
           "name": "RegisteredSigningBox",
           "type": "Struct",
           "struct_fields": [
@@ -2388,6 +2889,64 @@
               "type": "Ref",
               "ref_name": "crypto.SigningBoxHandle",
               "summary": "Handle of the signing box.",
+              "description": null
+            }
+          ],
+          "summary": null,
+          "description": null
+        },
+        {
+          "name": "ParamsOfGetEncryptionBoxFromCryptoBox",
+          "type": "Struct",
+          "struct_fields": [
+            {
+              "name": "handle",
+              "type": "Number",
+              "number_type": "UInt",
+              "number_size": 32,
+              "summary": "Crypto Box Handle.",
+              "description": null
+            },
+            {
+              "name": "hdpath",
+              "type": "Optional",
+              "optional_inner": {
+                "type": "String"
+              },
+              "summary": "HD key derivation path.",
+              "description": "By default, Everscale HD path is used."
+            },
+            {
+              "name": "algorithm",
+              "type": "Ref",
+              "ref_name": "crypto.BoxEncryptionAlgorithm",
+              "summary": "Encryption algorithm.",
+              "description": null
+            },
+            {
+              "name": "secret_lifetime",
+              "type": "Optional",
+              "optional_inner": {
+                "type": "Number",
+                "number_type": "UInt",
+                "number_size": 32
+              },
+              "summary": "Store derived secret for encryption algorithm for this lifetime (in ms). The timer starts after each encryption box operation. Secrets will be deleted (overwritten with zeroes) after each encryption operation, if this value is not set.",
+              "description": null
+            }
+          ],
+          "summary": null,
+          "description": null
+        },
+        {
+          "name": "RegisteredEncryptionBox",
+          "type": "Struct",
+          "struct_fields": [
+            {
+              "name": "handle",
+              "type": "Ref",
+              "ref_name": "crypto.EncryptionBoxHandle",
+              "summary": "Handle of the encryption box.",
               "description": null
             }
           ],
@@ -2509,21 +3068,6 @@
           "description": null
         },
         {
-          "name": "RegisteredEncryptionBox",
-          "type": "Struct",
-          "struct_fields": [
-            {
-              "name": "handle",
-              "type": "Ref",
-              "ref_name": "crypto.EncryptionBoxHandle",
-              "summary": "Handle of the encryption box",
-              "description": null
-            }
-          ],
-          "summary": null,
-          "description": null
-        },
-        {
           "name": "ParamsOfAppEncryptionBox",
           "type": "EnumOfTypes",
           "enum_types": [
@@ -2563,7 +3107,7 @@
               "description": null
             }
           ],
-          "summary": "Encryption box callbacks.",
+          "summary": "Interface for data encryption/decryption",
           "description": null
         },
         {
@@ -3969,6 +4513,287 @@
               {
                 "type": "Ref",
                 "ref_name": "crypto.ResultOfChaCha20"
+              }
+            ]
+          },
+          "errors": null
+        },
+        {
+          "name": "create_crypto_box",
+          "summary": "Creates a Crypto Box instance.",
+          "description": "Crypto Box is a root crypto object, that encapsulates some secret (seed phrase usually)\nin encrypted form and acts as a factory for all crypto primitives used in SDK:\nkeys for signing and encryption, derived from this secret.\n\nCrypto Box encrypts original Seed Phrase with salt and password that is retrieved\nfrom `password_provider` callback, implemented on Application side.\n\nWhen used, decrypted secret shows up in core library's memory for a very short period\nof time and then is immediately overwritten with zeroes.",
+          "params": [
+            {
+              "name": "context",
+              "type": "Generic",
+              "generic_name": "Arc",
+              "generic_args": [
+                {
+                  "type": "Ref",
+                  "ref_name": "ClientContext"
+                }
+              ],
+              "summary": null,
+              "description": null
+            },
+            {
+              "name": "params",
+              "type": "Ref",
+              "ref_name": "crypto.ParamsOfCreateCryptoBox",
+              "summary": null,
+              "description": null
+            },
+            {
+              "name": "password_provider",
+              "type": "Generic",
+              "generic_name": "AppObject",
+              "generic_args": [
+                {
+                  "type": "Ref",
+                  "ref_name": "crypto.ParamsOfAppPasswordProvider"
+                },
+                {
+                  "type": "Ref",
+                  "ref_name": "crypto.ResultOfAppPasswordProvider"
+                }
+              ],
+              "summary": null,
+              "description": null
+            }
+          ],
+          "result": {
+            "type": "Generic",
+            "generic_name": "ClientResult",
+            "generic_args": [
+              {
+                "type": "Ref",
+                "ref_name": "crypto.RegisteredCryptoBox"
+              }
+            ]
+          },
+          "errors": null
+        },
+        {
+          "name": "remove_crypto_box",
+          "summary": "Removes Crypto Box. Clears all secret data.",
+          "description": null,
+          "params": [
+            {
+              "name": "context",
+              "type": "Generic",
+              "generic_name": "Arc",
+              "generic_args": [
+                {
+                  "type": "Ref",
+                  "ref_name": "ClientContext"
+                }
+              ],
+              "summary": null,
+              "description": null
+            },
+            {
+              "name": "params",
+              "type": "Ref",
+              "ref_name": "crypto.RegisteredCryptoBox",
+              "summary": null,
+              "description": null
+            }
+          ],
+          "result": {
+            "type": "Generic",
+            "generic_name": "ClientResult",
+            "generic_args": [
+              {
+                "type": "None"
+              }
+            ]
+          },
+          "errors": null
+        },
+        {
+          "name": "get_crypto_box_info",
+          "summary": "Get Crypto Box Info. Used to get `encrypted_secret` that should be used for all the cryptobox initializations except the first one.",
+          "description": null,
+          "params": [
+            {
+              "name": "context",
+              "type": "Generic",
+              "generic_name": "Arc",
+              "generic_args": [
+                {
+                  "type": "Ref",
+                  "ref_name": "ClientContext"
+                }
+              ],
+              "summary": null,
+              "description": null
+            },
+            {
+              "name": "params",
+              "type": "Ref",
+              "ref_name": "crypto.RegisteredCryptoBox",
+              "summary": null,
+              "description": null
+            }
+          ],
+          "result": {
+            "type": "Generic",
+            "generic_name": "ClientResult",
+            "generic_args": [
+              {
+                "type": "Ref",
+                "ref_name": "crypto.ResultOfGetCryptoBoxInfo"
+              }
+            ]
+          },
+          "errors": null
+        },
+        {
+          "name": "get_crypto_box_seed_phrase",
+          "summary": "Get Crypto Box Seed Phrase.",
+          "description": "Attention! Store this data in your application for a very short period of time and overwrite it with zeroes ASAP.",
+          "params": [
+            {
+              "name": "context",
+              "type": "Generic",
+              "generic_name": "Arc",
+              "generic_args": [
+                {
+                  "type": "Ref",
+                  "ref_name": "ClientContext"
+                }
+              ],
+              "summary": null,
+              "description": null
+            },
+            {
+              "name": "params",
+              "type": "Ref",
+              "ref_name": "crypto.RegisteredCryptoBox",
+              "summary": null,
+              "description": null
+            }
+          ],
+          "result": {
+            "type": "Generic",
+            "generic_name": "ClientResult",
+            "generic_args": [
+              {
+                "type": "Ref",
+                "ref_name": "crypto.ResultOfGetCryptoBoxSeedPhrase"
+              }
+            ]
+          },
+          "errors": null
+        },
+        {
+          "name": "get_signing_box_from_crypto_box",
+          "summary": "Get handle of Signing Box derived from Crypto Box.",
+          "description": null,
+          "params": [
+            {
+              "name": "context",
+              "type": "Generic",
+              "generic_name": "Arc",
+              "generic_args": [
+                {
+                  "type": "Ref",
+                  "ref_name": "ClientContext"
+                }
+              ],
+              "summary": null,
+              "description": null
+            },
+            {
+              "name": "params",
+              "type": "Ref",
+              "ref_name": "crypto.ParamsOfGetSigningBoxFromCryptoBox",
+              "summary": null,
+              "description": null
+            }
+          ],
+          "result": {
+            "type": "Generic",
+            "generic_name": "ClientResult",
+            "generic_args": [
+              {
+                "type": "Ref",
+                "ref_name": "crypto.RegisteredSigningBox"
+              }
+            ]
+          },
+          "errors": null
+        },
+        {
+          "name": "get_encryption_box_from_crypto_box",
+          "summary": "Gets Encryption Box from Crypto Box.",
+          "description": "Derives encryption keypair from cryptobox secret and hdpath and\nstores it in cache for `secret_lifetime`\nor until explicitly cleared by `clear_crypto_box_secret_cache` method.\nIf `secret_lifetime` is not specified - overwrites encryption secret with zeroes immediately after\nencryption operation.",
+          "params": [
+            {
+              "name": "context",
+              "type": "Generic",
+              "generic_name": "Arc",
+              "generic_args": [
+                {
+                  "type": "Ref",
+                  "ref_name": "ClientContext"
+                }
+              ],
+              "summary": null,
+              "description": null
+            },
+            {
+              "name": "params",
+              "type": "Ref",
+              "ref_name": "crypto.ParamsOfGetEncryptionBoxFromCryptoBox",
+              "summary": null,
+              "description": null
+            }
+          ],
+          "result": {
+            "type": "Generic",
+            "generic_name": "ClientResult",
+            "generic_args": [
+              {
+                "type": "Ref",
+                "ref_name": "crypto.RegisteredEncryptionBox"
+              }
+            ]
+          },
+          "errors": null
+        },
+        {
+          "name": "clear_crypto_box_secret_cache",
+          "summary": "Removes cached secrets (overwrites with zeroes) from all signing and encryption boxes, derived from crypto box.",
+          "description": null,
+          "params": [
+            {
+              "name": "context",
+              "type": "Generic",
+              "generic_name": "Arc",
+              "generic_args": [
+                {
+                  "type": "Ref",
+                  "ref_name": "ClientContext"
+                }
+              ],
+              "summary": null,
+              "description": null
+            },
+            {
+              "name": "params",
+              "type": "Ref",
+              "ref_name": "crypto.RegisteredCryptoBox",
+              "summary": null,
+              "description": null
+            }
+          ],
+          "result": {
+            "type": "Generic",
+            "generic_name": "ClientResult",
+            "generic_args": [
+              {
+                "type": "None"
               }
             ]
           },
@@ -5602,6 +6427,15 @@
               "type": "String",
               "summary": "Message BOC",
               "description": null
+            },
+            {
+              "name": "allow_partial",
+              "type": "Optional",
+              "optional_inner": {
+                "type": "Boolean"
+              },
+              "summary": "Flag allowing partial BOC decoding when ABI doesn't describe the full body BOC. Controls decoder behaviour when after decoding all described in ABI params there are some data left in BOC: `true` - return decoded values `false` - return error of incomplete BOC deserialization (default)",
+              "description": null
             }
           ],
           "summary": null,
@@ -5669,6 +6503,15 @@
               "name": "is_internal",
               "type": "Boolean",
               "summary": "True if the body belongs to the internal message.",
+              "description": null
+            },
+            {
+              "name": "allow_partial",
+              "type": "Optional",
+              "optional_inner": {
+                "type": "Boolean"
+              },
+              "summary": "Flag allowing partial BOC decoding when ABI doesn't describe the full body BOC. Controls decoder behaviour when after decoding all described in ABI params there are some data left in BOC: `true` - return decoded values `false` - return error of incomplete BOC deserialization (default)",
               "description": null
             }
           ],
@@ -5768,6 +6611,15 @@
               "name": "data",
               "type": "String",
               "summary": "Data BOC or BOC handle",
+              "description": null
+            },
+            {
+              "name": "allow_partial",
+              "type": "Optional",
+              "optional_inner": {
+                "type": "Boolean"
+              },
+              "summary": "Flag allowing partial BOC decoding when ABI doesn't describe the full body BOC. Controls decoder behaviour when after decoding all described in ABI params there are some data left in BOC: `true` - return decoded values `false` - return error of incomplete BOC deserialization (default)",
               "description": null
             }
           ],
@@ -5936,6 +6788,15 @@
               "type": "String",
               "summary": "Data BOC or BOC handle",
               "description": null
+            },
+            {
+              "name": "allow_partial",
+              "type": "Optional",
+              "optional_inner": {
+                "type": "Boolean"
+              },
+              "summary": "Flag allowing partial BOC decoding when ABI doesn't describe the full body BOC. Controls decoder behaviour when after decoding all described in ABI params there are some data left in BOC: `true` - return decoded values `false` - return error of incomplete BOC deserialization (default)",
+              "description": null
             }
           ],
           "summary": null,
@@ -6004,6 +6865,55 @@
               "type": "Ref",
               "ref_name": "Value",
               "summary": "Decoded data as a JSON structure.",
+              "description": null
+            }
+          ],
+          "summary": null,
+          "description": null
+        },
+        {
+          "name": "ParamsOfAbiEncodeBoc",
+          "type": "Struct",
+          "struct_fields": [
+            {
+              "name": "params",
+              "type": "Array",
+              "array_item": {
+                "type": "Ref",
+                "ref_name": "abi.AbiParam"
+              },
+              "summary": "Parameters to encode into BOC",
+              "description": null
+            },
+            {
+              "name": "data",
+              "type": "Ref",
+              "ref_name": "Value",
+              "summary": "Parameters and values as a JSON structure",
+              "description": null
+            },
+            {
+              "name": "boc_cache",
+              "type": "Optional",
+              "optional_inner": {
+                "type": "Ref",
+                "ref_name": "boc.BocCacheType"
+              },
+              "summary": "Cache type to put the result.",
+              "description": "The BOC itself returned if no cache type provided"
+            }
+          ],
+          "summary": null,
+          "description": null
+        },
+        {
+          "name": "ResultOfAbiEncodeBoc",
+          "type": "Struct",
+          "struct_fields": [
+            {
+              "name": "boc",
+              "type": "String",
+              "summary": "BOC encoded as base64",
               "description": null
             }
           ],
@@ -6505,6 +7415,44 @@
             ]
           },
           "errors": null
+        },
+        {
+          "name": "encode_boc",
+          "summary": "Encodes given parameters in JSON into a BOC using param types from ABI.",
+          "description": null,
+          "params": [
+            {
+              "name": "context",
+              "type": "Generic",
+              "generic_name": "Arc",
+              "generic_args": [
+                {
+                  "type": "Ref",
+                  "ref_name": "ClientContext"
+                }
+              ],
+              "summary": null,
+              "description": null
+            },
+            {
+              "name": "params",
+              "type": "Ref",
+              "ref_name": "abi.ParamsOfAbiEncodeBoc",
+              "summary": null,
+              "description": null
+            }
+          ],
+          "result": {
+            "type": "Generic",
+            "generic_name": "ClientResult",
+            "generic_args": [
+              {
+                "type": "Ref",
+                "ref_name": "abi.ResultOfAbiEncodeBoc"
+              }
+            ]
+          },
+          "errors": null
         }
       ]
     },
@@ -6911,11 +7859,11 @@
                     "type": "Ref",
                     "ref_name": "boc.BuilderOp"
                   },
-                  "summary": "Nested cell builder",
+                  "summary": "Nested cell builder.",
                   "description": null
                 }
               ],
-              "summary": "Append ref to nested cells",
+              "summary": "Append ref to nested cells.",
               "description": null
             },
             {
@@ -6929,7 +7877,21 @@
                   "description": null
                 }
               ],
-              "summary": "Append ref to nested cell",
+              "summary": "Append ref to nested cell.",
+              "description": null
+            },
+            {
+              "name": "Address",
+              "type": "Struct",
+              "struct_fields": [
+                {
+                  "name": "address",
+                  "type": "String",
+                  "summary": "Address in a common `workchain:account` or base64 format.",
+                  "description": null
+                }
+              ],
+              "summary": "Address.",
               "description": null
             }
           ],
@@ -7282,6 +8244,77 @@
               "name": "tvc",
               "type": "String",
               "summary": "Contract TVC image BOC encoded as base64 or BOC handle of boc_cache parameter was specified",
+              "description": null
+            }
+          ],
+          "summary": null,
+          "description": null
+        },
+        {
+          "name": "ParamsOfEncodeExternalInMessage",
+          "type": "Struct",
+          "struct_fields": [
+            {
+              "name": "src",
+              "type": "Optional",
+              "optional_inner": {
+                "type": "String"
+              },
+              "summary": "Source address.",
+              "description": null
+            },
+            {
+              "name": "dst",
+              "type": "String",
+              "summary": "Destination address.",
+              "description": null
+            },
+            {
+              "name": "init",
+              "type": "Optional",
+              "optional_inner": {
+                "type": "String"
+              },
+              "summary": "Bag of cells with state init (used in deploy messages).",
+              "description": null
+            },
+            {
+              "name": "body",
+              "type": "Optional",
+              "optional_inner": {
+                "type": "String"
+              },
+              "summary": "Bag of cells with the message body encoded as base64.",
+              "description": null
+            },
+            {
+              "name": "boc_cache",
+              "type": "Optional",
+              "optional_inner": {
+                "type": "Ref",
+                "ref_name": "boc.BocCacheType"
+              },
+              "summary": "Cache type to put the result.",
+              "description": "The BOC itself returned if no cache type provided"
+            }
+          ],
+          "summary": null,
+          "description": null
+        },
+        {
+          "name": "ResultOfEncodeExternalInMessage",
+          "type": "Struct",
+          "struct_fields": [
+            {
+              "name": "message",
+              "type": "String",
+              "summary": "Message BOC encoded with `base64`.",
+              "description": null
+            },
+            {
+              "name": "message_id",
+              "type": "String",
+              "summary": "Message id.",
               "description": null
             }
           ],
@@ -7778,7 +8811,7 @@
         },
         {
           "name": "encode_boc",
-          "summary": "Encodes bag of cells (BOC) with builder operations. This method provides the same functionality as Solidity TvmBuilder. Resulting BOC of this method can be passed into Solidity and C++ contracts as TvmCell type",
+          "summary": "Encodes bag of cells (BOC) with builder operations. This method provides the same functionality as Solidity TvmBuilder. Resulting BOC of this method can be passed into Solidity and C++ contracts as TvmCell type.",
           "description": null,
           "params": [
             {
@@ -7967,6 +9000,44 @@
           "errors": null
         },
         {
+          "name": "encode_external_in_message",
+          "summary": "Encodes a message",
+          "description": "Allows to encode any external inbound message.",
+          "params": [
+            {
+              "name": "context",
+              "type": "Generic",
+              "generic_name": "Arc",
+              "generic_args": [
+                {
+                  "type": "Ref",
+                  "ref_name": "ClientContext"
+                }
+              ],
+              "summary": null,
+              "description": null
+            },
+            {
+              "name": "params",
+              "type": "Ref",
+              "ref_name": "boc.ParamsOfEncodeExternalInMessage",
+              "summary": null,
+              "description": null
+            }
+          ],
+          "result": {
+            "type": "Generic",
+            "generic_name": "ClientResult",
+            "generic_args": [
+              {
+                "type": "Ref",
+                "ref_name": "boc.ResultOfEncodeExternalInMessage"
+              }
+            ]
+          },
+          "errors": null
+        },
+        {
           "name": "get_compiler_version",
           "summary": "Returns the compiler version used to compile the code.",
           "description": null,
@@ -8103,6 +9174,27 @@
               "name": "ExternalSignerMustNotBeUsed",
               "type": "Number",
               "value": "513",
+              "summary": null,
+              "description": null
+            },
+            {
+              "name": "MessageRejected",
+              "type": "Number",
+              "value": "514",
+              "summary": null,
+              "description": null
+            },
+            {
+              "name": "InvalidRempStatus",
+              "type": "Number",
+              "value": "515",
+              "summary": null,
+              "description": null
+            },
+            {
+              "name": "NextRempStatusTimeout",
+              "type": "Number",
+              "value": "516",
               "summary": null,
               "description": null
             }
@@ -8306,6 +9398,137 @@
               ],
               "summary": "Notifies the app that the message was not executed within expire timeout on-chain and will never be because it is already expired. The expiration timeout can be configured with `AbiConfig` parameters.",
               "description": "This event occurs only for the contracts which ABI includes \"expire\" header.\n\nIf Application specifies `NetworkConfig.message_retries_count` > 0, then `process_message`\nwill perform retries: will create a new message and send it again and repeat it untill it reaches\nthe maximum retries count or receives a successful result.  All the processing\nevents will be repeated."
+            },
+            {
+              "name": "RempSentToValidators",
+              "type": "Struct",
+              "struct_fields": [
+                {
+                  "name": "message_id",
+                  "type": "String",
+                  "summary": null,
+                  "description": null
+                },
+                {
+                  "name": "timestamp",
+                  "type": "BigInt",
+                  "number_type": "UInt",
+                  "number_size": 64,
+                  "summary": null,
+                  "description": null
+                },
+                {
+                  "name": "json",
+                  "type": "Ref",
+                  "ref_name": "Value",
+                  "summary": null,
+                  "description": null
+                }
+              ],
+              "summary": "Notifies the app that the message has been delivered to the thread's validators",
+              "description": null
+            },
+            {
+              "name": "RempIncludedIntoBlock",
+              "type": "Struct",
+              "struct_fields": [
+                {
+                  "name": "message_id",
+                  "type": "String",
+                  "summary": null,
+                  "description": null
+                },
+                {
+                  "name": "timestamp",
+                  "type": "BigInt",
+                  "number_type": "UInt",
+                  "number_size": 64,
+                  "summary": null,
+                  "description": null
+                },
+                {
+                  "name": "json",
+                  "type": "Ref",
+                  "ref_name": "Value",
+                  "summary": null,
+                  "description": null
+                }
+              ],
+              "summary": "Notifies the app that the message has been successfully included into a block candidate by the thread's collator",
+              "description": null
+            },
+            {
+              "name": "RempIncludedIntoAcceptedBlock",
+              "type": "Struct",
+              "struct_fields": [
+                {
+                  "name": "message_id",
+                  "type": "String",
+                  "summary": null,
+                  "description": null
+                },
+                {
+                  "name": "timestamp",
+                  "type": "BigInt",
+                  "number_type": "UInt",
+                  "number_size": 64,
+                  "summary": null,
+                  "description": null
+                },
+                {
+                  "name": "json",
+                  "type": "Ref",
+                  "ref_name": "Value",
+                  "summary": null,
+                  "description": null
+                }
+              ],
+              "summary": "Notifies the app that the block candicate with the message has been accepted by the thread's validators",
+              "description": null
+            },
+            {
+              "name": "RempOther",
+              "type": "Struct",
+              "struct_fields": [
+                {
+                  "name": "message_id",
+                  "type": "String",
+                  "summary": null,
+                  "description": null
+                },
+                {
+                  "name": "timestamp",
+                  "type": "BigInt",
+                  "number_type": "UInt",
+                  "number_size": 64,
+                  "summary": null,
+                  "description": null
+                },
+                {
+                  "name": "json",
+                  "type": "Ref",
+                  "ref_name": "Value",
+                  "summary": null,
+                  "description": null
+                }
+              ],
+              "summary": "Notifies the app about some other minor REMP statuses occurring during message processing",
+              "description": null
+            },
+            {
+              "name": "RempError",
+              "type": "Struct",
+              "struct_fields": [
+                {
+                  "name": "error",
+                  "type": "Ref",
+                  "ref_name": "client.ClientError",
+                  "summary": null,
+                  "description": null
+                }
+              ],
+              "summary": "Notifies the app about any problem that has occured in REMP processing - in this case library switches to the fallback transaction awaiting scenario (sequential block reading).",
+              "description": null
             }
           ],
           "summary": null,
@@ -10436,6 +11659,30 @@
           "description": null
         },
         {
+          "name": "ParamsOfSubscribe",
+          "type": "Struct",
+          "struct_fields": [
+            {
+              "name": "subscription",
+              "type": "String",
+              "summary": "GraphQL subscription text.",
+              "description": null
+            },
+            {
+              "name": "variables",
+              "type": "Optional",
+              "optional_inner": {
+                "type": "Ref",
+                "ref_name": "Value"
+              },
+              "summary": "Variables used in subscription.",
+              "description": "Must be a map with named values that can be used in query."
+            }
+          ],
+          "summary": null,
+          "description": null
+        },
+        {
           "name": "ParamsOfFindLastShardBlock",
           "type": "Struct",
           "struct_fields": [
@@ -11091,7 +12338,7 @@
         },
         {
           "name": "subscribe_collection",
-          "summary": "Creates a subscription",
+          "summary": "Creates a collection subscription",
           "description": "Triggers for each insert/update of data that satisfies\nthe `filter` conditions.\nThe projection fields are limited to `result` fields.\n\nThe subscription is a persistent communication channel between\nclient and Free TON Network.\nAll changes in the blockchain will be reflected in realtime.\nChanges means inserts and updates of the blockchain entities.\n\n### Important Notes on Subscriptions\n\nUnfortunately sometimes the connection with the network brakes down.\nIn this situation the library attempts to reconnect to the network.\nThis reconnection sequence can take significant time.\nAll of this time the client is disconnected from the network.\n\nBad news is that all blockchain changes that happened while\nthe client was disconnected are lost.\n\nGood news is that the client report errors to the callback when\nit loses and resumes connection.\n\nSo, if the lost changes are important to the application then\nthe application must handle these error reports.\n\nLibrary reports errors with `responseType` == 101\nand the error object passed via `params`.\n\nWhen the library has successfully reconnected\nthe application receives callback with\n`responseType` == 101 and `params.code` == 614 (NetworkModuleResumed).\n\nApplication can use several ways to handle this situation:\n- If application monitors changes for the single blockchain\nobject (for example specific account):  application\ncan perform a query for this object and handle actual data as a\nregular data from the subscription.\n- If application monitors sequence of some blockchain objects\n(for example transactions of the specific account): application must\nrefresh all cached (or visible to user) lists where this sequences presents.",
           "params": [
             {
@@ -11111,6 +12358,57 @@
               "name": "params",
               "type": "Ref",
               "ref_name": "net.ParamsOfSubscribeCollection",
+              "summary": null,
+              "description": null
+            },
+            {
+              "name": "callback",
+              "type": "Generic",
+              "generic_name": "Arc",
+              "generic_args": [
+                {
+                  "type": "Ref",
+                  "ref_name": "Request"
+                }
+              ],
+              "summary": null,
+              "description": null
+            }
+          ],
+          "result": {
+            "type": "Generic",
+            "generic_name": "ClientResult",
+            "generic_args": [
+              {
+                "type": "Ref",
+                "ref_name": "net.ResultOfSubscribeCollection"
+              }
+            ]
+          },
+          "errors": null
+        },
+        {
+          "name": "subscribe",
+          "summary": "Creates a subscription",
+          "description": "The subscription is a persistent communication channel between\nclient and Everscale Network.\n\n### Important Notes on Subscriptions\n\nUnfortunately sometimes the connection with the network brakes down.\nIn this situation the library attempts to reconnect to the network.\nThis reconnection sequence can take significant time.\nAll of this time the client is disconnected from the network.\n\nBad news is that all changes that happened while\nthe client was disconnected are lost.\n\nGood news is that the client report errors to the callback when\nit loses and resumes connection.\n\nSo, if the lost changes are important to the application then\nthe application must handle these error reports.\n\nLibrary reports errors with `responseType` == 101\nand the error object passed via `params`.\n\nWhen the library has successfully reconnected\nthe application receives callback with\n`responseType` == 101 and `params.code` == 614 (NetworkModuleResumed).\n\nApplication can use several ways to handle this situation:\n- If application monitors changes for the single\nobject (for example specific account):  application\ncan perform a query for this object and handle actual data as a\nregular data from the subscription.\n- If application monitors sequence of some objects\n(for example transactions of the specific account): application must\nrefresh all cached (or visible to user) lists where this sequences presents.",
+          "params": [
+            {
+              "name": "context",
+              "type": "Generic",
+              "generic_name": "Arc",
+              "generic_args": [
+                {
+                  "type": "Ref",
+                  "ref_name": "ClientContext"
+                }
+              ],
+              "summary": null,
+              "description": null
+            },
+            {
+              "name": "params",
+              "type": "Ref",
+              "ref_name": "net.ParamsOfSubscribe",
               "summary": null,
               "description": null
             },
@@ -11340,7 +12638,7 @@
         {
           "name": "query_counterparties",
           "summary": "Allows to query and paginate through the list of accounts that the specified account has interacted with, sorted by the time of the last internal message between accounts",
-          "description": "*Attention* this query retrieves data from 'Counterparties' service which is not supported in\nthe opensource version of DApp Server (and will not be supported) as well as in TON OS SE (will be supported in SE in future),\nbut is always accessible via [TON OS Devnet/Mainnet Clouds](https://docs.ton.dev/86757ecb2/p/85c869-networks)",
+          "description": "*Attention* this query retrieves data from 'Counterparties' service which is not supported in\nthe opensource version of DApp Server (and will not be supported) as well as in Evernode SE (will be supported in SE in future),\nbut is always accessible via [EVER OS Clouds](../ton-os-api/networks.md)",
           "params": [
             {
               "name": "context",
@@ -12672,7 +13970,7 @@
         {
           "name": "proof_block_data",
           "summary": "Proves that a given block's data, which is queried from TONOS API, can be trusted.",
-          "description": "This function checks block proofs and compares given data with the proven.\nIf the given data differs from the proven, the exception will be thrown.\nThe input param is a single block's JSON object, which was queried from DApp server using\nfunctions such as `net.query`, `net.query_collection` or `net.wait_for_collection`.\nIf block's BOC is not provided in the JSON, it will be queried from DApp server\n(in this case it is required to provide at least `id` of block).\n\nPlease note, that joins (like `signatures` in `Block`) are separated entities and not supported,\nso function will throw an exception in a case if JSON being checked has such entities in it.\n\nIf `cache_in_local_storage` in config is set to `true` (default), downloaded proofs and\nmaster-chain BOCs are saved into the persistent local storage (e.g. file system for native\nenvironments or browser's IndexedDB for the web); otherwise all the data is cached only in\nmemory in current client's context and will be lost after destruction of the client.\n\n**Why Proofs are needed**\n\nProofs are needed to ensure that the data downloaded from a DApp server is real blockchain\ndata. Checking proofs can protect from the malicious DApp server which can potentially provide\nfake data, or also from \"Man in the Middle\" attacks class.\n\n**What Proofs are**\n\nSimply, proof is a list of signatures of validators', which have signed this particular master-\nblock.\n\nThe very first validator set's public keys are included in the zero-state. Whe know a root hash\nof the zero-state, because it is stored in the network configuration file, it is our authority\nroot. For proving zero-state it is enough to calculate and compare its root hash.\n\nIn each new validator cycle the validator set is changed. The new one is stored in a key-block,\nwhich is signed by the validator set, which we already trust, the next validator set will be\nstored to the new key-block and signed by the current validator set, and so on.\n\nIn order to prove any block in the master-chain we need to check, that it has been signed by\na trusted validator set. So we need to check all key-blocks' proofs, started from the zero-state\nand until the block, which we want to prove. But it can take a lot of time and traffic to\ndownload and prove all key-blocks on a client. For solving this, special trusted blocks are used\nin TON-SDK.\n\nThe trusted block is the authority root, as well, as the zero-state. Each trusted block is the\n`id` (e.g. `root_hash`) of the already proven key-block. There can be plenty of trusted\nblocks, so there can be a lot of authority roots. The hashes of trusted blocks for MainNet\nand DevNet are hardcoded in SDK in a separated binary file (trusted_key_blocks.bin) and can\nbe updated for each release.\nIn future SDK releases, one will also be able to provide their hashes of trusted blocks for\nother networks, besides for MainNet and DevNet.\nBy using trusted key-blocks, in order to prove any block, we can prove chain of key-blocks to\nthe closest previous trusted key-block, not only to the zero-state.\n\nBut shard-blocks don't have proofs on DApp server. In this case, in order to prove any shard-\nblock data, we search for a corresponding master-block, which contains the root hash of this\nshard-block, or some shard block which is linked to that block in shard-chain. After proving\nthis master-block, we traverse through each link and calculate and compare hashes with links,\none-by-one. After that we can ensure that this shard-block has also been proven.",
+          "description": "This function checks block proofs and compares given data with the proven.\nIf the given data differs from the proven, the exception will be thrown.\nThe input param is a single block's JSON object, which was queried from DApp server using\nfunctions such as `net.query`, `net.query_collection` or `net.wait_for_collection`.\nIf block's BOC is not provided in the JSON, it will be queried from DApp server\n(in this case it is required to provide at least `id` of block).\n\nPlease note, that joins (like `signatures` in `Block`) are separated entities and not supported,\nso function will throw an exception in a case if JSON being checked has such entities in it.\n\nIf `cache_in_local_storage` in config is set to `true` (default), downloaded proofs and\nmaster-chain BOCs are saved into the persistent local storage (e.g. file system for native\nenvironments or browser's IndexedDB for the web); otherwise all the data is cached only in\nmemory in current client's context and will be lost after destruction of the client.\n\n**Why Proofs are needed**\n\nProofs are needed to ensure that the data downloaded from a DApp server is real blockchain\ndata. Checking proofs can protect from the malicious DApp server which can potentially provide\nfake data, or also from \"Man in the Middle\" attacks class.\n\n**What Proofs are**\n\nSimply, proof is a list of signatures of validators', which have signed this particular master-\nblock.\n\nThe very first validator set's public keys are included in the zero-state. Whe know a root hash\nof the zero-state, because it is stored in the network configuration file, it is our authority\nroot. For proving zero-state it is enough to calculate and compare its root hash.\n\nIn each new validator cycle the validator set is changed. The new one is stored in a key-block,\nwhich is signed by the validator set, which we already trust, the next validator set will be\nstored to the new key-block and signed by the current validator set, and so on.\n\nIn order to prove any block in the master-chain we need to check, that it has been signed by\na trusted validator set. So we need to check all key-blocks' proofs, started from the zero-state\nand until the block, which we want to prove. But it can take a lot of time and traffic to\ndownload and prove all key-blocks on a client. For solving this, special trusted blocks are used\nin Ever-SDK.\n\nThe trusted block is the authority root, as well, as the zero-state. Each trusted block is the\n`id` (e.g. `root_hash`) of the already proven key-block. There can be plenty of trusted\nblocks, so there can be a lot of authority roots. The hashes of trusted blocks for MainNet\nand DevNet are hardcoded in SDK in a separated binary file (trusted_key_blocks.bin) and is\nbeing updated for each release by using `update_trusted_blocks` utility.\n\nSee [update_trusted_blocks](../../../tools/update_trusted_blocks) directory for more info.\n\nIn future SDK releases, one will also be able to provide their hashes of trusted blocks for\nother networks, besides for MainNet and DevNet.\nBy using trusted key-blocks, in order to prove any block, we can prove chain of key-blocks to\nthe closest previous trusted key-block, not only to the zero-state.\n\nBut shard-blocks don't have proofs on DApp server. In this case, in order to prove any shard-\nblock data, we search for a corresponding master-block, which contains the root hash of this\nshard-block, or some shard block which is linked to that block in shard-chain. After proving\nthis master-block, we traverse through each link and calculate and compare hashes with links,\none-by-one. After that we can ensure that this shard-block has also been proven.",
           "params": [
             {
               "name": "context",

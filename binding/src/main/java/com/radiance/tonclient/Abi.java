@@ -1490,9 +1490,10 @@ public class Abi {
     *
     * @param abi 
     * @param message 
+    * @param allowPartial 
     */
-    public CompletableFuture<DecodedMessageBody> decodeMessage(ABI abi, String message) {
-        return context.requestJSON("abi.decode_message", "{"+Stream.of((abi==null?null:("\"abi\":"+abi)),(message==null?null:("\"message\":\""+message+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
+    public CompletableFuture<DecodedMessageBody> decodeMessage(ABI abi, String message, Boolean allowPartial) {
+        return context.requestJSON("abi.decode_message", "{"+Stream.of((abi==null?null:("\"abi\":"+abi)),(message==null?null:("\"message\":\""+message+"\"")),(allowPartial==null?null:("\"allow_partial\":"+allowPartial))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
             .thenApply(json -> TONContext.convertValue(json, DecodedMessageBody.class));
     }
 
@@ -1502,9 +1503,10 @@ public class Abi {
     * @param abi 
     * @param body 
     * @param isInternal 
+    * @param allowPartial 
     */
-    public CompletableFuture<DecodedMessageBody> decodeMessageBody(ABI abi, String body, Boolean isInternal) {
-        return context.requestJSON("abi.decode_message_body", "{"+Stream.of((abi==null?null:("\"abi\":"+abi)),(body==null?null:("\"body\":\""+body+"\"")),(isInternal==null?null:("\"is_internal\":"+isInternal))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
+    public CompletableFuture<DecodedMessageBody> decodeMessageBody(ABI abi, String body, Boolean isInternal, Boolean allowPartial) {
+        return context.requestJSON("abi.decode_message_body", "{"+Stream.of((abi==null?null:("\"abi\":"+abi)),(body==null?null:("\"body\":\""+body+"\"")),(isInternal==null?null:("\"is_internal\":"+isInternal)),(allowPartial==null?null:("\"allow_partial\":"+allowPartial))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
             .thenApply(json -> TONContext.convertValue(json, DecodedMessageBody.class));
     }
 
@@ -1527,9 +1529,10 @@ public class Abi {
     *
     * @param abi 
     * @param data 
+    * @param allowPartial 
     */
-    public CompletableFuture<Object> decodeAccountData(ABI abi, String data) {
-        return context.requestJSON("abi.decode_account_data", "{"+Stream.of((abi==null?null:("\"abi\":"+abi)),(data==null?null:("\"data\":\""+data+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
+    public CompletableFuture<Object> decodeAccountData(ABI abi, String data, Boolean allowPartial) {
+        return context.requestJSON("abi.decode_account_data", "{"+Stream.of((abi==null?null:("\"abi\":"+abi)),(data==null?null:("\"data\":\""+data+"\"")),(allowPartial==null?null:("\"allow_partial\":"+allowPartial))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
             .thenApply(json -> TONContext.convertValue(json.findValue("data"), Object.class));
     }
 
@@ -1565,9 +1568,10 @@ public class Abi {
     *
     * @param abi Initial data is decoded if this parameter is provided
     * @param data 
+    * @param allowPartial 
     */
-    public CompletableFuture<ResultOfDecodeInitialData> decodeInitialData(ABI abi, String data) {
-        return context.requestJSON("abi.decode_initial_data", "{"+Stream.of((abi==null?null:("\"abi\":"+abi)),(data==null?null:("\"data\":\""+data+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
+    public CompletableFuture<ResultOfDecodeInitialData> decodeInitialData(ABI abi, String data, Boolean allowPartial) {
+        return context.requestJSON("abi.decode_initial_data", "{"+Stream.of((abi==null?null:("\"abi\":"+abi)),(data==null?null:("\"data\":\""+data+"\"")),(allowPartial==null?null:("\"allow_partial\":"+allowPartial))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
             .thenApply(json -> TONContext.convertValue(json, ResultOfDecodeInitialData.class));
     }
 
@@ -1581,6 +1585,18 @@ public class Abi {
     public CompletableFuture<Object> decodeBoc(AbiParam[] params, String boc, Boolean allowPartial) {
         return context.requestJSON("abi.decode_boc", "{"+Stream.of((params==null?null:("\"params\":"+Arrays.toString(params))),(boc==null?null:("\"boc\":\""+boc+"\"")),(allowPartial==null?null:("\"allow_partial\":"+allowPartial))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
             .thenApply(json -> TONContext.convertValue(json.findValue("data"), Object.class));
+    }
+
+   /**
+    * 
+    *
+    * @param params 
+    * @param data 
+    * @param bocCache The BOC itself returned if no cache type provided
+    */
+    public CompletableFuture<String> encodeBoc(AbiParam[] params, Object data, Boc.BocCacheType bocCache) {
+        return context.requestJSON("abi.encode_boc", "{"+Stream.of((params==null?null:("\"params\":"+Arrays.toString(params))),(data==null?null:("\"data\":"+data)),(bocCache==null?null:("\"boc_cache\":"+bocCache))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
+            .thenApply(json -> TONContext.convertValue(json.findValue("boc"), String.class));
     }
 
 }

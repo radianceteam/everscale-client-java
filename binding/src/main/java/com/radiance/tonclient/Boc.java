@@ -239,6 +239,43 @@ public class Boc {
             return "{"+Stream.of("\"type\":\"CellBoc\"",(boc==null?null:("\"boc\":\""+boc+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
         }
     }
+
+    /**
+     *  
+     */
+    public static class Address extends BuilderOp  {
+
+        public Address(String address) {
+
+            this.address = address;
+
+        }
+        public Address() {
+
+        }
+
+
+        @JsonProperty("address")
+        private String address;
+        /**
+         * 
+         */
+        public String getAddress() {
+            return address;
+        }
+        /**
+         * 
+         */
+        public void setAddress(String value) {
+            this.address = value;
+        }
+
+
+        @Override
+        public String toString() {
+            return "{"+Stream.of("\"type\":\"Address\"",(address==null?null:("\"address\":\""+address+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
+        }
+    }
 }
     /**
      *  
@@ -586,6 +623,64 @@ public class Boc {
             return "{"+Stream.of((code==null?null:("\"code\":\""+code+"\"")),(codeHash==null?null:("\"code_hash\":\""+codeHash+"\"")),(codeDepth==null?null:("\"code_depth\":"+codeDepth)),(data==null?null:("\"data\":\""+data+"\"")),(dataHash==null?null:("\"data_hash\":\""+dataHash+"\"")),(dataDepth==null?null:("\"data_depth\":"+dataDepth)),(library==null?null:("\"library\":\""+library+"\"")),(tick==null?null:("\"tick\":"+tick)),(tock==null?null:("\"tock\":"+tock)),(splitDepth==null?null:("\"split_depth\":"+splitDepth)),(compilerVersion==null?null:("\"compiler_version\":\""+compilerVersion+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
         }
     }
+    /**
+     *  
+     */
+    public static class ResultOfEncodeExternalInMessage  {
+
+        public ResultOfEncodeExternalInMessage(String message, String messageId) {
+
+            this.message = message;
+
+            this.messageId = messageId;
+
+        }
+        public ResultOfEncodeExternalInMessage(String message) {
+
+            this.message = message;
+
+        }
+        public ResultOfEncodeExternalInMessage() {
+
+        }
+
+
+        @JsonProperty("message")
+        private String message;
+        /**
+         * 
+         */
+        public String getMessage() {
+            return message;
+        }
+        /**
+         * 
+         */
+        public void setMessage(String value) {
+            this.message = value;
+        }
+
+        @JsonProperty("message_id")
+        private String messageId;
+        /**
+         * 
+         */
+        public String getMessageId() {
+            return messageId;
+        }
+        /**
+         * 
+         */
+        public void setMessageId(String value) {
+            this.messageId = value;
+        }
+
+
+        @Override
+        public String toString() {
+            return "{"+Stream.of((message==null?null:("\"message\":\""+message+"\"")),(messageId==null?null:("\"message_id\":\""+messageId+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
+        }
+    }
     private TONContext context;
 
     public Boc(TONContext context) {
@@ -777,6 +872,20 @@ public class Boc {
     public CompletableFuture<String> encodeTvc(String code, String data, String library, Boolean tick, Boolean tock, Number splitDepth, BocCacheType bocCache) {
         return context.requestJSON("boc.encode_tvc", "{"+Stream.of((code==null?null:("\"code\":\""+code+"\"")),(data==null?null:("\"data\":\""+data+"\"")),(library==null?null:("\"library\":\""+library+"\"")),(tick==null?null:("\"tick\":"+tick)),(tock==null?null:("\"tock\":"+tock)),(splitDepth==null?null:("\"split_depth\":"+splitDepth)),(bocCache==null?null:("\"boc_cache\":"+bocCache))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
             .thenApply(json -> TONContext.convertValue(json.findValue("tvc"), String.class));
+    }
+
+   /**
+    * Allows to encode any external inbound message.
+    *
+    * @param src 
+    * @param dst 
+    * @param init 
+    * @param body 
+    * @param bocCache The BOC itself returned if no cache type provided
+    */
+    public CompletableFuture<ResultOfEncodeExternalInMessage> encodeExternalInMessage(String src, String dst, String init, String body, BocCacheType bocCache) {
+        return context.requestJSON("boc.encode_external_in_message", "{"+Stream.of((src==null?null:("\"src\":\""+src+"\"")),(dst==null?null:("\"dst\":\""+dst+"\"")),(init==null?null:("\"init\":\""+init+"\"")),(body==null?null:("\"body\":\""+body+"\"")),(bocCache==null?null:("\"boc_cache\":"+bocCache))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
+            .thenApply(json -> TONContext.convertValue(json, ResultOfEncodeExternalInMessage.class));
     }
 
    /**
