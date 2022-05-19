@@ -262,8 +262,8 @@ public class Processing {
     * @param sendEvents 
     * @param sendingEndpoints Use this field to get more informative errors.Provide the same value as the `send_message` has returned.If the message was not delivered (expired), SDK will log the endpoint URLs, used for its sending.
     */
-    public CompletableFuture<ResultOfProcessMessage> waitForTransaction(Abi.ABI abi, String message, String shardBlockId, Boolean sendEvents, String[] sendingEndpoints, Consumer<WaitForTransactionEvent> consumer) {
-        return context.requestJSONCallback("processing.wait_for_transaction", "{"+Stream.of((abi==null?null:("\"abi\":"+abi)),(message==null?null:("\"message\":\""+message+"\"")),(shardBlockId==null?null:("\"shard_block_id\":\""+shardBlockId+"\"")),(sendEvents==null?null:("\"send_events\":"+sendEvents)),(sendingEndpoints==null?null:("\"sending_endpoints\":\""+Arrays.toString(sendingEndpoints)+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}", (event,type)->consumer.accept(event), WaitForTransactionEvent.class)
+    public CompletableFuture<ResultOfProcessMessage> waitForTransaction(Abi.ABI abi, String message, String shardBlockId, Boolean sendEvents, String[] sendingEndpoints, Consumer<ProcessMessageEvent> consumer) {
+        return context.requestJSONCallback("processing.wait_for_transaction", "{"+Stream.of((abi==null?null:("\"abi\":"+abi)),(message==null?null:("\"message\":\""+message+"\"")),(shardBlockId==null?null:("\"shard_block_id\":\""+shardBlockId+"\"")),(sendEvents==null?null:("\"send_events\":"+sendEvents)),(sendingEndpoints==null?null:("\"sending_endpoints\":\""+Arrays.toString(sendingEndpoints)+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}", (event,type)->consumer.accept(event), ProcessMessageEvent.class)
             .thenApply(json -> TONContext.convertValue(json, ResultOfProcessMessage.class));
     }
 

@@ -1340,8 +1340,8 @@ public class Net {
     * @param variables Must be a map with named values that can be used in query.
     * @return Must be closed with `unsubscribe`
     */
-    public CompletableFuture<Number> subscribe(String subscription, Object variables, Consumer<SubscribeEvent> consumer) {
-        return context.requestJSONCallback("net.subscribe", "{"+Stream.of((subscription==null?null:("\"subscription\":\""+subscription+"\"")),(variables==null?null:("\"variables\":"+variables))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}", (event,type)->consumer.accept(event), SubscribeEvent.class)
+    public CompletableFuture<Number> subscribe(String subscription, Object variables, Consumer<SubscribeCollectionEvent> consumer) {
+        return context.requestJSONCallback("net.subscribe", "{"+Stream.of((subscription==null?null:("\"subscription\":\""+subscription+"\"")),(variables==null?null:("\"variables\":"+variables))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}", (event,type)->consumer.accept(event), SubscribeCollectionEvent.class)
             .thenApply(json -> TONContext.convertValue(json.findValue("handle"), Number.class));
     }
 

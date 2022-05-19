@@ -218,8 +218,8 @@ api.modules.forEach(mod => {
                     break;
                 case 'callback':
                 case 'request':
-                    console.log('============== ',f.name);
-                    event = camelize('_'+f.name+'_event');
+                    var ref_name = f.result.generic_args[0].ref_name;
+                    event = ref_name.substring(ref_name.indexOf('.') + 9) + 'Event';
                     imports['java.util.function.Consumer'] = true;
                     break;
                 case 'app_object':
