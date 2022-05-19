@@ -205,15 +205,6 @@ api.modules.forEach(mod => {
                 case '_context':
                     break;
                 case 'params':
-                    /*
-                    var fl = types[p.ref_name]
-                    if (isFlattable(p.ref_name) || fl.fields.length == 1)
-                        fields = fl.fields;
-                    else {
-                        fl.getType = () => '=======================';
-                        fl.name = '!!!!!!!!!!!!';
-                        fields = [fl];
-                    }*/
                     fields = types[p.ref_name].fields;
                     break;
                 case 'callback':
