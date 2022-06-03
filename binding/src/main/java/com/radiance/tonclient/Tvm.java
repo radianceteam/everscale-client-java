@@ -222,6 +222,63 @@ public class Tvm {
      */
     public static class TransactionFees  {
 
+        public TransactionFees(Long inMsgFwdFee, Long storageFee, Long gasFee, Long outMsgsFwdFee, Long totalAccountFees, Long totalOutput, Long extInMsgFee, Long totalFwdFees, Long accountFees) {
+
+            this.inMsgFwdFee = inMsgFwdFee;
+
+            this.storageFee = storageFee;
+
+            this.gasFee = gasFee;
+
+            this.outMsgsFwdFee = outMsgsFwdFee;
+
+            this.totalAccountFees = totalAccountFees;
+
+            this.totalOutput = totalOutput;
+
+            this.extInMsgFee = extInMsgFee;
+
+            this.totalFwdFees = totalFwdFees;
+
+            this.accountFees = accountFees;
+
+        }
+        public TransactionFees(Long inMsgFwdFee, Long storageFee, Long gasFee, Long outMsgsFwdFee, Long totalAccountFees, Long totalOutput, Long extInMsgFee, Long totalFwdFees) {
+
+            this.inMsgFwdFee = inMsgFwdFee;
+
+            this.storageFee = storageFee;
+
+            this.gasFee = gasFee;
+
+            this.outMsgsFwdFee = outMsgsFwdFee;
+
+            this.totalAccountFees = totalAccountFees;
+
+            this.totalOutput = totalOutput;
+
+            this.extInMsgFee = extInMsgFee;
+
+            this.totalFwdFees = totalFwdFees;
+
+        }
+        public TransactionFees(Long inMsgFwdFee, Long storageFee, Long gasFee, Long outMsgsFwdFee, Long totalAccountFees, Long totalOutput, Long extInMsgFee) {
+
+            this.inMsgFwdFee = inMsgFwdFee;
+
+            this.storageFee = storageFee;
+
+            this.gasFee = gasFee;
+
+            this.outMsgsFwdFee = outMsgsFwdFee;
+
+            this.totalAccountFees = totalAccountFees;
+
+            this.totalOutput = totalOutput;
+
+            this.extInMsgFee = extInMsgFee;
+
+        }
         public TransactionFees(Long inMsgFwdFee, Long storageFee, Long gasFee, Long outMsgsFwdFee, Long totalAccountFees, Long totalOutput) {
 
             this.inMsgFwdFee = inMsgFwdFee;
@@ -290,13 +347,13 @@ public class Tvm {
         @JsonProperty("in_msg_fwd_fee")
         private Long inMsgFwdFee;
         /**
-         * 
+         * Left for backward compatibility. Does not participate in account transaction fees calculation.
          */
         public Long getInMsgFwdFee() {
             return inMsgFwdFee;
         }
         /**
-         * 
+         * Left for backward compatibility. Does not participate in account transaction fees calculation.
          */
         public void setInMsgFwdFee(Long value) {
             this.inMsgFwdFee = value;
@@ -335,13 +392,13 @@ public class Tvm {
         @JsonProperty("out_msgs_fwd_fee")
         private Long outMsgsFwdFee;
         /**
-         * 
+         * Contains the same data as total_fwd_fees field. Deprecated because of its confusing name, that is not the same with GraphQL API Transaction type's field.
          */
         public Long getOutMsgsFwdFee() {
             return outMsgsFwdFee;
         }
         /**
-         * 
+         * Contains the same data as total_fwd_fees field. Deprecated because of its confusing name, that is not the same with GraphQL API Transaction type's field.
          */
         public void setOutMsgsFwdFee(Long value) {
             this.outMsgsFwdFee = value;
@@ -350,13 +407,13 @@ public class Tvm {
         @JsonProperty("total_account_fees")
         private Long totalAccountFees;
         /**
-         * 
+         * This is the field that is named as `total_fees` in GraphQL API Transaction type. `total_account_fees` name is misleading, because it does not mean account fees, instead it meansvalidators total fees received for the transaction execution. It does not include some forward fees that accountactually pays now, but validators will receive later during value delivery to another account (not even in the receivingtransaction).Because of all of this, this field is not interesting for those who wants to understandthe real account fees, this is why it is deprecated and left for backward compatibility.
          */
         public Long getTotalAccountFees() {
             return totalAccountFees;
         }
         /**
-         * 
+         * This is the field that is named as `total_fees` in GraphQL API Transaction type. `total_account_fees` name is misleading, because it does not mean account fees, instead it meansvalidators total fees received for the transaction execution. It does not include some forward fees that accountactually pays now, but validators will receive later during value delivery to another account (not even in the receivingtransaction).Because of all of this, this field is not interesting for those who wants to understandthe real account fees, this is why it is deprecated and left for backward compatibility.
          */
         public void setTotalAccountFees(Long value) {
             this.totalAccountFees = value;
@@ -377,10 +434,55 @@ public class Tvm {
             this.totalOutput = value;
         }
 
+        @JsonProperty("ext_in_msg_fee")
+        private Long extInMsgFee;
+        /**
+         * 
+         */
+        public Long getExtInMsgFee() {
+            return extInMsgFee;
+        }
+        /**
+         * 
+         */
+        public void setExtInMsgFee(Long value) {
+            this.extInMsgFee = value;
+        }
+
+        @JsonProperty("total_fwd_fees")
+        private Long totalFwdFees;
+        /**
+         * 
+         */
+        public Long getTotalFwdFees() {
+            return totalFwdFees;
+        }
+        /**
+         * 
+         */
+        public void setTotalFwdFees(Long value) {
+            this.totalFwdFees = value;
+        }
+
+        @JsonProperty("account_fees")
+        private Long accountFees;
+        /**
+         * 
+         */
+        public Long getAccountFees() {
+            return accountFees;
+        }
+        /**
+         * 
+         */
+        public void setAccountFees(Long value) {
+            this.accountFees = value;
+        }
+
 
         @Override
         public String toString() {
-            return "{"+Stream.of((inMsgFwdFee==null?null:("\"in_msg_fwd_fee\":"+inMsgFwdFee)),(storageFee==null?null:("\"storage_fee\":"+storageFee)),(gasFee==null?null:("\"gas_fee\":"+gasFee)),(outMsgsFwdFee==null?null:("\"out_msgs_fwd_fee\":"+outMsgsFwdFee)),(totalAccountFees==null?null:("\"total_account_fees\":"+totalAccountFees)),(totalOutput==null?null:("\"total_output\":"+totalOutput))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
+            return "{"+Stream.of((inMsgFwdFee==null?null:("\"in_msg_fwd_fee\":"+inMsgFwdFee)),(storageFee==null?null:("\"storage_fee\":"+storageFee)),(gasFee==null?null:("\"gas_fee\":"+gasFee)),(outMsgsFwdFee==null?null:("\"out_msgs_fwd_fee\":"+outMsgsFwdFee)),(totalAccountFees==null?null:("\"total_account_fees\":"+totalAccountFees)),(totalOutput==null?null:("\"total_output\":"+totalOutput)),(extInMsgFee==null?null:("\"ext_in_msg_fee\":"+extInMsgFee)),(totalFwdFees==null?null:("\"total_fwd_fees\":"+totalFwdFees)),(accountFees==null?null:("\"account_fees\":"+accountFees))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
         }
     }
     /**

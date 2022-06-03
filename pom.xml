@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.radiance.tonclient</groupId>
     <artifactId>ton-client</artifactId>
-    <version>1.33.1</version>
+    <version>1.34.2</version>
     <packaging>pom</packaging>
 
     <name>ton-client</name>

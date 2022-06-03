@@ -1276,6 +1276,15 @@ public class Client {
     * 
     *
     */
+    public CompletableFuture<ClientConfig> config() {
+        return context.requestJSON("client.config", "{}")
+            .thenApply(json -> TONContext.convertValue(json, ClientConfig.class));
+    }
+
+   /**
+    * 
+    *
+    */
     public CompletableFuture<ResultOfBuildInfo> buildInfo() {
         return context.requestJSON("client.build_info", "{}")
             .thenApply(json -> TONContext.convertValue(json, ResultOfBuildInfo.class));
