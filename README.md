@@ -1,11 +1,11 @@
-# Java library for TON Client
+# Java library for Everscale Client
 
-[![SDK version](https://img.shields.io/badge/TON%20SDK%20version-1.34.2-green)](https://github.com/tonlabs/TON-SDK/tree/1.34.2)
+[![SDK version](https://img.shields.io/badge/Ever%20SDK%20version-1.34.3-green)](https://github.com/tonlabs/TON-SDK/tree/1.34.3)
 
-The Library is a binding for [TONOS Client](https://github.com/tonlabs/TON-SDK) written in Java
-that act as a bridge between TONOS Client and a Java application. The library includes original
-TONOS Library with incorporated support of [Java Native Interface (JNI)](https://en.wikipedia.org/wiki/Java_Native_Interface)
-which allows direct access to TONOS Client from Java Virtual Machine.
+The Library is a binding for [Everscale Client](https://github.com/tonlabs/EVER-SDK) written in Java
+that act as a bridge between Everscale Client and a Java application. The library includes original
+EVER-SDK Library with incorporated support of [Java Native Interface (JNI)](https://en.wikipedia.org/wiki/Java_Native_Interface)
+which allows direct access to Everscale Client from Java Virtual Machine.
 
 ### Code Generation
 
@@ -42,7 +42,7 @@ Follow installation instructions from https://docs.docker.com/engine/install/
 ```
     $ mvn test
 ```
-- If succeed, you can find "ton-client-binding-1.34.2-jar-with-dependencies.jar" file located under ${Project_basedir}/binding/target
+- If succeed, you can find "everscale-client-binding-1.34.3-jar-with-dependencies.jar" file located under ${Project_basedir}/binding/target
 
 
 ### Clean
@@ -59,8 +59,8 @@ To use it in your projects, add the dependency to `pom.xml`
     ...
     <dependency>
       <groupId>com.radiance.tonclient</groupId>
-      <artifactId>ton-client-binding</artifactId>
-      <version>1.34.2</version>
+      <artifactId>everscale-client-binding</artifactId>
+      <version>1.34.3</version>
     </dependency>
     ...
 ```

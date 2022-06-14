@@ -1,6 +1,6 @@
 [package]
-name = "ton-client-jni"
-version = "1.34.2"
+name = "everscale-client-jni"
+version = "1.34.3"
 authors = ["Igor Vasilev"]
 edition = "2018"
 

@@ -5,10 +5,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.radiance.tonclient</groupId>
-    <artifactId>ton-client-binding</artifactId>
-    <version>1.34.2</version>
+    <artifactId>everscale-client-binding</artifactId>
+    <version>1.34.3</version>
 
-    <name>ton-client-binding</name>
+    <name>everscale-client-binding</name>
     <!-- FIXME change it to the project's website -->
     <url>http://www.example.com</url>
 
