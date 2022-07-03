@@ -15,6 +15,19 @@ public class Tvm {
      */
     public static class ExecutionOptions  {
 
+        public ExecutionOptions(String blockchainConfig, Number blockTime, Long blockLt, Long transactionLt, Boolean chksigAlwaysSucceed) {
+
+            this.blockchainConfig = blockchainConfig;
+
+            this.blockTime = blockTime;
+
+            this.blockLt = blockLt;
+
+            this.transactionLt = transactionLt;
+
+            this.chksigAlwaysSucceed = chksigAlwaysSucceed;
+
+        }
         public ExecutionOptions(String blockchainConfig, Number blockTime, Long blockLt, Long transactionLt) {
 
             this.blockchainConfig = blockchainConfig;
@@ -112,10 +125,25 @@ public class Tvm {
             this.transactionLt = value;
         }
 
+        @JsonProperty("chksig_always_succeed")
+        private Boolean chksigAlwaysSucceed;
+        /**
+         * 
+         */
+        public Boolean getChksigAlwaysSucceed() {
+            return chksigAlwaysSucceed;
+        }
+        /**
+         * 
+         */
+        public void setChksigAlwaysSucceed(Boolean value) {
+            this.chksigAlwaysSucceed = value;
+        }
+
 
         @Override
         public String toString() {
-            return "{"+Stream.of((blockchainConfig==null?null:("\"blockchain_config\":\""+blockchainConfig+"\"")),(blockTime==null?null:("\"block_time\":"+blockTime)),(blockLt==null?null:("\"block_lt\":"+blockLt)),(transactionLt==null?null:("\"transaction_lt\":"+transactionLt))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
+            return "{"+Stream.of((blockchainConfig==null?null:("\"blockchain_config\":\""+blockchainConfig+"\"")),(blockTime==null?null:("\"block_time\":"+blockTime)),(blockLt==null?null:("\"block_lt\":"+blockLt)),(transactionLt==null?null:("\"transaction_lt\":"+transactionLt)),(chksigAlwaysSucceed==null?null:("\"chksig_always_succeed\":"+chksigAlwaysSucceed))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
         }
     }
     public static abstract class AccountForExecutor {

@@ -1599,4 +1599,16 @@ public class Abi {
             .thenApply(json -> TONContext.convertValue(json.findValue("boc"), String.class));
     }
 
+   /**
+    * 
+    *
+    * @param abi 
+    * @param functionName 
+    * @param output 
+    */
+    public CompletableFuture<Number> calcFunctionId(ABI abi, String functionName, Boolean output) {
+        return context.requestJSON("abi.calc_function_id", "{"+Stream.of((abi==null?null:("\"abi\":"+abi)),(functionName==null?null:("\"function_name\":\""+functionName+"\"")),(output==null?null:("\"output\":"+output))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
+            .thenApply(json -> TONContext.convertValue(json.findValue("function_id"), Number.class));
+    }
+
 }
