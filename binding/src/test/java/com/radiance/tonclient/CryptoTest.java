@@ -219,6 +219,7 @@ public class CryptoTest extends TestBase {
             new Abi.CallSet("transfer", null, "{\"comment\":\""+ (new BigInteger(1, "Hello friend!!!".getBytes()).toString(16)) +"\"}"),
             true,
             new Abi.Signer.SigningBox(handle),
+            null,
             null
         );
 

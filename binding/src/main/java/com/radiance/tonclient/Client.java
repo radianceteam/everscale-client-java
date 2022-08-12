@@ -786,13 +786,13 @@ public class Client {
         @JsonProperty("access_key")
         private String accessKey;
         /**
-         * At the moment is not used in production.
+         * You can specify here Evercloud project secret ot serialized JWT.
          */
         public String getAccessKey() {
             return accessKey;
         }
         /**
-         * At the moment is not used in production.
+         * You can specify here Evercloud project secret ot serialized JWT.
          */
         public void setAccessKey(String value) {
             this.accessKey = value;
