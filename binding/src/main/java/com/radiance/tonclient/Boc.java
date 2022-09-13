@@ -13,7 +13,7 @@ public class Boc {
     public static abstract class BocCacheType {
 
     /**
-     *  Such BOC will not be removed from cache until it is unpinned
+     *  Such BOC will not be removed from cache until it is unpinned BOCs can have several pins and each of the pins has reference counter indicating how manytimes the BOC was pinned with the pin. BOC is removed from cache after all references for allpins are unpinned with `cache_unpin` function calls.
      */
     public static class Pinned extends BocCacheType  {
 
@@ -52,7 +52,7 @@ public class Boc {
         public static final Unpinned Unpinned = new Unpinned();
 
     /**
-     *  
+     *  BOC resides there until it is replaced with other BOCs if it is not used
      */
     public static class Unpinned extends BocCacheType  {
 
@@ -801,7 +801,7 @@ public class Boc {
     }
 
    /**
-    * BOCs which don't have another pins will be removed from cache
+    * 
     *
     * @param pin 
     * @param bocRef If it is provided then only referenced BOC is unpinned

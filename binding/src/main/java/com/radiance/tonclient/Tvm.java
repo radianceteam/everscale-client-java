@@ -375,13 +375,13 @@ public class Tvm {
         @JsonProperty("in_msg_fwd_fee")
         private Long inMsgFwdFee;
         /**
-         * Left for backward compatibility. Does not participate in account transaction fees calculation.
+         * Contains the same data as ext_in_msg_fee field
          */
         public Long getInMsgFwdFee() {
             return inMsgFwdFee;
         }
         /**
-         * Left for backward compatibility. Does not participate in account transaction fees calculation.
+         * Contains the same data as ext_in_msg_fee field
          */
         public void setInMsgFwdFee(Long value) {
             this.inMsgFwdFee = value;
@@ -435,13 +435,13 @@ public class Tvm {
         @JsonProperty("total_account_fees")
         private Long totalAccountFees;
         /**
-         * This is the field that is named as `total_fees` in GraphQL API Transaction type. `total_account_fees` name is misleading, because it does not mean account fees, instead it meansvalidators total fees received for the transaction execution. It does not include some forward fees that accountactually pays now, but validators will receive later during value delivery to another account (not even in the receivingtransaction).Because of all of this, this field is not interesting for those who wants to understandthe real account fees, this is why it is deprecated and left for backward compatibility.
+         * Contains the same data as account_fees field
          */
         public Long getTotalAccountFees() {
             return totalAccountFees;
         }
         /**
-         * This is the field that is named as `total_fees` in GraphQL API Transaction type. `total_account_fees` name is misleading, because it does not mean account fees, instead it meansvalidators total fees received for the transaction execution. It does not include some forward fees that accountactually pays now, but validators will receive later during value delivery to another account (not even in the receivingtransaction).Because of all of this, this field is not interesting for those who wants to understandthe real account fees, this is why it is deprecated and left for backward compatibility.
+         * Contains the same data as account_fees field
          */
         public void setTotalAccountFees(Long value) {
             this.totalAccountFees = value;
