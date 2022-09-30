@@ -19,25 +19,9 @@ public class Crypto {
      */
     public static class AES extends EncryptionAlgorithm  {
 
-        public AES(Object mode, String key, String iv) {
+        public AES(Object value) {
 
-            this.mode = mode;
-
-            this.key = key;
-
-            this.iv = iv;
-
-        }
-        public AES(Object mode, String key) {
-
-            this.mode = mode;
-
-            this.key = key;
-
-        }
-        public AES(Object mode) {
-
-            this.mode = mode;
+            this.value = value;
 
         }
         public AES() {
@@ -45,55 +29,25 @@ public class Crypto {
         }
 
 
-        @JsonProperty("mode")
-        private Object mode;
+        @JsonProperty("value")
+        private Object value;
         /**
          * 
          */
-        public Object getMode() {
-            return mode;
+        public Object getValue() {
+            return value;
         }
         /**
          * 
          */
-        public void setMode(Object value) {
-            this.mode = value;
-        }
-
-        @JsonProperty("key")
-        private String key;
-        /**
-         * 
-         */
-        public String getKey() {
-            return key;
-        }
-        /**
-         * 
-         */
-        public void setKey(String value) {
-            this.key = value;
-        }
-
-        @JsonProperty("iv")
-        private String iv;
-        /**
-         * 
-         */
-        public String getIv() {
-            return iv;
-        }
-        /**
-         * 
-         */
-        public void setIv(String value) {
-            this.iv = value;
+        public void setValue(Object value) {
+            this.value = value;
         }
 
 
         @Override
         public String toString() {
-            return "{"+Stream.of("\"type\":\"AES\"",(mode==null?null:("\"mode\":"+mode)),(key==null?null:("\"key\":\""+key+"\"")),(iv==null?null:("\"iv\":\""+iv+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
+            return "{"+Stream.of("\"type\":\"AES\"",(value==null?null:("\"value\":"+value))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
         }
     }
 
@@ -102,16 +56,9 @@ public class Crypto {
      */
     public static class ChaCha20 extends EncryptionAlgorithm  {
 
-        public ChaCha20(String key, String nonce) {
+        public ChaCha20(Object value) {
 
-            this.key = key;
-
-            this.nonce = nonce;
-
-        }
-        public ChaCha20(String key) {
-
-            this.key = key;
+            this.value = value;
 
         }
         public ChaCha20() {
@@ -119,40 +66,25 @@ public class Crypto {
         }
 
 
-        @JsonProperty("key")
-        private String key;
+        @JsonProperty("value")
+        private Object value;
         /**
-         * Must be encoded with `hex`.
+         * 
          */
-        public String getKey() {
-            return key;
+        public Object getValue() {
+            return value;
         }
         /**
-         * Must be encoded with `hex`.
+         * 
          */
-        public void setKey(String value) {
-            this.key = value;
-        }
-
-        @JsonProperty("nonce")
-        private String nonce;
-        /**
-         * Must be encoded with `hex`.
-         */
-        public String getNonce() {
-            return nonce;
-        }
-        /**
-         * Must be encoded with `hex`.
-         */
-        public void setNonce(String value) {
-            this.nonce = value;
+        public void setValue(Object value) {
+            this.value = value;
         }
 
 
         @Override
         public String toString() {
-            return "{"+Stream.of("\"type\":\"ChaCha20\"",(key==null?null:("\"key\":\""+key+"\"")),(nonce==null?null:("\"nonce\":\""+nonce+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
+            return "{"+Stream.of("\"type\":\"ChaCha20\"",(value==null?null:("\"value\":"+value))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
         }
     }
 
@@ -161,25 +93,9 @@ public class Crypto {
      */
     public static class NaclBox extends EncryptionAlgorithm  {
 
-        public NaclBox(String theirPublic, String secretKey, String nonce) {
+        public NaclBox(Object value) {
 
-            this.theirPublic = theirPublic;
-
-            this.secretKey = secretKey;
-
-            this.nonce = nonce;
-
-        }
-        public NaclBox(String theirPublic, String secretKey) {
-
-            this.theirPublic = theirPublic;
-
-            this.secretKey = secretKey;
-
-        }
-        public NaclBox(String theirPublic) {
-
-            this.theirPublic = theirPublic;
+            this.value = value;
 
         }
         public NaclBox() {
@@ -187,55 +103,25 @@ public class Crypto {
         }
 
 
-        @JsonProperty("their_public")
-        private String theirPublic;
+        @JsonProperty("value")
+        private Object value;
         /**
-         * Must be encoded with `hex`.
+         * 
          */
-        public String getTheirPublic() {
-            return theirPublic;
+        public Object getValue() {
+            return value;
         }
         /**
-         * Must be encoded with `hex`.
+         * 
          */
-        public void setTheirPublic(String value) {
-            this.theirPublic = value;
-        }
-
-        @JsonProperty("secret")
-        private String secretKey;
-        /**
-         * Must be encoded with `hex`.
-         */
-        public String getSecret() {
-            return secretKey;
-        }
-        /**
-         * Must be encoded with `hex`.
-         */
-        public void setSecret(String value) {
-            this.secretKey = value;
-        }
-
-        @JsonProperty("nonce")
-        private String nonce;
-        /**
-         * Must be encoded with `hex`.
-         */
-        public String getNonce() {
-            return nonce;
-        }
-        /**
-         * Must be encoded with `hex`.
-         */
-        public void setNonce(String value) {
-            this.nonce = value;
+        public void setValue(Object value) {
+            this.value = value;
         }
 
 
         @Override
         public String toString() {
-            return "{"+Stream.of("\"type\":\"NaclBox\"",(theirPublic==null?null:("\"their_public\":\""+theirPublic+"\"")),(secretKey==null?null:("\"secret\":\""+secretKey+"\"")),(nonce==null?null:("\"nonce\":\""+nonce+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
+            return "{"+Stream.of("\"type\":\"NaclBox\"",(value==null?null:("\"value\":"+value))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
         }
     }
 
@@ -244,16 +130,9 @@ public class Crypto {
      */
     public static class NaclSecretBox extends EncryptionAlgorithm  {
 
-        public NaclSecretBox(String key, String nonce) {
+        public NaclSecretBox(Object value) {
 
-            this.key = key;
-
-            this.nonce = nonce;
-
-        }
-        public NaclSecretBox(String key) {
-
-            this.key = key;
+            this.value = value;
 
         }
         public NaclSecretBox() {
@@ -261,40 +140,25 @@ public class Crypto {
         }
 
 
-        @JsonProperty("key")
-        private String key;
+        @JsonProperty("value")
+        private Object value;
         /**
          * 
          */
-        public String getKey() {
-            return key;
+        public Object getValue() {
+            return value;
         }
         /**
          * 
          */
-        public void setKey(String value) {
-            this.key = value;
-        }
-
-        @JsonProperty("nonce")
-        private String nonce;
-        /**
-         * 
-         */
-        public String getNonce() {
-            return nonce;
-        }
-        /**
-         * 
-         */
-        public void setNonce(String value) {
-            this.nonce = value;
+        public void setValue(Object value) {
+            this.value = value;
         }
 
 
         @Override
         public String toString() {
-            return "{"+Stream.of("\"type\":\"NaclSecretBox\"",(key==null?null:("\"key\":\""+key+"\"")),(nonce==null?null:("\"nonce\":\""+nonce+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
+            return "{"+Stream.of("\"type\":\"NaclSecretBox\"",(value==null?null:("\"value\":"+value))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
         }
     }
 }
@@ -486,9 +350,9 @@ public class Crypto {
      */
     public static class ChaCha20 extends BoxEncryptionAlgorithm  {
 
-        public ChaCha20(String nonce) {
+        public ChaCha20(Object value) {
 
-            this.nonce = nonce;
+            this.value = value;
 
         }
         public ChaCha20() {
@@ -496,25 +360,25 @@ public class Crypto {
         }
 
 
-        @JsonProperty("nonce")
-        private String nonce;
+        @JsonProperty("value")
+        private Object value;
         /**
-         * Must be encoded with `hex`.
+         * 
          */
-        public String getNonce() {
-            return nonce;
+        public Object getValue() {
+            return value;
         }
         /**
-         * Must be encoded with `hex`.
+         * 
          */
-        public void setNonce(String value) {
-            this.nonce = value;
+        public void setValue(Object value) {
+            this.value = value;
         }
 
 
         @Override
         public String toString() {
-            return "{"+Stream.of("\"type\":\"ChaCha20\"",(nonce==null?null:("\"nonce\":\""+nonce+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
+            return "{"+Stream.of("\"type\":\"ChaCha20\"",(value==null?null:("\"value\":"+value))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
         }
     }
 
@@ -523,16 +387,9 @@ public class Crypto {
      */
     public static class NaclBox extends BoxEncryptionAlgorithm  {
 
-        public NaclBox(String theirPublic, String nonce) {
+        public NaclBox(Object value) {
 
-            this.theirPublic = theirPublic;
-
-            this.nonce = nonce;
-
-        }
-        public NaclBox(String theirPublic) {
-
-            this.theirPublic = theirPublic;
+            this.value = value;
 
         }
         public NaclBox() {
@@ -540,40 +397,25 @@ public class Crypto {
         }
 
 
-        @JsonProperty("their_public")
-        private String theirPublic;
+        @JsonProperty("value")
+        private Object value;
         /**
-         * Must be encoded with `hex`.
+         * 
          */
-        public String getTheirPublic() {
-            return theirPublic;
+        public Object getValue() {
+            return value;
         }
         /**
-         * Must be encoded with `hex`.
+         * 
          */
-        public void setTheirPublic(String value) {
-            this.theirPublic = value;
-        }
-
-        @JsonProperty("nonce")
-        private String nonce;
-        /**
-         * Must be encoded with `hex`.
-         */
-        public String getNonce() {
-            return nonce;
-        }
-        /**
-         * Must be encoded with `hex`.
-         */
-        public void setNonce(String value) {
-            this.nonce = value;
+        public void setValue(Object value) {
+            this.value = value;
         }
 
 
         @Override
         public String toString() {
-            return "{"+Stream.of("\"type\":\"NaclBox\"",(theirPublic==null?null:("\"their_public\":\""+theirPublic+"\"")),(nonce==null?null:("\"nonce\":\""+nonce+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
+            return "{"+Stream.of("\"type\":\"NaclBox\"",(value==null?null:("\"value\":"+value))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
         }
     }
 
@@ -582,9 +424,9 @@ public class Crypto {
      */
     public static class NaclSecretBox extends BoxEncryptionAlgorithm  {
 
-        public NaclSecretBox(String nonce) {
+        public NaclSecretBox(Object value) {
 
-            this.nonce = nonce;
+            this.value = value;
 
         }
         public NaclSecretBox() {
@@ -592,25 +434,25 @@ public class Crypto {
         }
 
 
-        @JsonProperty("nonce")
-        private String nonce;
+        @JsonProperty("value")
+        private Object value;
         /**
          * 
          */
-        public String getNonce() {
-            return nonce;
+        public Object getValue() {
+            return value;
         }
         /**
          * 
          */
-        public void setNonce(String value) {
-            this.nonce = value;
+        public void setValue(Object value) {
+            this.value = value;
         }
 
 
         @Override
         public String toString() {
-            return "{"+Stream.of("\"type\":\"NaclSecretBox\"",(nonce==null?null:("\"nonce\":\""+nonce+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
+            return "{"+Stream.of("\"type\":\"NaclSecretBox\"",(value==null?null:("\"value\":"+value))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
         }
     }
 }

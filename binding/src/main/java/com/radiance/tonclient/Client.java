@@ -786,13 +786,13 @@ public class Client {
         @JsonProperty("access_key")
         private String accessKey;
         /**
-         * You can specify here Evercloud project secret ot serialized JWT.
+         * You can specify here Basic Auth secret (Evercloud project secret) in hex stringor serialized JWT in base64 string.Will be passed on as Authorization: Basic ... or Authorization: Bearer ... header.
          */
         public String getAccessKey() {
             return accessKey;
         }
         /**
-         * You can specify here Evercloud project secret ot serialized JWT.
+         * You can specify here Basic Auth secret (Evercloud project secret) in hex stringor serialized JWT in base64 string.Will be passed on as Authorization: Basic ... or Authorization: Bearer ... header.
          */
         public void setAccessKey(String value) {
             this.accessKey = value;
