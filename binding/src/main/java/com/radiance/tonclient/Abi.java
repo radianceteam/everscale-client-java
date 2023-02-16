@@ -877,6 +877,22 @@ public class Abi {
             return "{"+Stream.of((name==null?null:("\"name\":\""+name+"\"")),(type==null?null:("\"type\":\""+type+"\"")),(components==null?null:("\"components\":"+Arrays.toString(components)))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
         }
     }
+
+    /**
+     *  
+     */
+    public enum DataLayout {
+        
+        /**
+         * 
+         */
+        Input,
+
+        /**
+         * 
+         */
+        Output
+    }
     /**
      *  
      */
@@ -1288,7 +1304,7 @@ public class Abi {
 
         @Override
         public String toString() {
-            return "{"+Stream.of((bodyType==null?null:("\"body_type\":"+bodyType)),(name==null?null:("\"name\":\""+name+"\"")),(value==null?null:("\"value\":"+value)),(header==null?null:("\"header\":"+header))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
+            return "{"+Stream.of((bodyType==null?null:("\"body_type\":"+bodyType.ordinal())),(name==null?null:("\"name\":\""+name+"\"")),(value==null?null:("\"value\":"+value)),(header==null?null:("\"header\":"+header))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
         }
     }
     /**
@@ -1407,6 +1423,64 @@ public class Abi {
             return "{"+Stream.of((initialData==null?null:("\"initial_data\":"+initialData)),(initialPubkey==null?null:("\"initial_pubkey\":\""+initialPubkey+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
         }
     }
+    /**
+     *  
+     */
+    public static class ResultOfGetSignatureData  {
+
+        public ResultOfGetSignatureData(String signature, String unsigned) {
+
+            this.signature = signature;
+
+            this.unsigned = unsigned;
+
+        }
+        public ResultOfGetSignatureData(String signature) {
+
+            this.signature = signature;
+
+        }
+        public ResultOfGetSignatureData() {
+
+        }
+
+
+        @JsonProperty("signature")
+        private String signature;
+        /**
+         * 
+         */
+        public String getSignature() {
+            return signature;
+        }
+        /**
+         * 
+         */
+        public void setSignature(String value) {
+            this.signature = value;
+        }
+
+        @JsonProperty("unsigned")
+        private String unsigned;
+        /**
+         * 
+         */
+        public String getUnsigned() {
+            return unsigned;
+        }
+        /**
+         * 
+         */
+        public void setUnsigned(String value) {
+            this.unsigned = value;
+        }
+
+
+        @Override
+        public String toString() {
+            return "{"+Stream.of((signature==null?null:("\"signature\":\""+signature+"\"")),(unsigned==null?null:("\"unsigned\":\""+unsigned+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
+        }
+    }
     private TONContext context;
 
     public Abi(TONContext context) {
@@ -1422,9 +1496,10 @@ public class Abi {
     * @param signer 
     * @param processingTryIndex Used in message processing with retries.<p>Encoder uses the provided try index to calculate messageexpiration time.<p>Expiration timeouts will grow with every retry.<p>Default value is 0.
     * @param address Since ABI version 2.3 destination address of external inbound message is used in messagebody signature calculation. Should be provided when signed external inbound message body iscreated. Otherwise can be omitted.
+    * @param signatureId 
     */
-    public CompletableFuture<ResultOfEncodeMessageBody> encodeMessageBody(ABI abi, CallSet callSet, Boolean isInternal, Signer signer, Number processingTryIndex, String address) {
-        return context.requestJSON("abi.encode_message_body", "{"+Stream.of((abi==null?null:("\"abi\":"+abi)),(callSet==null?null:("\"call_set\":"+callSet)),(isInternal==null?null:("\"is_internal\":"+isInternal)),(signer==null?null:("\"signer\":"+signer)),(processingTryIndex==null?null:("\"processing_try_index\":"+processingTryIndex)),(address==null?null:("\"address\":\""+address+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
+    public CompletableFuture<ResultOfEncodeMessageBody> encodeMessageBody(ABI abi, CallSet callSet, Boolean isInternal, Signer signer, Number processingTryIndex, String address, Number signatureId) {
+        return context.requestJSON("abi.encode_message_body", "{"+Stream.of((abi==null?null:("\"abi\":"+abi)),(callSet==null?null:("\"call_set\":"+callSet)),(isInternal==null?null:("\"is_internal\":"+isInternal)),(signer==null?null:("\"signer\":"+signer)),(processingTryIndex==null?null:("\"processing_try_index\":"+processingTryIndex)),(address==null?null:("\"address\":\""+address+"\"")),(signatureId==null?null:("\"signature_id\":"+signatureId))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
             .thenApply(json -> TONContext.convertValue(json, ResultOfEncodeMessageBody.class));
     }
 
@@ -1450,9 +1525,10 @@ public class Abi {
     * @param callSet Must be specified in case of non-deploy message.<p>In case of deploy message it is optional and contains parametersof the functions that will to be called upon deploy transaction.
     * @param signer 
     * @param processingTryIndex Used in message processing with retries (if contract's ABI includes "expire" header).<p>Encoder uses the provided try index to calculate messageexpiration time. The 1st message expiration time is specified inClient config.<p>Expiration timeouts will grow with every retry.Retry grow factor is set in Client config:&lt;.....add config parameter with default value here&gt;<p>Default value is 0.
+    * @param signatureId 
     */
-    public CompletableFuture<ResultOfEncodeMessage> encodeMessage(ABI abi, String address, DeploySet deploySet, CallSet callSet, Signer signer, Number processingTryIndex) {
-        return context.requestJSON("abi.encode_message", "{"+Stream.of((abi==null?null:("\"abi\":"+abi)),(address==null?null:("\"address\":\""+address+"\"")),(deploySet==null?null:("\"deploy_set\":"+deploySet)),(callSet==null?null:("\"call_set\":"+callSet)),(signer==null?null:("\"signer\":"+signer)),(processingTryIndex==null?null:("\"processing_try_index\":"+processingTryIndex))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
+    public CompletableFuture<ResultOfEncodeMessage> encodeMessage(ABI abi, String address, DeploySet deploySet, CallSet callSet, Signer signer, Number processingTryIndex, Number signatureId) {
+        return context.requestJSON("abi.encode_message", "{"+Stream.of((abi==null?null:("\"abi\":"+abi)),(address==null?null:("\"address\":\""+address+"\"")),(deploySet==null?null:("\"deploy_set\":"+deploySet)),(callSet==null?null:("\"call_set\":"+callSet)),(signer==null?null:("\"signer\":"+signer)),(processingTryIndex==null?null:("\"processing_try_index\":"+processingTryIndex)),(signatureId==null?null:("\"signature_id\":"+signatureId))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
             .thenApply(json -> TONContext.convertValue(json, ResultOfEncodeMessage.class));
     }
 
@@ -1492,9 +1568,11 @@ public class Abi {
     * @param abi 
     * @param message 
     * @param allowPartial 
+    * @param functionName 
+    * @param dataLayout 
     */
-    public CompletableFuture<DecodedMessageBody> decodeMessage(ABI abi, String message, Boolean allowPartial) {
-        return context.requestJSON("abi.decode_message", "{"+Stream.of((abi==null?null:("\"abi\":"+abi)),(message==null?null:("\"message\":\""+message+"\"")),(allowPartial==null?null:("\"allow_partial\":"+allowPartial))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
+    public CompletableFuture<DecodedMessageBody> decodeMessage(ABI abi, String message, Boolean allowPartial, String functionName, DataLayout dataLayout) {
+        return context.requestJSON("abi.decode_message", "{"+Stream.of((abi==null?null:("\"abi\":"+abi)),(message==null?null:("\"message\":\""+message+"\"")),(allowPartial==null?null:("\"allow_partial\":"+allowPartial)),(functionName==null?null:("\"function_name\":\""+functionName+"\"")),(dataLayout==null?null:("\"data_layout\":"+dataLayout.ordinal()))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
             .thenApply(json -> TONContext.convertValue(json, DecodedMessageBody.class));
     }
 
@@ -1505,9 +1583,11 @@ public class Abi {
     * @param body 
     * @param isInternal 
     * @param allowPartial 
+    * @param functionName 
+    * @param dataLayout 
     */
-    public CompletableFuture<DecodedMessageBody> decodeMessageBody(ABI abi, String body, Boolean isInternal, Boolean allowPartial) {
-        return context.requestJSON("abi.decode_message_body", "{"+Stream.of((abi==null?null:("\"abi\":"+abi)),(body==null?null:("\"body\":\""+body+"\"")),(isInternal==null?null:("\"is_internal\":"+isInternal)),(allowPartial==null?null:("\"allow_partial\":"+allowPartial))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
+    public CompletableFuture<DecodedMessageBody> decodeMessageBody(ABI abi, String body, Boolean isInternal, Boolean allowPartial, String functionName, DataLayout dataLayout) {
+        return context.requestJSON("abi.decode_message_body", "{"+Stream.of((abi==null?null:("\"abi\":"+abi)),(body==null?null:("\"body\":\""+body+"\"")),(isInternal==null?null:("\"is_internal\":"+isInternal)),(allowPartial==null?null:("\"allow_partial\":"+allowPartial)),(functionName==null?null:("\"function_name\":\""+functionName+"\"")),(dataLayout==null?null:("\"data_layout\":"+dataLayout.ordinal()))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
             .thenApply(json -> TONContext.convertValue(json, DecodedMessageBody.class));
     }
 
@@ -1610,6 +1690,18 @@ public class Abi {
     public CompletableFuture<Number> calcFunctionId(ABI abi, String functionName, Boolean output) {
         return context.requestJSON("abi.calc_function_id", "{"+Stream.of((abi==null?null:("\"abi\":"+abi)),(functionName==null?null:("\"function_name\":\""+functionName+"\"")),(output==null?null:("\"output\":"+output))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
             .thenApply(json -> TONContext.convertValue(json.findValue("function_id"), Number.class));
+    }
+
+   /**
+    * 
+    *
+    * @param abi 
+    * @param message 
+    * @param signatureId 
+    */
+    public CompletableFuture<ResultOfGetSignatureData> getSignatureData(ABI abi, String message, Number signatureId) {
+        return context.requestJSON("abi.get_signature_data", "{"+Stream.of((abi==null?null:("\"abi\":"+abi)),(message==null?null:("\"message\":\""+message+"\"")),(signatureId==null?null:("\"signature_id\":"+signatureId))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
+            .thenApply(json -> TONContext.convertValue(json, ResultOfGetSignatureData.class));
     }
 
 }

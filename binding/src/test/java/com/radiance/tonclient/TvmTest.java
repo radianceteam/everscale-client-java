@@ -176,7 +176,8 @@ public class TvmTest extends TestBase {
                 "\"period\": \"0x456\"" +
             "}"),
             signer,
-            null  // processingTryIndex
+            null,  // processingTryIndex
+            null
         ).get();
 
         account = runner.runMessage(encoded, subscriptionAbi, account);
@@ -188,7 +189,8 @@ public class TvmTest extends TestBase {
             null,   // deploySet
             new Abi.CallSet("getSubscription", null, "{\"subscriptionId\": " + subscriptionId + "}"),
             signer,
-            null    // processingTryIndex
+            null,    // processingTryIndex
+            null
         ).get();
 
         Tvm.ResultOfRunTvm r = tvm.runTvm(

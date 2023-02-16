@@ -94,7 +94,7 @@ public class CryptoTest extends TestBase {
         }
 
         // mnemonicWords
-        crypto.mnemonicWords(1).get();
+        crypto.mnemonicWords(Crypto.MnemonicDictionary.English).get();
 
         // hdkeyXprvFromMnemonic
         String xPrivate = crypto.hdkeyXprvFromMnemonic("abuse boss fly battle rubber wasp afraid hamster guide essence vibrant tattoo", null, null).get();
@@ -219,6 +219,7 @@ public class CryptoTest extends TestBase {
             new Abi.CallSet("transfer", null, "{\"comment\":\""+ (new BigInteger(1, "Hello friend!!!".getBytes()).toString(16)) +"\"}"),
             true,
             new Abi.Signer.SigningBox(handle),
+            null,
             null,
             null
         );

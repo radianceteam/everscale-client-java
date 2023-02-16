@@ -35,7 +35,7 @@ public class NetTest extends TestBase {
         assertTrue("ranges", (Integer)((Map)messages[0]).get("created_at") > 156234274);
     }
 
-    //@Test
+    @Test
     public void waitFor() throws Exception {
         long now = System.currentTimeMillis() / 1000;
         getGramsFromGiver(giverAddress).get();
@@ -49,7 +49,7 @@ public class NetTest extends TestBase {
         assertTrue("waitFor", (Integer)trans.get("now") >= now);
     }
 
-    //@Test
+    @Test
     public void subscribeForTransactionsWithAddresses() throws Exception {
         Crypto.KeyPair keysArr[] = new Crypto.KeyPair[1];
  
@@ -61,7 +61,8 @@ public class NetTest extends TestBase {
                     new Abi.DeploySet(helloTvc),
                     new Abi.CallSet("constructor"),
                     new Abi.Signer.Keys(keysArr[0] = keys),
-                    null    // processingTryIndex
+                    null,   // processingTryIndex
+                    null    // signatureId
                 )
             ).thenApply(msg -> msg.getAddress())
             .get();

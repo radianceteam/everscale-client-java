@@ -66,7 +66,7 @@ public class Net {
 
         @Override
         public String toString() {
-            return "{"+Stream.of((path==null?null:("\"path\":\""+path+"\"")),(direction==null?null:("\"direction\":"+direction))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
+            return "{"+Stream.of((path==null?null:("\"path\":\""+path+"\"")),(direction==null?null:("\"direction\":"+direction.ordinal()))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
         }
     }
 
@@ -580,7 +580,7 @@ public class Net {
 
         @Override
         public String toString() {
-            return "{"+Stream.of((field==null?null:("\"field\":\""+field+"\"")),(fn==null?null:("\"fn\":"+fn))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
+            return "{"+Stream.of((field==null?null:("\"field\":\""+field+"\"")),(fn==null?null:("\"fn\":"+fn.ordinal()))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
         }
     }
 
@@ -1334,7 +1334,7 @@ public class Net {
     }
 
    /**
-    * The subscription is a persistent communication channel betweenclient and Everscale Network.<p>### Important Notes on Subscriptions<p>Unfortunately sometimes the connection with the network breakes down.In this situation the library attempts to reconnect to the network.This reconnection sequence can take significant time.All of this time the client is disconnected from the network.<p>Bad news is that all changes that happened whilethe client was disconnected are lost.<p>Good news is that the client report errors to the callback whenit loses and resumes connection.<p>So, if the lost changes are important to the application thenthe application must handle these error reports.<p>Library reports errors with `responseType` == 101and the error object passed via `params`.<p>When the library has successfully reconnectedthe application receives callback with`responseType` == 101 and `params.code` == 614 (NetworkModuleResumed).<p>Application can use several ways to handle this situation:- If application monitors changes for the singleobject (for example specific account):  applicationcan perform a query for this object and handle actual data as aregular data from the subscription.- If application monitors sequence of some objects(for example transactions of the specific account): application mustrefresh all cached (or visible to user) lists where this sequences presents.
+    * The subscription is a persistent communication channel betweenclient and Everscale Network.<p>### Important Notes on Subscriptions<p>Unfortunately sometimes the connection with the network breaks down.In this situation the library attempts to reconnect to the network.This reconnection sequence can take significant time.All of this time the client is disconnected from the network.<p>Bad news is that all changes that happened whilethe client was disconnected are lost.<p>Good news is that the client report errors to the callback whenit loses and resumes connection.<p>So, if the lost changes are important to the application thenthe application must handle these error reports.<p>Library reports errors with `responseType` == 101and the error object passed via `params`.<p>When the library has successfully reconnectedthe application receives callback with`responseType` == 101 and `params.code` == 614 (NetworkModuleResumed).<p>Application can use several ways to handle this situation:- If application monitors changes for the singleobject (for example specific account):  applicationcan perform a query for this object and handle actual data as aregular data from the subscription.- If application monitors sequence of some objects(for example transactions of the specific account): application mustrefresh all cached (or visible to user) lists where this sequences presents.
     *
     * @param subscription 
     * @param variables Must be a map with named values that can be used in query.
@@ -1415,14 +1415,15 @@ public class Net {
     }
 
    /**
-    * Performs recursive retrieval of a transactions tree produced by a specific message:in_msg -&gt; dst_transaction -&gt; out_messages -&gt; dst_transaction -&gt; ...If the chain of transactions execution is in progress while the function is running,it will wait for the next transactions to appear until the full tree or more than 50 transactionsare received.<p>All the retrieved messages and transactions are includedinto `result.messages` and `result.transactions` respectively.<p>Function reads transactions layer by layer, by pages of 20 transactions.<p>The retrieval prosess goes like this:Let's assume we have an infinite chain of transactions and each transaction generates 5 messages.1. Retrieve 1st message (input parameter) and corresponding transaction - put it into result.It is the first level of the tree of transactions - its root.Retrieve 5 out message ids from the transaction for next steps.2. Retrieve 5 messages and corresponding transactions on the 2nd layer. Put them into result.Retrieve 5*5 out message ids from these transactions for next steps3. Retrieve 20 (size of the page) messages and transactions (3rd layer) and 20*5=100 message ids (4th layer).4. Retrieve the last 5 messages and 5 transactions on the 3rd layer + 15 messages and transactions (of 100) from the 4th layer+ 25 message ids of the 4th layer + 75 message ids of the 5th layer.5. Retrieve 20 more messages and 20 more transactions of the 4th layer + 100 more message ids of the 5th layer.6. Now we have 1+5+20+20+20 = 66 transactions, which is more than 50. Function exits with the tree of1m-&gt;1t-&gt;5m-&gt;5t-&gt;25m-&gt;25t-&gt;35m-&gt;35t. If we see any message ids in the last transactions out_msgs, which don't havecorresponding messages in the function result, it means that the full tree was not received and we need to continue iteration.<p>To summarize, it is guaranteed that each message in `result.messages` has the corresponding transactionin the `result.transactions`.But there is no guarantee that all messages from transactions `out_msgs` arepresented in `result.messages`.So the application has to continue retrieval for missing messages if it requires.
+    * Performs recursive retrieval of a transactions tree produced by a specific message:in_msg -&gt; dst_transaction -&gt; out_messages -&gt; dst_transaction -&gt; ...If the chain of transactions execution is in progress while the function is running,it will wait for the next transactions to appear until the full tree or more than 50 transactionsare received.<p>All the retrieved messages and transactions are includedinto `result.messages` and `result.transactions` respectively.<p>Function reads transactions layer by layer, by pages of 20 transactions.<p>The retrieval process goes like this:Let's assume we have an infinite chain of transactions and each transaction generates 5 messages.1. Retrieve 1st message (input parameter) and corresponding transaction - put it into result.It is the first level of the tree of transactions - its root.Retrieve 5 out message ids from the transaction for next steps.2. Retrieve 5 messages and corresponding transactions on the 2nd layer. Put them into result.Retrieve 5*5 out message ids from these transactions for next steps3. Retrieve 20 (size of the page) messages and transactions (3rd layer) and 20*5=100 message ids (4th layer).4. Retrieve the last 5 messages and 5 transactions on the 3rd layer + 15 messages and transactions (of 100) from the 4th layer+ 25 message ids of the 4th layer + 75 message ids of the 5th layer.5. Retrieve 20 more messages and 20 more transactions of the 4th layer + 100 more message ids of the 5th layer.6. Now we have 1+5+20+20+20 = 66 transactions, which is more than 50. Function exits with the tree of1m-&gt;1t-&gt;5m-&gt;5t-&gt;25m-&gt;25t-&gt;35m-&gt;35t. If we see any message ids in the last transactions out_msgs, which don't havecorresponding messages in the function result, it means that the full tree was not received and we need to continue iteration.<p>To summarize, it is guaranteed that each message in `result.messages` has the corresponding transactionin the `result.transactions`.But there is no guarantee that all messages from transactions `out_msgs` arepresented in `result.messages`.So the application has to continue retrieval for missing messages if it requires.
     *
     * @param inMsg 
     * @param abiRegistry 
-    * @param timeout If some of the following messages and transactions are missing yetThe maximum waiting time is regulated by this option.<p>Default value is 60000 (1 min).
+    * @param timeout If some of the following messages and transactions are missing yetThe maximum waiting time is regulated by this option.<p>Default value is 60000 (1 min). If `timeout` is set to 0 then function will wait infinitelyuntil the whole transaction tree is executed
+    * @param transactionMaxCount If transaction tree contains more transaction then this parameter then only first `transaction_max_count` transaction are awaited and returned.<p>Default value is 50. If `transaction_max_count` is set to 0 then no limitation ontransaction count is used and all transaction are returned.
     */
-    public CompletableFuture<ResultOfQueryTransactionTree> queryTransactionTree(String inMsg, Abi.ABI[] abiRegistry, Number timeout) {
-        return context.requestJSON("net.query_transaction_tree", "{"+Stream.of((inMsg==null?null:("\"in_msg\":\""+inMsg+"\"")),(abiRegistry==null?null:("\"abi_registry\":"+Arrays.toString(abiRegistry))),(timeout==null?null:("\"timeout\":"+timeout))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
+    public CompletableFuture<ResultOfQueryTransactionTree> queryTransactionTree(String inMsg, Abi.ABI[] abiRegistry, Number timeout, Number transactionMaxCount) {
+        return context.requestJSON("net.query_transaction_tree", "{"+Stream.of((inMsg==null?null:("\"in_msg\":\""+inMsg+"\"")),(abiRegistry==null?null:("\"abi_registry\":"+Arrays.toString(abiRegistry))),(timeout==null?null:("\"timeout\":"+timeout)),(transactionMaxCount==null?null:("\"transaction_max_count\":"+transactionMaxCount))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
             .thenApply(json -> TONContext.convertValue(json, ResultOfQueryTransactionTree.class));
     }
 
@@ -1441,7 +1442,7 @@ public class Net {
     }
 
    /**
-    * The iterator stays exactly at the same position where the `resume_state` was catched.<p>Application should call the `remove_iterator` when iterator is no longer required.
+    * The iterator stays exactly at the same position where the `resume_state` was caught.<p>Application should call the `remove_iterator` when iterator is no longer required.
     *
     * @param resumeState Same as value returned from `iterator_next`.
     * @return Must be removed using `remove_iterator`when it is no more needed for the application.
@@ -1499,6 +1500,15 @@ public class Net {
     public CompletableFuture<Void> removeIterator(Number handle) {
         return context.requestJSON("net.remove_iterator", "{"+(handle==null?"":("\"handle\":"+handle))+"}")
             .thenApply(json -> TONContext.convertValue(json, Void.class));
+    }
+
+   /**
+    * 
+    *
+    */
+    public CompletableFuture<Number> getSignatureId() {
+        return context.requestJSON("net.get_signature_id", "{}")
+            .thenApply(json -> TONContext.convertValue(json.findValue("signature_id"), Number.class));
     }
 
 }

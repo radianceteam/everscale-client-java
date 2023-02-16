@@ -75,11 +75,12 @@ function stringifyFields(fields, type) {
     let totLen = fields.length + (type?1:0);
     let stream = totLen > 1?'Stream.of(':'';
     return `"{${totLen?`"+${stream}${(type?[`"\\"type\\":\\"${type}\\""`]:[]).concat(fields.map(f=> {
-        let qu = f.type == 'String'?'\\"':'';
-        const flat = isFlattable(f.type);
-        if (flat)
+        if (isFlattable(f.type))
             return `"\\"${f.name}\\":"+${stringifyFields(types[f.type].fields)}`;
-        return `(${camelize(f.name)}==null?${stream?'null':'""'}:("\\"${f.name}\\":${qu}"+${(n=>f.isArray?`Arrays.toString(${n})`:n)(camelize(f.name))}${qu?`+"${qu}"`:''}))`;
+        const typeDesc = types[f.type];
+        const isEnum = typeDesc && typeDesc.isEnum;
+        let qu = f.type == 'String'?'\\"':'';
+        return `(${camelize(f.name)}==null?${stream?'null':'""'}:("\\"${f.name}\\":${qu}"+${(n=>f.isArray?`Arrays.toString(${n})`:n)(camelize(f.name)+(isEnum?'.ordinal()':''))}${qu?`+"${qu}"`:''}))`;
     }))}${stream&&`).filter(_f -> _f != null).collect(Collectors.joining(","))`}+"`:''}}"`
 }
 

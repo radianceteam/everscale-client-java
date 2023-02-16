@@ -24,6 +24,7 @@ public class ProcessingTest extends TestBase {
                 "constructor",
                 new Abi.FunctionHeader((int)(System.currentTimeMillis()/1000) + 10, null, keys.getPublic())),
             new Abi.Signer.Keys(keys),
+            null,
             null
         ).get();
 

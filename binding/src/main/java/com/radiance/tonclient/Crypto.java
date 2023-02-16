@@ -169,14 +169,14 @@ public class Crypto {
      */
     public static class RandomSeedPhrase extends CryptoBoxSecret  {
 
-        public RandomSeedPhrase(Number dictionary, Number wordcount) {
+        public RandomSeedPhrase(MnemonicDictionary dictionary, Number wordcount) {
 
             this.dictionary = dictionary;
 
             this.wordcount = wordcount;
 
         }
-        public RandomSeedPhrase(Number dictionary) {
+        public RandomSeedPhrase(MnemonicDictionary dictionary) {
 
             this.dictionary = dictionary;
 
@@ -187,17 +187,17 @@ public class Crypto {
 
 
         @JsonProperty("dictionary")
-        private Number dictionary;
+        private MnemonicDictionary dictionary;
         /**
          * 
          */
-        public Number getDictionary() {
+        public MnemonicDictionary getDictionary() {
             return dictionary;
         }
         /**
          * 
          */
-        public void setDictionary(Number value) {
+        public void setDictionary(MnemonicDictionary value) {
             this.dictionary = value;
         }
 
@@ -219,7 +219,7 @@ public class Crypto {
 
         @Override
         public String toString() {
-            return "{"+Stream.of("\"type\":\"RandomSeedPhrase\"",(dictionary==null?null:("\"dictionary\":"+dictionary)),(wordcount==null?null:("\"wordcount\":"+wordcount))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
+            return "{"+Stream.of("\"type\":\"RandomSeedPhrase\"",(dictionary==null?null:("\"dictionary\":"+dictionary.ordinal())),(wordcount==null?null:("\"wordcount\":"+wordcount))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
         }
     }
 
@@ -228,7 +228,7 @@ public class Crypto {
      */
     public static class PredefinedSeedPhrase extends CryptoBoxSecret  {
 
-        public PredefinedSeedPhrase(String phrase, Number dictionary, Number wordcount) {
+        public PredefinedSeedPhrase(String phrase, MnemonicDictionary dictionary, Number wordcount) {
 
             this.phrase = phrase;
 
@@ -237,7 +237,7 @@ public class Crypto {
             this.wordcount = wordcount;
 
         }
-        public PredefinedSeedPhrase(String phrase, Number dictionary) {
+        public PredefinedSeedPhrase(String phrase, MnemonicDictionary dictionary) {
 
             this.phrase = phrase;
 
@@ -270,17 +270,17 @@ public class Crypto {
         }
 
         @JsonProperty("dictionary")
-        private Number dictionary;
+        private MnemonicDictionary dictionary;
         /**
          * 
          */
-        public Number getDictionary() {
+        public MnemonicDictionary getDictionary() {
             return dictionary;
         }
         /**
          * 
          */
-        public void setDictionary(Number value) {
+        public void setDictionary(MnemonicDictionary value) {
             this.dictionary = value;
         }
 
@@ -302,7 +302,7 @@ public class Crypto {
 
         @Override
         public String toString() {
-            return "{"+Stream.of("\"type\":\"PredefinedSeedPhrase\"",(phrase==null?null:("\"phrase\":\""+phrase+"\"")),(dictionary==null?null:("\"dictionary\":"+dictionary)),(wordcount==null?null:("\"wordcount\":"+wordcount))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
+            return "{"+Stream.of("\"type\":\"PredefinedSeedPhrase\"",(phrase==null?null:("\"phrase\":\""+phrase+"\"")),(dictionary==null?null:("\"dictionary\":"+dictionary.ordinal())),(wordcount==null?null:("\"wordcount\":"+wordcount))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
         }
     }
 
@@ -456,6 +456,57 @@ public class Crypto {
         }
     }
 }
+
+    /**
+     *  
+     */
+    public enum MnemonicDictionary {
+        
+        /**
+         * 
+         */
+        Ton,
+
+        /**
+         * 
+         */
+        English,
+
+        /**
+         * 
+         */
+        ChineseSimplified,
+
+        /**
+         * 
+         */
+        ChineseTraditional,
+
+        /**
+         * 
+         */
+        French,
+
+        /**
+         * 
+         */
+        Italian,
+
+        /**
+         * 
+         */
+        Japanese,
+
+        /**
+         * 
+         */
+        Korean,
+
+        /**
+         * 
+         */
+        Spanish
+    }
     /**
      *  
      */
@@ -577,7 +628,7 @@ public class Crypto {
      */
     public static class ResultOfGetCryptoBoxSeedPhrase  {
 
-        public ResultOfGetCryptoBoxSeedPhrase(String phrase, Number dictionary, Number wordcount) {
+        public ResultOfGetCryptoBoxSeedPhrase(String phrase, MnemonicDictionary dictionary, Number wordcount) {
 
             this.phrase = phrase;
 
@@ -586,7 +637,7 @@ public class Crypto {
             this.wordcount = wordcount;
 
         }
-        public ResultOfGetCryptoBoxSeedPhrase(String phrase, Number dictionary) {
+        public ResultOfGetCryptoBoxSeedPhrase(String phrase, MnemonicDictionary dictionary) {
 
             this.phrase = phrase;
 
@@ -619,17 +670,17 @@ public class Crypto {
         }
 
         @JsonProperty("dictionary")
-        private Number dictionary;
+        private MnemonicDictionary dictionary;
         /**
          * 
          */
-        public Number getDictionary() {
+        public MnemonicDictionary getDictionary() {
             return dictionary;
         }
         /**
          * 
          */
-        public void setDictionary(Number value) {
+        public void setDictionary(MnemonicDictionary value) {
             this.dictionary = value;
         }
 
@@ -651,7 +702,7 @@ public class Crypto {
 
         @Override
         public String toString() {
-            return "{"+Stream.of((phrase==null?null:("\"phrase\":\""+phrase+"\"")),(dictionary==null?null:("\"dictionary\":"+dictionary)),(wordcount==null?null:("\"wordcount\":"+wordcount))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
+            return "{"+Stream.of((phrase==null?null:("\"phrase\":\""+phrase+"\"")),(dictionary==null?null:("\"dictionary\":"+dictionary.ordinal())),(wordcount==null?null:("\"wordcount\":"+wordcount))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
         }
     }
     public static abstract class ParamsOfAppSigningBox {
@@ -1252,8 +1303,8 @@ public class Crypto {
     *
     * @param dictionary 
     */
-    public CompletableFuture<String> mnemonicWords(Number dictionary) {
-        return context.requestJSON("crypto.mnemonic_words", "{"+(dictionary==null?"":("\"dictionary\":"+dictionary))+"}")
+    public CompletableFuture<String> mnemonicWords(MnemonicDictionary dictionary) {
+        return context.requestJSON("crypto.mnemonic_words", "{"+(dictionary==null?"":("\"dictionary\":"+dictionary.ordinal()))+"}")
             .thenApply(json -> TONContext.convertValue(json.findValue("words"), String.class));
     }
 
@@ -1263,8 +1314,8 @@ public class Crypto {
     * @param dictionary 
     * @param wordCount 
     */
-    public CompletableFuture<String> mnemonicFromRandom(Number dictionary, Number wordCount) {
-        return context.requestJSON("crypto.mnemonic_from_random", "{"+Stream.of((dictionary==null?null:("\"dictionary\":"+dictionary)),(wordCount==null?null:("\"word_count\":"+wordCount))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
+    public CompletableFuture<String> mnemonicFromRandom(MnemonicDictionary dictionary, Number wordCount) {
+        return context.requestJSON("crypto.mnemonic_from_random", "{"+Stream.of((dictionary==null?null:("\"dictionary\":"+dictionary.ordinal())),(wordCount==null?null:("\"word_count\":"+wordCount))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
             .thenApply(json -> TONContext.convertValue(json.findValue("phrase"), String.class));
     }
 
@@ -1275,8 +1326,8 @@ public class Crypto {
     * @param dictionary 
     * @param wordCount 
     */
-    public CompletableFuture<String> mnemonicFromEntropy(String entropy, Number dictionary, Number wordCount) {
-        return context.requestJSON("crypto.mnemonic_from_entropy", "{"+Stream.of((entropy==null?null:("\"entropy\":\""+entropy+"\"")),(dictionary==null?null:("\"dictionary\":"+dictionary)),(wordCount==null?null:("\"word_count\":"+wordCount))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
+    public CompletableFuture<String> mnemonicFromEntropy(String entropy, MnemonicDictionary dictionary, Number wordCount) {
+        return context.requestJSON("crypto.mnemonic_from_entropy", "{"+Stream.of((entropy==null?null:("\"entropy\":\""+entropy+"\"")),(dictionary==null?null:("\"dictionary\":"+dictionary.ordinal())),(wordCount==null?null:("\"word_count\":"+wordCount))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
             .thenApply(json -> TONContext.convertValue(json.findValue("phrase"), String.class));
     }
 
@@ -1287,8 +1338,8 @@ public class Crypto {
     * @param dictionary 
     * @param wordCount 
     */
-    public CompletableFuture<Boolean> mnemonicVerify(String phrase, Number dictionary, Number wordCount) {
-        return context.requestJSON("crypto.mnemonic_verify", "{"+Stream.of((phrase==null?null:("\"phrase\":\""+phrase+"\"")),(dictionary==null?null:("\"dictionary\":"+dictionary)),(wordCount==null?null:("\"word_count\":"+wordCount))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
+    public CompletableFuture<Boolean> mnemonicVerify(String phrase, MnemonicDictionary dictionary, Number wordCount) {
+        return context.requestJSON("crypto.mnemonic_verify", "{"+Stream.of((phrase==null?null:("\"phrase\":\""+phrase+"\"")),(dictionary==null?null:("\"dictionary\":"+dictionary.ordinal())),(wordCount==null?null:("\"word_count\":"+wordCount))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
             .thenApply(json -> TONContext.convertValue(json.findValue("valid"), Boolean.class));
     }
 
@@ -1300,8 +1351,8 @@ public class Crypto {
     * @param dictionary 
     * @param wordCount 
     */
-    public CompletableFuture<KeyPair> mnemonicDeriveSignKeys(String phrase, String path, Number dictionary, Number wordCount) {
-        return context.requestJSON("crypto.mnemonic_derive_sign_keys", "{"+Stream.of((phrase==null?null:("\"phrase\":\""+phrase+"\"")),(path==null?null:("\"path\":\""+path+"\"")),(dictionary==null?null:("\"dictionary\":"+dictionary)),(wordCount==null?null:("\"word_count\":"+wordCount))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
+    public CompletableFuture<KeyPair> mnemonicDeriveSignKeys(String phrase, String path, MnemonicDictionary dictionary, Number wordCount) {
+        return context.requestJSON("crypto.mnemonic_derive_sign_keys", "{"+Stream.of((phrase==null?null:("\"phrase\":\""+phrase+"\"")),(path==null?null:("\"path\":\""+path+"\"")),(dictionary==null?null:("\"dictionary\":"+dictionary.ordinal())),(wordCount==null?null:("\"word_count\":"+wordCount))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
             .thenApply(json -> TONContext.convertValue(json, KeyPair.class));
     }
 
@@ -1312,8 +1363,8 @@ public class Crypto {
     * @param dictionary 
     * @param wordCount 
     */
-    public CompletableFuture<String> hdkeyXprvFromMnemonic(String phrase, Number dictionary, Number wordCount) {
-        return context.requestJSON("crypto.hdkey_xprv_from_mnemonic", "{"+Stream.of((phrase==null?null:("\"phrase\":\""+phrase+"\"")),(dictionary==null?null:("\"dictionary\":"+dictionary)),(wordCount==null?null:("\"word_count\":"+wordCount))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
+    public CompletableFuture<String> hdkeyXprvFromMnemonic(String phrase, MnemonicDictionary dictionary, Number wordCount) {
+        return context.requestJSON("crypto.hdkey_xprv_from_mnemonic", "{"+Stream.of((phrase==null?null:("\"phrase\":\""+phrase+"\"")),(dictionary==null?null:("\"dictionary\":"+dictionary.ordinal())),(wordCount==null?null:("\"word_count\":"+wordCount))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
             .thenApply(json -> TONContext.convertValue(json.findValue("xprv"), String.class));
     }
 

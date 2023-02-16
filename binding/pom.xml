@@ -6,7 +6,7 @@
 
     <groupId>com.radiance.tonclient</groupId>
     <artifactId>everscale-client-binding</artifactId>
-    <version>1.37.2</version>
+    <version>1.40.1</version>
 
     <name>everscale-client-binding</name>
     <!-- FIXME change it to the project's website -->

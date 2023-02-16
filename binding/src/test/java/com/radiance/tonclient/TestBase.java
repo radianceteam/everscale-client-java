@@ -85,7 +85,7 @@ public abstract class TestBase {
         return abiModule.encodeMessage(
             abi,
             "0:841288ed3b55d9cdafa806807f02a0ae0c169aa5edfe88a789a6482429756a94",
-            null,
+            new Abi.DeploySet(),
             new Abi.CallSet(
                 "sendGrams",
                 null,
@@ -116,6 +116,7 @@ public abstract class TestBase {
                 "{\"dest\":\"" + address +"\", \"amount\":500000000}"),
             Abi.Signer.None,
             null,
+            null,
             false,
             null); //event -> System.out.println("Event: " + event));
     }
@@ -123,12 +124,12 @@ public abstract class TestBase {
     protected CompletableFuture<String> deployWithGiver(Abi.ABI abi, Abi.DeploySet deploySet, Abi.CallSet callSet, Abi.Signer signer) {
         String[] address = new String[1];
 
-        return abiModule.encodeMessage(abi, null, deploySet, callSet, signer, null)
+        return abiModule.encodeMessage(abi, null, deploySet, callSet, signer, null, null)
             .thenCompose(encoded -> {
                 address[0] = encoded.getAddress();
                 return getGramsFromGiver(encoded.getAddress());
             }).thenCompose(processed -> {
-                return processing.processMessage(abi, null, deploySet, callSet, signer, null, false, null);
+                return processing.processMessage(abi, null, deploySet, callSet, signer, null, null, false, null);
             }).thenApply(processed -> address[0]);
     }
 }

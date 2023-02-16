@@ -15,7 +15,9 @@ public class Client {
      */
     public static class ClientConfig  {
 
-        public ClientConfig(NetworkConfig network, CryptoConfig crypto, AbiConfig abi, BocConfig boc, ProofsConfig proofs, String localStoragePath) {
+        public ClientConfig(BindingConfig binding, NetworkConfig network, CryptoConfig crypto, AbiConfig abi, BocConfig boc, ProofsConfig proofs, String localStoragePath) {
+
+            this.binding = binding;
 
             this.network = network;
 
@@ -30,7 +32,9 @@ public class Client {
             this.localStoragePath = localStoragePath;
 
         }
-        public ClientConfig(NetworkConfig network, CryptoConfig crypto, AbiConfig abi, BocConfig boc, ProofsConfig proofs) {
+        public ClientConfig(BindingConfig binding, NetworkConfig network, CryptoConfig crypto, AbiConfig abi, BocConfig boc, ProofsConfig proofs) {
+
+            this.binding = binding;
 
             this.network = network;
 
@@ -43,7 +47,9 @@ public class Client {
             this.proofs = proofs;
 
         }
-        public ClientConfig(NetworkConfig network, CryptoConfig crypto, AbiConfig abi, BocConfig boc) {
+        public ClientConfig(BindingConfig binding, NetworkConfig network, CryptoConfig crypto, AbiConfig abi, BocConfig boc) {
+
+            this.binding = binding;
 
             this.network = network;
 
@@ -54,7 +60,9 @@ public class Client {
             this.boc = boc;
 
         }
-        public ClientConfig(NetworkConfig network, CryptoConfig crypto, AbiConfig abi) {
+        public ClientConfig(BindingConfig binding, NetworkConfig network, CryptoConfig crypto, AbiConfig abi) {
+
+            this.binding = binding;
 
             this.network = network;
 
@@ -63,22 +71,46 @@ public class Client {
             this.abi = abi;
 
         }
-        public ClientConfig(NetworkConfig network, CryptoConfig crypto) {
+        public ClientConfig(BindingConfig binding, NetworkConfig network, CryptoConfig crypto) {
+
+            this.binding = binding;
 
             this.network = network;
 
             this.crypto = crypto;
 
         }
-        public ClientConfig(NetworkConfig network) {
+        public ClientConfig(BindingConfig binding, NetworkConfig network) {
+
+            this.binding = binding;
 
             this.network = network;
+
+        }
+        public ClientConfig(BindingConfig binding) {
+
+            this.binding = binding;
 
         }
         public ClientConfig() {
 
         }
 
+
+        @JsonProperty("binding")
+        private BindingConfig binding;
+        /**
+         * 
+         */
+        public BindingConfig getBinding() {
+            return binding;
+        }
+        /**
+         * 
+         */
+        public void setBinding(BindingConfig value) {
+            this.binding = value;
+        }
 
         @JsonProperty("network")
         private NetworkConfig network;
@@ -173,7 +205,7 @@ public class Client {
 
         @Override
         public String toString() {
-            return "{"+Stream.of((network==null?null:("\"network\":"+network)),(crypto==null?null:("\"crypto\":"+crypto)),(abi==null?null:("\"abi\":"+abi)),(boc==null?null:("\"boc\":"+boc)),(proofs==null?null:("\"proofs\":"+proofs)),(localStoragePath==null?null:("\"local_storage_path\":\""+localStoragePath+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
+            return "{"+Stream.of((binding==null?null:("\"binding\":"+binding)),(network==null?null:("\"network\":"+network)),(crypto==null?null:("\"crypto\":"+crypto)),(abi==null?null:("\"abi\":"+abi)),(boc==null?null:("\"boc\":"+boc)),(proofs==null?null:("\"proofs\":"+proofs)),(localStoragePath==null?null:("\"local_storage_path\":\""+localStoragePath+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
         }
     }
     /**
@@ -181,7 +213,7 @@ public class Client {
      */
     public static class NetworkConfig  {
 
-        public NetworkConfig(String serverAddress, String[] endpoints, Number networkRetriesCount, Number maxReconnectTimeout, Number reconnectTimeout, Number messageRetriesCount, Number messageProcessingTimeout, Number waitForTimeout, Number outOfSyncThreshold, Number sendingEndpointCount, Number latencyDetectionInterval, Number maxLatency, Number queryTimeout, NetworkQueriesProtocol queriesProtocol, Number firstRempStatusTimeout, Number nextRempStatusTimeout, String accessKey) {
+        public NetworkConfig(String serverAddress, String[] endpoints, Number networkRetriesCount, Number maxReconnectTimeout, Number reconnectTimeout, Number messageRetriesCount, Number messageProcessingTimeout, Number waitForTimeout, Number outOfSyncThreshold, Number sendingEndpointCount, Number latencyDetectionInterval, Number maxLatency, Number queryTimeout, NetworkQueriesProtocol queriesProtocol, Number firstRempStatusTimeout, Number nextRempStatusTimeout, Number signatureId, String accessKey) {
 
             this.serverAddress = serverAddress;
 
@@ -215,7 +247,46 @@ public class Client {
 
             this.nextRempStatusTimeout = nextRempStatusTimeout;
 
+            this.signatureId = signatureId;
+
             this.accessKey = accessKey;
+
+        }
+        public NetworkConfig(String serverAddress, String[] endpoints, Number networkRetriesCount, Number maxReconnectTimeout, Number reconnectTimeout, Number messageRetriesCount, Number messageProcessingTimeout, Number waitForTimeout, Number outOfSyncThreshold, Number sendingEndpointCount, Number latencyDetectionInterval, Number maxLatency, Number queryTimeout, NetworkQueriesProtocol queriesProtocol, Number firstRempStatusTimeout, Number nextRempStatusTimeout, Number signatureId) {
+
+            this.serverAddress = serverAddress;
+
+            this.endpoints = endpoints;
+
+            this.networkRetriesCount = networkRetriesCount;
+
+            this.maxReconnectTimeout = maxReconnectTimeout;
+
+            this.reconnectTimeout = reconnectTimeout;
+
+            this.messageRetriesCount = messageRetriesCount;
+
+            this.messageProcessingTimeout = messageProcessingTimeout;
+
+            this.waitForTimeout = waitForTimeout;
+
+            this.outOfSyncThreshold = outOfSyncThreshold;
+
+            this.sendingEndpointCount = sendingEndpointCount;
+
+            this.latencyDetectionInterval = latencyDetectionInterval;
+
+            this.maxLatency = maxLatency;
+
+            this.queryTimeout = queryTimeout;
+
+            this.queriesProtocol = queriesProtocol;
+
+            this.firstRempStatusTimeout = firstRempStatusTimeout;
+
+            this.nextRempStatusTimeout = nextRempStatusTimeout;
+
+            this.signatureId = signatureId;
 
         }
         public NetworkConfig(String serverAddress, String[] endpoints, Number networkRetriesCount, Number maxReconnectTimeout, Number reconnectTimeout, Number messageRetriesCount, Number messageProcessingTimeout, Number waitForTimeout, Number outOfSyncThreshold, Number sendingEndpointCount, Number latencyDetectionInterval, Number maxLatency, Number queryTimeout, NetworkQueriesProtocol queriesProtocol, Number firstRempStatusTimeout, Number nextRempStatusTimeout) {
@@ -561,13 +632,13 @@ public class Client {
         @JsonProperty("endpoints")
         private String[] endpoints;
         /**
-         * Any correct URL format can be specified, including IP addresses. This parameter is prevailing over `server_address`.Check the full list of <a target="_blank" href="supported network endpoints">supported network endpoints</a>(../ton-os-api/networks.md).
+         * Any correct URL format can be specified, including IP addresses. This parameter is prevailing over `server_address`.Check the full list of <a target="_blank" href="supported network endpoints">supported network endpoints</a>(https://docs.everos.dev/ever-sdk/reference/ever-os-api/networks).
          */
         public String[] getEndpoints() {
             return endpoints;
         }
         /**
-         * Any correct URL format can be specified, including IP addresses. This parameter is prevailing over `server_address`.Check the full list of <a target="_blank" href="supported network endpoints">supported network endpoints</a>(../ton-os-api/networks.md).
+         * Any correct URL format can be specified, including IP addresses. This parameter is prevailing over `server_address`.Check the full list of <a target="_blank" href="supported network endpoints">supported network endpoints</a>(https://docs.everos.dev/ever-sdk/reference/ever-os-api/networks).
          */
         public void setEndpoints(String[] value) {
             this.endpoints = value;
@@ -696,13 +767,13 @@ public class Client {
         @JsonProperty("latency_detection_interval")
         private Number latencyDetectionInterval;
         /**
-         * Library periodically checks the current endpoint for blockchain data syncronization latency.If the latency (time-lag) is less then `NetworkConfig.max_latency`then library selects another endpoint.<p>Must be specified in milliseconds. Default is 60000 (1 min).
+         * Library periodically checks the current endpoint for blockchain data synchronization latency.If the latency (time-lag) is less then `NetworkConfig.max_latency`then library selects another endpoint.<p>Must be specified in milliseconds. Default is 60000 (1 min).
          */
         public Number getLatencyDetectionInterval() {
             return latencyDetectionInterval;
         }
         /**
-         * Library periodically checks the current endpoint for blockchain data syncronization latency.If the latency (time-lag) is less then `NetworkConfig.max_latency`then library selects another endpoint.<p>Must be specified in milliseconds. Default is 60000 (1 min).
+         * Library periodically checks the current endpoint for blockchain data synchronization latency.If the latency (time-lag) is less then `NetworkConfig.max_latency`then library selects another endpoint.<p>Must be specified in milliseconds. Default is 60000 (1 min).
          */
         public void setLatencyDetectionInterval(Number value) {
             this.latencyDetectionInterval = value;
@@ -756,13 +827,13 @@ public class Client {
         @JsonProperty("first_remp_status_timeout")
         private Number firstRempStatusTimeout;
         /**
-         * First REMP status awaiting timeout. If no status recieved during the timeout than fallback transaction scenario is activated.<p>Must be specified in milliseconds. Default is 1000 (1 sec).
+         * First REMP status awaiting timeout. If no status received during the timeout than fallback transaction scenario is activated.<p>Must be specified in milliseconds. Default is 1000 (1 sec).
          */
         public Number getFirstRempStatusTimeout() {
             return firstRempStatusTimeout;
         }
         /**
-         * First REMP status awaiting timeout. If no status recieved during the timeout than fallback transaction scenario is activated.<p>Must be specified in milliseconds. Default is 1000 (1 sec).
+         * First REMP status awaiting timeout. If no status received during the timeout than fallback transaction scenario is activated.<p>Must be specified in milliseconds. Default is 1000 (1 sec).
          */
         public void setFirstRempStatusTimeout(Number value) {
             this.firstRempStatusTimeout = value;
@@ -771,28 +842,43 @@ public class Client {
         @JsonProperty("next_remp_status_timeout")
         private Number nextRempStatusTimeout;
         /**
-         * Subsequent REMP status awaiting timeout. If no status recieved during the timeout than fallback transaction scenario is activated.<p>Must be specified in milliseconds. Default is 5000 (5 sec).
+         * Subsequent REMP status awaiting timeout. If no status received during the timeout than fallback transaction scenario is activated.<p>Must be specified in milliseconds. Default is 5000 (5 sec).
          */
         public Number getNextRempStatusTimeout() {
             return nextRempStatusTimeout;
         }
         /**
-         * Subsequent REMP status awaiting timeout. If no status recieved during the timeout than fallback transaction scenario is activated.<p>Must be specified in milliseconds. Default is 5000 (5 sec).
+         * Subsequent REMP status awaiting timeout. If no status received during the timeout than fallback transaction scenario is activated.<p>Must be specified in milliseconds. Default is 5000 (5 sec).
          */
         public void setNextRempStatusTimeout(Number value) {
             this.nextRempStatusTimeout = value;
         }
 
+        @JsonProperty("signature_id")
+        private Number signatureId;
+        /**
+         * This parameter should be set to `global_id` field from any blockchain block if network cannot be reachable at the moment of message encoding and the message is aimed to be sent intonetwork with `CapSignatureWithId` enabled. Otherwise signature ID is detected automaticallyinside message encoding functions
+         */
+        public Number getSignatureId() {
+            return signatureId;
+        }
+        /**
+         * This parameter should be set to `global_id` field from any blockchain block if network cannot be reachable at the moment of message encoding and the message is aimed to be sent intonetwork with `CapSignatureWithId` enabled. Otherwise signature ID is detected automaticallyinside message encoding functions
+         */
+        public void setSignatureId(Number value) {
+            this.signatureId = value;
+        }
+
         @JsonProperty("access_key")
         private String accessKey;
         /**
-         * You can specify here Basic Auth secret (Evercloud project secret) in hex stringor serialized JWT in base64 string.Will be passed on as Authorization: Basic ... or Authorization: Bearer ... header.
+         * 
          */
         public String getAccessKey() {
             return accessKey;
         }
         /**
-         * You can specify here Basic Auth secret (Evercloud project secret) in hex stringor serialized JWT in base64 string.Will be passed on as Authorization: Basic ... or Authorization: Bearer ... header.
+         * 
          */
         public void setAccessKey(String value) {
             this.accessKey = value;
@@ -801,7 +887,65 @@ public class Client {
 
         @Override
         public String toString() {
-            return "{"+Stream.of((serverAddress==null?null:("\"server_address\":\""+serverAddress+"\"")),(endpoints==null?null:("\"endpoints\":\""+Arrays.toString(endpoints)+"\"")),(networkRetriesCount==null?null:("\"network_retries_count\":"+networkRetriesCount)),(maxReconnectTimeout==null?null:("\"max_reconnect_timeout\":"+maxReconnectTimeout)),(reconnectTimeout==null?null:("\"reconnect_timeout\":"+reconnectTimeout)),(messageRetriesCount==null?null:("\"message_retries_count\":"+messageRetriesCount)),(messageProcessingTimeout==null?null:("\"message_processing_timeout\":"+messageProcessingTimeout)),(waitForTimeout==null?null:("\"wait_for_timeout\":"+waitForTimeout)),(outOfSyncThreshold==null?null:("\"out_of_sync_threshold\":"+outOfSyncThreshold)),(sendingEndpointCount==null?null:("\"sending_endpoint_count\":"+sendingEndpointCount)),(latencyDetectionInterval==null?null:("\"latency_detection_interval\":"+latencyDetectionInterval)),(maxLatency==null?null:("\"max_latency\":"+maxLatency)),(queryTimeout==null?null:("\"query_timeout\":"+queryTimeout)),(queriesProtocol==null?null:("\"queries_protocol\":"+queriesProtocol)),(firstRempStatusTimeout==null?null:("\"first_remp_status_timeout\":"+firstRempStatusTimeout)),(nextRempStatusTimeout==null?null:("\"next_remp_status_timeout\":"+nextRempStatusTimeout)),(accessKey==null?null:("\"access_key\":\""+accessKey+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
+            return "{"+Stream.of((serverAddress==null?null:("\"server_address\":\""+serverAddress+"\"")),(endpoints==null?null:("\"endpoints\":\""+Arrays.toString(endpoints)+"\"")),(networkRetriesCount==null?null:("\"network_retries_count\":"+networkRetriesCount)),(maxReconnectTimeout==null?null:("\"max_reconnect_timeout\":"+maxReconnectTimeout)),(reconnectTimeout==null?null:("\"reconnect_timeout\":"+reconnectTimeout)),(messageRetriesCount==null?null:("\"message_retries_count\":"+messageRetriesCount)),(messageProcessingTimeout==null?null:("\"message_processing_timeout\":"+messageProcessingTimeout)),(waitForTimeout==null?null:("\"wait_for_timeout\":"+waitForTimeout)),(outOfSyncThreshold==null?null:("\"out_of_sync_threshold\":"+outOfSyncThreshold)),(sendingEndpointCount==null?null:("\"sending_endpoint_count\":"+sendingEndpointCount)),(latencyDetectionInterval==null?null:("\"latency_detection_interval\":"+latencyDetectionInterval)),(maxLatency==null?null:("\"max_latency\":"+maxLatency)),(queryTimeout==null?null:("\"query_timeout\":"+queryTimeout)),(queriesProtocol==null?null:("\"queries_protocol\":"+queriesProtocol.ordinal())),(firstRempStatusTimeout==null?null:("\"first_remp_status_timeout\":"+firstRempStatusTimeout)),(nextRempStatusTimeout==null?null:("\"next_remp_status_timeout\":"+nextRempStatusTimeout)),(signatureId==null?null:("\"signature_id\":"+signatureId)),(accessKey==null?null:("\"access_key\":\""+accessKey+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
+        }
+    }
+    /**
+     *  
+     */
+    public static class BindingConfig  {
+
+        public BindingConfig(String library, String version) {
+
+            this.library = library;
+
+            this.version = version;
+
+        }
+        public BindingConfig(String library) {
+
+            this.library = library;
+
+        }
+        public BindingConfig() {
+
+        }
+
+
+        @JsonProperty("library")
+        private String library;
+        /**
+         * 
+         */
+        public String getLibrary() {
+            return library;
+        }
+        /**
+         * 
+         */
+        public void setLibrary(String value) {
+            this.library = value;
+        }
+
+        @JsonProperty("version")
+        private String version;
+        /**
+         * 
+         */
+        public String getVersion() {
+            return version;
+        }
+        /**
+         * 
+         */
+        public void setVersion(String value) {
+            this.version = value;
+        }
+
+
+        @Override
+        public String toString() {
+            return "{"+Stream.of((library==null?null:("\"library\":\""+library+"\"")),(version==null?null:("\"version\":\""+version+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
         }
     }
 
@@ -825,7 +969,7 @@ public class Client {
      */
     public static class CryptoConfig  {
 
-        public CryptoConfig(Number mnemonicDictionary, Number mnemonicWordCount, String hdkeyDerivationPath) {
+        public CryptoConfig(Crypto.MnemonicDictionary mnemonicDictionary, Number mnemonicWordCount, String hdkeyDerivationPath) {
 
             this.mnemonicDictionary = mnemonicDictionary;
 
@@ -834,14 +978,14 @@ public class Client {
             this.hdkeyDerivationPath = hdkeyDerivationPath;
 
         }
-        public CryptoConfig(Number mnemonicDictionary, Number mnemonicWordCount) {
+        public CryptoConfig(Crypto.MnemonicDictionary mnemonicDictionary, Number mnemonicWordCount) {
 
             this.mnemonicDictionary = mnemonicDictionary;
 
             this.mnemonicWordCount = mnemonicWordCount;
 
         }
-        public CryptoConfig(Number mnemonicDictionary) {
+        public CryptoConfig(Crypto.MnemonicDictionary mnemonicDictionary) {
 
             this.mnemonicDictionary = mnemonicDictionary;
 
@@ -852,17 +996,17 @@ public class Client {
 
 
         @JsonProperty("mnemonic_dictionary")
-        private Number mnemonicDictionary;
+        private Crypto.MnemonicDictionary mnemonicDictionary;
         /**
          * 
          */
-        public Number getMnemonicDictionary() {
+        public Crypto.MnemonicDictionary getMnemonicDictionary() {
             return mnemonicDictionary;
         }
         /**
          * 
          */
-        public void setMnemonicDictionary(Number value) {
+        public void setMnemonicDictionary(Crypto.MnemonicDictionary value) {
             this.mnemonicDictionary = value;
         }
 
@@ -899,7 +1043,7 @@ public class Client {
 
         @Override
         public String toString() {
-            return "{"+Stream.of((mnemonicDictionary==null?null:("\"mnemonic_dictionary\":"+mnemonicDictionary)),(mnemonicWordCount==null?null:("\"mnemonic_word_count\":"+mnemonicWordCount)),(hdkeyDerivationPath==null?null:("\"hdkey_derivation_path\":\""+hdkeyDerivationPath+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
+            return "{"+Stream.of((mnemonicDictionary==null?null:("\"mnemonic_dictionary\":"+mnemonicDictionary.ordinal())),(mnemonicWordCount==null?null:("\"mnemonic_word_count\":"+mnemonicWordCount)),(hdkeyDerivationPath==null?null:("\"hdkey_derivation_path\":\""+hdkeyDerivationPath+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
         }
     }
     /**

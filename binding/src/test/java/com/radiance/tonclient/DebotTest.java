@@ -159,7 +159,8 @@ public class DebotTest extends TestBase {
             targetDS,
             new Abi.CallSet("constructor"),
             new Abi.Signer.Keys(keys),
-            null // processingTryIndex
+            null, // processingTryIndex
+            null
         ).get().getAddress();
 
 
@@ -185,7 +186,7 @@ public class DebotTest extends TestBase {
         return new TestBrowser(context, debotFuture.get(), targetFuture.get(), keys);
     }
 
-    //@Test
+    @Test
     public void testDebotGoto() throws Exception {
         try {
         TestBrowser browser = initDebot();

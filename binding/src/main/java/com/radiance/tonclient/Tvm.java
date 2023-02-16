@@ -15,6 +15,21 @@ public class Tvm {
      */
     public static class ExecutionOptions  {
 
+        public ExecutionOptions(String blockchainConfig, Number blockTime, Long blockLt, Long transactionLt, Boolean chksigAlwaysSucceed, Number signatureId) {
+
+            this.blockchainConfig = blockchainConfig;
+
+            this.blockTime = blockTime;
+
+            this.blockLt = blockLt;
+
+            this.transactionLt = transactionLt;
+
+            this.chksigAlwaysSucceed = chksigAlwaysSucceed;
+
+            this.signatureId = signatureId;
+
+        }
         public ExecutionOptions(String blockchainConfig, Number blockTime, Long blockLt, Long transactionLt, Boolean chksigAlwaysSucceed) {
 
             this.blockchainConfig = blockchainConfig;
@@ -140,10 +155,25 @@ public class Tvm {
             this.chksigAlwaysSucceed = value;
         }
 
+        @JsonProperty("signature_id")
+        private Number signatureId;
+        /**
+         * 
+         */
+        public Number getSignatureId() {
+            return signatureId;
+        }
+        /**
+         * 
+         */
+        public void setSignatureId(Number value) {
+            this.signatureId = value;
+        }
+
 
         @Override
         public String toString() {
-            return "{"+Stream.of((blockchainConfig==null?null:("\"blockchain_config\":\""+blockchainConfig+"\"")),(blockTime==null?null:("\"block_time\":"+blockTime)),(blockLt==null?null:("\"block_lt\":"+blockLt)),(transactionLt==null?null:("\"transaction_lt\":"+transactionLt)),(chksigAlwaysSucceed==null?null:("\"chksig_always_succeed\":"+chksigAlwaysSucceed))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
+            return "{"+Stream.of((blockchainConfig==null?null:("\"blockchain_config\":\""+blockchainConfig+"\"")),(blockTime==null?null:("\"block_time\":"+blockTime)),(blockLt==null?null:("\"block_lt\":"+blockLt)),(transactionLt==null?null:("\"transaction_lt\":"+transactionLt)),(chksigAlwaysSucceed==null?null:("\"chksig_always_succeed\":"+chksigAlwaysSucceed)),(signatureId==null?null:("\"signature_id\":"+signatureId))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
         }
     }
     public static abstract class AccountForExecutor {
@@ -738,7 +768,7 @@ public class Tvm {
     }
 
    /**
-    * Performs all the phases of contract execution on Transaction Executor -the same component that is used on Validator Nodes.<p>Can be used for contract debugging, to find out the reason why a message was not delivered successfully.Validators throw away the failed external inbound messages (if they failed bedore `ACCEPT`) in the real network.This is why these messages are impossible to debug in the real network.With the help of run_executor you can do that. In fact, `process_message` functionperforms local check with `run_executor` if there was no transaction as a result of processingand returns the error, if there is one.<p>Another use case to use `run_executor` is to estimate fees for message execution.Set  `AccountForExecutor::Account.unlimited_balance`to `true` so that emulation will not depend on the actual balance.This may be needed to calculate deploy fees for an account that does not exist yet.JSON with fees is in `fees` field of the result.<p>One more use case - you can produce the sequence of operations,thus emulating the sequential contract calls locally.And so on.<p>Transaction executor requires account BOC (bag of cells) as a parameter.To get the account BOC - use `net.query` method to download it from GraphQL API(field `boc` of `account`) or generate it with `abi.encode_account` method.<p>Also it requires message BOC. To get the message BOC - use `abi.encode_message` or `abi.encode_internal_message`.<p>If you need this emulation to be as precise as possible (for instance - emulate transactionwith particular lt in particular block or use particular blockchain config,downloaded from a particular key block - then specify `execution_options` parameter.<p>If you need to see the aborted transaction as a result, not as an error, set `skip_transaction_check` to `true`.
+    * Performs all the phases of contract execution on Transaction Executor -the same component that is used on Validator Nodes.<p>Can be used for contract debugging, to find out the reason why a message was not delivered successfully.Validators throw away the failed external inbound messages (if they failed before `ACCEPT`) in the real network.This is why these messages are impossible to debug in the real network.With the help of run_executor you can do that. In fact, `process_message` functionperforms local check with `run_executor` if there was no transaction as a result of processingand returns the error, if there is one.<p>Another use case to use `run_executor` is to estimate fees for message execution.Set  `AccountForExecutor::Account.unlimited_balance`to `true` so that emulation will not depend on the actual balance.This may be needed to calculate deploy fees for an account that does not exist yet.JSON with fees is in `fees` field of the result.<p>One more use case - you can produce the sequence of operations,thus emulating the sequential contract calls locally.And so on.<p>Transaction executor requires account BOC (bag of cells) as a parameter.To get the account BOC - use `net.query` method to download it from GraphQL API(field `boc` of `account`) or generate it with `abi.encode_account` method.<p>Also it requires message BOC. To get the message BOC - use `abi.encode_message` or `abi.encode_internal_message`.<p>If you need this emulation to be as precise as possible (for instance - emulate transactionwith particular lt in particular block or use particular blockchain config,downloaded from a particular key block - then specify `execution_options` parameter.<p>If you need to see the aborted transaction as a result, not as an error, set `skip_transaction_check` to `true`.
     *
     * @param message Must be encoded as base64.
     * @param account 
