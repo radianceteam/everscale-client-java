@@ -180,6 +180,347 @@ public class Processing {
     /**
      *  
      */
+    public static class MessageMonitoringParams  {
+
+        public MessageMonitoringParams(MonitoredMessage message, Number waitUntil, Object userData) {
+
+            this.message = message;
+
+            this.waitUntil = waitUntil;
+
+            this.userData = userData;
+
+        }
+        public MessageMonitoringParams(MonitoredMessage message, Number waitUntil) {
+
+            this.message = message;
+
+            this.waitUntil = waitUntil;
+
+        }
+        public MessageMonitoringParams(MonitoredMessage message) {
+
+            this.message = message;
+
+        }
+        public MessageMonitoringParams() {
+
+        }
+
+
+        @JsonProperty("message")
+        private MonitoredMessage message;
+        /**
+         * 
+         */
+        public MonitoredMessage getMessage() {
+            return message;
+        }
+        /**
+         * 
+         */
+        public void setMessage(MonitoredMessage value) {
+            this.message = value;
+        }
+
+        @JsonProperty("wait_until")
+        private Number waitUntil;
+        /**
+         * 
+         */
+        public Number getWaitUntil() {
+            return waitUntil;
+        }
+        /**
+         * 
+         */
+        public void setWaitUntil(Number value) {
+            this.waitUntil = value;
+        }
+
+        @JsonProperty("user_data")
+        private Object userData;
+        /**
+         * 
+         */
+        public Object getUserData() {
+            return userData;
+        }
+        /**
+         * 
+         */
+        public void setUserData(Object value) {
+            this.userData = value;
+        }
+
+
+        @Override
+        public String toString() {
+            return "{"+Stream.of((message==null?null:("\"message\":"+message)),(waitUntil==null?null:("\"wait_until\":"+waitUntil)),(userData==null?null:("\"user_data\":"+userData))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
+        }
+    }
+
+    /**
+     *  
+     */
+    public enum MonitorFetchWaitMode {
+        
+        /**
+         * 
+         */
+        AtLeastOne,
+
+        /**
+         * 
+         */
+        All,
+
+        /**
+         * 
+         */
+        NoWait
+    }
+    public static abstract class MonitoredMessage {
+
+    /**
+     *  
+     */
+    public static class Boc extends MonitoredMessage  {
+
+        public Boc(String boc) {
+
+            this.boc = boc;
+
+        }
+        public Boc() {
+
+        }
+
+
+        @JsonProperty("boc")
+        private String boc;
+        /**
+         * 
+         */
+        public String getBoc() {
+            return boc;
+        }
+        /**
+         * 
+         */
+        public void setBoc(String value) {
+            this.boc = value;
+        }
+
+
+        @Override
+        public String toString() {
+            return "{"+Stream.of("\"type\":\"Boc\"",(boc==null?null:("\"boc\":\""+boc+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
+        }
+    }
+
+    /**
+     *  
+     */
+    public static class HashAddress extends MonitoredMessage  {
+
+        public HashAddress(String hash, String address) {
+
+            this.hash = hash;
+
+            this.address = address;
+
+        }
+        public HashAddress(String hash) {
+
+            this.hash = hash;
+
+        }
+        public HashAddress() {
+
+        }
+
+
+        @JsonProperty("hash")
+        private String hash;
+        /**
+         * 
+         */
+        public String getHash() {
+            return hash;
+        }
+        /**
+         * 
+         */
+        public void setHash(String value) {
+            this.hash = value;
+        }
+
+        @JsonProperty("address")
+        private String address;
+        /**
+         * 
+         */
+        public String getAddress() {
+            return address;
+        }
+        /**
+         * 
+         */
+        public void setAddress(String value) {
+            this.address = value;
+        }
+
+
+        @Override
+        public String toString() {
+            return "{"+Stream.of("\"type\":\"HashAddress\"",(hash==null?null:("\"hash\":\""+hash+"\"")),(address==null?null:("\"address\":\""+address+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
+        }
+    }
+}
+    /**
+     *  
+     */
+    public static class MessageSendingParams  {
+
+        public MessageSendingParams(String boc, Number waitUntil, Object userData) {
+
+            this.boc = boc;
+
+            this.waitUntil = waitUntil;
+
+            this.userData = userData;
+
+        }
+        public MessageSendingParams(String boc, Number waitUntil) {
+
+            this.boc = boc;
+
+            this.waitUntil = waitUntil;
+
+        }
+        public MessageSendingParams(String boc) {
+
+            this.boc = boc;
+
+        }
+        public MessageSendingParams() {
+
+        }
+
+
+        @JsonProperty("boc")
+        private String boc;
+        /**
+         * 
+         */
+        public String getBoc() {
+            return boc;
+        }
+        /**
+         * 
+         */
+        public void setBoc(String value) {
+            this.boc = value;
+        }
+
+        @JsonProperty("wait_until")
+        private Number waitUntil;
+        /**
+         * 
+         */
+        public Number getWaitUntil() {
+            return waitUntil;
+        }
+        /**
+         * 
+         */
+        public void setWaitUntil(Number value) {
+            this.waitUntil = value;
+        }
+
+        @JsonProperty("user_data")
+        private Object userData;
+        /**
+         * 
+         */
+        public Object getUserData() {
+            return userData;
+        }
+        /**
+         * 
+         */
+        public void setUserData(Object value) {
+            this.userData = value;
+        }
+
+
+        @Override
+        public String toString() {
+            return "{"+Stream.of((boc==null?null:("\"boc\":\""+boc+"\"")),(waitUntil==null?null:("\"wait_until\":"+waitUntil)),(userData==null?null:("\"user_data\":"+userData))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
+        }
+    }
+    /**
+     *  
+     */
+    public static class MonitoringQueueInfo  {
+
+        public MonitoringQueueInfo(Number unresolved, Number resolved) {
+
+            this.unresolved = unresolved;
+
+            this.resolved = resolved;
+
+        }
+        public MonitoringQueueInfo(Number unresolved) {
+
+            this.unresolved = unresolved;
+
+        }
+        public MonitoringQueueInfo() {
+
+        }
+
+
+        @JsonProperty("unresolved")
+        private Number unresolved;
+        /**
+         * 
+         */
+        public Number getUnresolved() {
+            return unresolved;
+        }
+        /**
+         * 
+         */
+        public void setUnresolved(Number value) {
+            this.unresolved = value;
+        }
+
+        @JsonProperty("resolved")
+        private Number resolved;
+        /**
+         * 
+         */
+        public Number getResolved() {
+            return resolved;
+        }
+        /**
+         * 
+         */
+        public void setResolved(Number value) {
+            this.resolved = value;
+        }
+
+
+        @Override
+        public String toString() {
+            return "{"+Stream.of((unresolved==null?null:("\"unresolved\":"+unresolved)),(resolved==null?null:("\"resolved\":"+resolved))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
+        }
+    }
+    /**
+     *  
+     */
     public static class ResultOfSendMessage  {
 
         public ResultOfSendMessage(String shardBlockId, String[] sendingEndpoints) {
@@ -239,6 +580,59 @@ public class Processing {
 
     public Processing(TONContext context) {
         this.context = context;
+    }
+
+   /**
+    * Message monitor performs background monitoring for a message processing resultsfor the specified set of messages.<p>Message monitor can serve several isolated monitoring queues.Each monitor queue has a unique application defined identifier (or name) usedto separate several queue's.<p>There are two important lists inside of the monitoring queue:<p>- unresolved messages: contains messages requested by the application for monitoring  and not yet resolved;<p>- resolved results: contains resolved processing results for monitored messages.<p>Each monitoring queue tracks own unresolved and resolved lists.Application can add more messages to the monitoring queue at any time.<p>Message monitor accumulates resolved results.Application should fetch this results with `fetchNextMonitorResults` function.<p>When both unresolved and resolved lists becomes empty, monitor stops any background activityand frees all allocated internal memory.<p>If monitoring queue with specified name already exists then messages will be addedto the unresolved list.<p>If monitoring queue with specified name does not exist then monitoring queue will be createdwith specified unresolved messages.
+    *
+    * @param queue 
+    * @param messages 
+    */
+    public CompletableFuture<Void> monitorMessages(String queue, MessageMonitoringParams[] messages) {
+        return context.requestJSON("processing.monitor_messages", "{"+Stream.of((queue==null?null:("\"queue\":\""+queue+"\"")),(messages==null?null:("\"messages\":"+Arrays.toString(messages)))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
+            .thenApply(json -> TONContext.convertValue(json, Void.class));
+    }
+
+   /**
+    * 
+    *
+    * @param queue 
+    */
+    public CompletableFuture<MonitoringQueueInfo> getMonitorInfo(String queue) {
+        return context.requestJSON("processing.get_monitor_info", "{"+(queue==null?"":("\"queue\":\""+queue+"\""))+"}")
+            .thenApply(json -> TONContext.convertValue(json, MonitoringQueueInfo.class));
+    }
+
+   /**
+    * Results and waiting options are depends on the `wait` parameter.All returned results will be removed from the queue's resolved list.
+    *
+    * @param queue 
+    * @param waitMode Default is `NO_WAIT`.
+    */
+    public CompletableFuture<Object[]> fetchNextMonitorResults(String queue, MonitorFetchWaitMode waitMode) {
+        return context.requestJSON("processing.fetch_next_monitor_results", "{"+Stream.of((queue==null?null:("\"queue\":\""+queue+"\"")),(waitMode==null?null:("\"wait_mode\":"+waitMode.ordinal()))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
+            .thenApply(json -> TONContext.convertValue(json.findValue("results"), Object[].class));
+    }
+
+   /**
+    * 
+    *
+    * @param queue 
+    */
+    public CompletableFuture<Void> cancelMonitor(String queue) {
+        return context.requestJSON("processing.cancel_monitor", "{"+(queue==null?"":("\"queue\":\""+queue+"\""))+"}")
+            .thenApply(json -> TONContext.convertValue(json, Void.class));
+    }
+
+   /**
+    * 
+    *
+    * @param messages 
+    * @param monitorQueue 
+    */
+    public CompletableFuture<MessageMonitoringParams[]> sendMessages(MessageSendingParams[] messages, String monitorQueue) {
+        return context.requestJSON("processing.send_messages", "{"+Stream.of((messages==null?null:("\"messages\":"+Arrays.toString(messages))),(monitorQueue==null?null:("\"monitor_queue\":\""+monitorQueue+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
+            .thenApply(json -> TONContext.convertValue(json.findValue("messages"), MessageMonitoringParams[].class));
     }
 
    /**

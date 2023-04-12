@@ -6,7 +6,7 @@
 
     <groupId>com.radiance.tonclient</groupId>
     <artifactId>everscale-client-binding</artifactId>
-    <version>1.40.1</version>
+    <version>1.42.1</version>
 
     <name>everscale-client-binding</name>
     <!-- FIXME change it to the project's website -->
@@ -22,7 +22,7 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.11.2</version>
+            <version>2.12.7.1</version>
         </dependency>
 
         <dependency>

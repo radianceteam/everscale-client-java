@@ -827,13 +827,13 @@ public class Client {
         @JsonProperty("first_remp_status_timeout")
         private Number firstRempStatusTimeout;
         /**
-         * First REMP status awaiting timeout. If no status received during the timeout than fallback transaction scenario is activated.<p>Must be specified in milliseconds. Default is 1000 (1 sec).
+         * First REMP status awaiting timeout. If no status received during the timeout than fallback transaction scenario is activated.<p>Must be specified in milliseconds. Default is 1 (1 ms) in order to start fallback scenariotogether with REMP statuses processing while REMP is not properly tuned yet.
          */
         public Number getFirstRempStatusTimeout() {
             return firstRempStatusTimeout;
         }
         /**
-         * First REMP status awaiting timeout. If no status received during the timeout than fallback transaction scenario is activated.<p>Must be specified in milliseconds. Default is 1000 (1 sec).
+         * First REMP status awaiting timeout. If no status received during the timeout than fallback transaction scenario is activated.<p>Must be specified in milliseconds. Default is 1 (1 ms) in order to start fallback scenariotogether with REMP statuses processing while REMP is not properly tuned yet.
          */
         public void setFirstRempStatusTimeout(Number value) {
             this.firstRempStatusTimeout = value;
