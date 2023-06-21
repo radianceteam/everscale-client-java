@@ -632,13 +632,13 @@ public class Client {
         @JsonProperty("endpoints")
         private String[] endpoints;
         /**
-         * Any correct URL format can be specified, including IP addresses. This parameter is prevailing over `server_address`.Check the full list of <a target="_blank" href="supported network endpoints">supported network endpoints</a>(https://docs.everos.dev/ever-sdk/reference/ever-os-api/networks).
+         * Any correct URL format can be specified, including IP addresses. This parameter is prevailing over `server_address`.Check the full list of <a target="_blank" href="supported network endpoints">supported network endpoints</a>(https://docs.evercloud.dev/products/evercloud/networks-endpoints).
          */
         public String[] getEndpoints() {
             return endpoints;
         }
         /**
-         * Any correct URL format can be specified, including IP addresses. This parameter is prevailing over `server_address`.Check the full list of <a target="_blank" href="supported network endpoints">supported network endpoints</a>(https://docs.everos.dev/ever-sdk/reference/ever-os-api/networks).
+         * Any correct URL format can be specified, including IP addresses. This parameter is prevailing over `server_address`.Check the full list of <a target="_blank" href="supported network endpoints">supported network endpoints</a>(https://docs.evercloud.dev/products/evercloud/networks-endpoints).
          */
         public void setEndpoints(String[] value) {
             this.endpoints = value;
@@ -737,13 +737,13 @@ public class Client {
         @JsonProperty("out_of_sync_threshold")
         private Number outOfSyncThreshold;
         /**
-         * If client's device time is out of sync and difference is more than the threshold then error will occur. Also an error will occur if the specified threshold is more than`message_processing_timeout/2`.<p>Must be specified in milliseconds. Default is 15000 (15 sec).
+         * 
          */
         public Number getOutOfSyncThreshold() {
             return outOfSyncThreshold;
         }
         /**
-         * If client's device time is out of sync and difference is more than the threshold then error will occur. Also an error will occur if the specified threshold is more than`message_processing_timeout/2`.<p>Must be specified in milliseconds. Default is 15000 (15 sec).
+         * 
          */
         public void setOutOfSyncThreshold(Number value) {
             this.outOfSyncThreshold = value;
@@ -1095,13 +1095,13 @@ public class Client {
         @JsonProperty("message_expiration_timeout")
         private Number messageExpirationTimeout;
         /**
-         * 
+         * Must be specified in milliseconds. Default is 40000 (40 sec).
          */
         public Number getMessageExpirationTimeout() {
             return messageExpirationTimeout;
         }
         /**
-         * 
+         * Must be specified in milliseconds. Default is 40000 (40 sec).
          */
         public void setMessageExpirationTimeout(Number value) {
             this.messageExpirationTimeout = value;
@@ -1110,13 +1110,13 @@ public class Client {
         @JsonProperty("message_expiration_timeout_grow_factor")
         private Number messageExpirationTimeoutGrowFactor;
         /**
-         * 
+         * Default is 1.5
          */
         public Number getMessageExpirationTimeoutGrowFactor() {
             return messageExpirationTimeoutGrowFactor;
         }
         /**
-         * 
+         * Default is 1.5
          */
         public void setMessageExpirationTimeoutGrowFactor(Number value) {
             this.messageExpirationTimeoutGrowFactor = value;

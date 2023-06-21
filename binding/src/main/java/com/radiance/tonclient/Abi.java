@@ -194,13 +194,13 @@ public class Abi {
         @JsonProperty("expire")
         private Number expire;
         /**
-         * 
+         * If not specified - calculated automatically from message_expiration_timeout(),try_index and message_expiration_timeout_grow_factor() (if ABI includes `expire` header).
          */
         public Number getExpire() {
             return expire;
         }
         /**
-         * 
+         * If not specified - calculated automatically from message_expiration_timeout(),try_index and message_expiration_timeout_grow_factor() (if ABI includes `expire` header).
          */
         public void setExpire(Number value) {
             this.expire = value;
@@ -329,9 +329,13 @@ public class Abi {
      */
     public static class DeploySet  {
 
-        public DeploySet(String tvc, Number workchainId, Object initialData, String initialPubkey) {
+        public DeploySet(String tvc, String code, String stateInit, Number workchainId, Object initialData, String initialPubkey) {
 
             this.tvc = tvc;
+
+            this.code = code;
+
+            this.stateInit = stateInit;
 
             this.workchainId = workchainId;
 
@@ -340,20 +344,44 @@ public class Abi {
             this.initialPubkey = initialPubkey;
 
         }
-        public DeploySet(String tvc, Number workchainId, Object initialData) {
+        public DeploySet(String tvc, String code, String stateInit, Number workchainId, Object initialData) {
 
             this.tvc = tvc;
+
+            this.code = code;
+
+            this.stateInit = stateInit;
 
             this.workchainId = workchainId;
 
             this.initialData = initialData;
 
         }
-        public DeploySet(String tvc, Number workchainId) {
+        public DeploySet(String tvc, String code, String stateInit, Number workchainId) {
 
             this.tvc = tvc;
 
+            this.code = code;
+
+            this.stateInit = stateInit;
+
             this.workchainId = workchainId;
+
+        }
+        public DeploySet(String tvc, String code, String stateInit) {
+
+            this.tvc = tvc;
+
+            this.code = code;
+
+            this.stateInit = stateInit;
+
+        }
+        public DeploySet(String tvc, String code) {
+
+            this.tvc = tvc;
+
+            this.code = code;
 
         }
         public DeploySet(String tvc) {
@@ -379,6 +407,36 @@ public class Abi {
          */
         public void setTvc(String value) {
             this.tvc = value;
+        }
+
+        @JsonProperty("code")
+        private String code;
+        /**
+         * 
+         */
+        public String getCode() {
+            return code;
+        }
+        /**
+         * 
+         */
+        public void setCode(String value) {
+            this.code = value;
+        }
+
+        @JsonProperty("state_init")
+        private String stateInit;
+        /**
+         * 
+         */
+        public String getStateInit() {
+            return stateInit;
+        }
+        /**
+         * 
+         */
+        public void setStateInit(String value) {
+            this.stateInit = value;
         }
 
         @JsonProperty("workchain_id")
@@ -429,7 +487,7 @@ public class Abi {
 
         @Override
         public String toString() {
-            return "{"+Stream.of((tvc==null?null:("\"tvc\":\""+tvc+"\"")),(workchainId==null?null:("\"workchain_id\":"+workchainId)),(initialData==null?null:("\"initial_data\":"+initialData)),(initialPubkey==null?null:("\"initial_pubkey\":\""+initialPubkey+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
+            return "{"+Stream.of((tvc==null?null:("\"tvc\":\""+tvc+"\"")),(code==null?null:("\"code\":\""+code+"\"")),(stateInit==null?null:("\"state_init\":\""+stateInit+"\"")),(workchainId==null?null:("\"workchain_id\":"+workchainId)),(initialData==null?null:("\"initial_data\":"+initialData)),(initialPubkey==null?null:("\"initial_pubkey\":\""+initialPubkey+"\""))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}";
         }
     }
     public static abstract class Signer {

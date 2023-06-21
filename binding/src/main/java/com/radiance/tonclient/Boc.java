@@ -280,9 +280,9 @@ public class Boc {
     /**
      *  
      */
-    public static class ResultOfDecodeTvc  {
+    public static class ResultOfDecodeStateInit  {
 
-        public ResultOfDecodeTvc(String code, String codeHash, Number codeDepth, String data, String dataHash, Number dataDepth, String library, Boolean tick, Boolean tock, Number splitDepth, String compilerVersion) {
+        public ResultOfDecodeStateInit(String code, String codeHash, Number codeDepth, String data, String dataHash, Number dataDepth, String library, Boolean tick, Boolean tock, Number splitDepth, String compilerVersion) {
 
             this.code = code;
 
@@ -307,7 +307,7 @@ public class Boc {
             this.compilerVersion = compilerVersion;
 
         }
-        public ResultOfDecodeTvc(String code, String codeHash, Number codeDepth, String data, String dataHash, Number dataDepth, String library, Boolean tick, Boolean tock, Number splitDepth) {
+        public ResultOfDecodeStateInit(String code, String codeHash, Number codeDepth, String data, String dataHash, Number dataDepth, String library, Boolean tick, Boolean tock, Number splitDepth) {
 
             this.code = code;
 
@@ -330,7 +330,7 @@ public class Boc {
             this.splitDepth = splitDepth;
 
         }
-        public ResultOfDecodeTvc(String code, String codeHash, Number codeDepth, String data, String dataHash, Number dataDepth, String library, Boolean tick, Boolean tock) {
+        public ResultOfDecodeStateInit(String code, String codeHash, Number codeDepth, String data, String dataHash, Number dataDepth, String library, Boolean tick, Boolean tock) {
 
             this.code = code;
 
@@ -351,7 +351,7 @@ public class Boc {
             this.tock = tock;
 
         }
-        public ResultOfDecodeTvc(String code, String codeHash, Number codeDepth, String data, String dataHash, Number dataDepth, String library, Boolean tick) {
+        public ResultOfDecodeStateInit(String code, String codeHash, Number codeDepth, String data, String dataHash, Number dataDepth, String library, Boolean tick) {
 
             this.code = code;
 
@@ -370,7 +370,7 @@ public class Boc {
             this.tick = tick;
 
         }
-        public ResultOfDecodeTvc(String code, String codeHash, Number codeDepth, String data, String dataHash, Number dataDepth, String library) {
+        public ResultOfDecodeStateInit(String code, String codeHash, Number codeDepth, String data, String dataHash, Number dataDepth, String library) {
 
             this.code = code;
 
@@ -387,7 +387,7 @@ public class Boc {
             this.library = library;
 
         }
-        public ResultOfDecodeTvc(String code, String codeHash, Number codeDepth, String data, String dataHash, Number dataDepth) {
+        public ResultOfDecodeStateInit(String code, String codeHash, Number codeDepth, String data, String dataHash, Number dataDepth) {
 
             this.code = code;
 
@@ -402,7 +402,7 @@ public class Boc {
             this.dataDepth = dataDepth;
 
         }
-        public ResultOfDecodeTvc(String code, String codeHash, Number codeDepth, String data, String dataHash) {
+        public ResultOfDecodeStateInit(String code, String codeHash, Number codeDepth, String data, String dataHash) {
 
             this.code = code;
 
@@ -415,7 +415,7 @@ public class Boc {
             this.dataHash = dataHash;
 
         }
-        public ResultOfDecodeTvc(String code, String codeHash, Number codeDepth, String data) {
+        public ResultOfDecodeStateInit(String code, String codeHash, Number codeDepth, String data) {
 
             this.code = code;
 
@@ -426,7 +426,7 @@ public class Boc {
             this.data = data;
 
         }
-        public ResultOfDecodeTvc(String code, String codeHash, Number codeDepth) {
+        public ResultOfDecodeStateInit(String code, String codeHash, Number codeDepth) {
 
             this.code = code;
 
@@ -435,19 +435,19 @@ public class Boc {
             this.codeDepth = codeDepth;
 
         }
-        public ResultOfDecodeTvc(String code, String codeHash) {
+        public ResultOfDecodeStateInit(String code, String codeHash) {
 
             this.code = code;
 
             this.codeHash = codeHash;
 
         }
-        public ResultOfDecodeTvc(String code) {
+        public ResultOfDecodeStateInit(String code) {
 
             this.code = code;
 
         }
-        public ResultOfDecodeTvc() {
+        public ResultOfDecodeStateInit() {
 
         }
 
@@ -688,6 +688,16 @@ public class Boc {
     }
 
    /**
+    * 
+    *
+    * @param tvc 
+    */
+    public CompletableFuture<Object> decodeTvc(String tvc) {
+        return context.requestJSON("boc.decode_tvc", "{"+(tvc==null?"":("\"tvc\":\""+tvc+"\""))+"}")
+            .thenApply(json -> TONContext.convertValue(json.findValue("tvc"), Object.class));
+    }
+
+   /**
     * JSON structure is compatible with GraphQL API message object
     *
     * @param boc 
@@ -850,12 +860,12 @@ public class Boc {
    /**
     * 
     *
-    * @param tvc 
+    * @param stateInit 
     * @param bocCache 
     */
-    public CompletableFuture<ResultOfDecodeTvc> decodeTvc(String tvc, BocCacheType bocCache) {
-        return context.requestJSON("boc.decode_tvc", "{"+Stream.of((tvc==null?null:("\"tvc\":\""+tvc+"\"")),(bocCache==null?null:("\"boc_cache\":"+bocCache))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
-            .thenApply(json -> TONContext.convertValue(json, ResultOfDecodeTvc.class));
+    public CompletableFuture<ResultOfDecodeStateInit> decodeStateInit(String stateInit, BocCacheType bocCache) {
+        return context.requestJSON("boc.decode_state_init", "{"+Stream.of((stateInit==null?null:("\"state_init\":\""+stateInit+"\"")),(bocCache==null?null:("\"boc_cache\":"+bocCache))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
+            .thenApply(json -> TONContext.convertValue(json, ResultOfDecodeStateInit.class));
     }
 
    /**
@@ -869,9 +879,9 @@ public class Boc {
     * @param splitDepth 
     * @param bocCache 
     */
-    public CompletableFuture<String> encodeTvc(String code, String data, String library, Boolean tick, Boolean tock, Number splitDepth, BocCacheType bocCache) {
-        return context.requestJSON("boc.encode_tvc", "{"+Stream.of((code==null?null:("\"code\":\""+code+"\"")),(data==null?null:("\"data\":\""+data+"\"")),(library==null?null:("\"library\":\""+library+"\"")),(tick==null?null:("\"tick\":"+tick)),(tock==null?null:("\"tock\":"+tock)),(splitDepth==null?null:("\"split_depth\":"+splitDepth)),(bocCache==null?null:("\"boc_cache\":"+bocCache))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
-            .thenApply(json -> TONContext.convertValue(json.findValue("tvc"), String.class));
+    public CompletableFuture<String> encodeStateInit(String code, String data, String library, Boolean tick, Boolean tock, Number splitDepth, BocCacheType bocCache) {
+        return context.requestJSON("boc.encode_state_init", "{"+Stream.of((code==null?null:("\"code\":\""+code+"\"")),(data==null?null:("\"data\":\""+data+"\"")),(library==null?null:("\"library\":\""+library+"\"")),(tick==null?null:("\"tick\":"+tick)),(tock==null?null:("\"tock\":"+tock)),(splitDepth==null?null:("\"split_depth\":"+splitDepth)),(bocCache==null?null:("\"boc_cache\":"+bocCache))).filter(_f -> _f != null).collect(Collectors.joining(","))+"}")
+            .thenApply(json -> TONContext.convertValue(json.findValue("state_init"), String.class));
     }
 
    /**
