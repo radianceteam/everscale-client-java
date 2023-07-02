@@ -107,7 +107,7 @@ checksum = "9c7d0618f0e0b7e8ff11427422b64564d5fb0be1940354bfe2e0529b18a9d9b8"
 
 [[package]]
 name = "api_derive"
-version = "1.43.2"
+version = "1.43.3"
 dependencies = [
  "api_info",
  "proc-macro2",
@@ -118,7 +118,7 @@ dependencies = [
 
 [[package]]
 name = "api_info"
-version = "1.43.2"
+version = "1.43.3"
 dependencies = [
  "serde",
  "serde_derive",
@@ -601,8 +601,8 @@ dependencies = [
 
 [[package]]
 name = "ever-struct"
-version = "1.0.0"
-source = "git+https://github.com/tonlabs/ever-struct.git?tag=0.1.1#1a5c8d3d95c01cfe924416cefe1f679ebbf1a681"
+version = "0.1.2"
+source = "git+https://github.com/tonlabs/ever-struct.git?tag=0.1.2#4d03ee97f588c39f4431db118b9e8394de8bce60"
 dependencies = [
  "anyhow",
  "failure",
@@ -613,7 +613,7 @@ dependencies = [
 
 [[package]]
 name = "everscale-client-jni"
-version = "1.43.2"
+version = "1.43.3"
 dependencies = [
  "jni",
  "lazy_static",
@@ -2165,8 +2165,8 @@ dependencies = [
 
 [[package]]
 name = "ton_abi"
-version = "2.3.88"
-source = "git+https://github.com/tonlabs/ever-abi.git?tag=2.3.88#01a43ad2d00b0fdfe6774fe666d2b4886bc2028a"
+version = "2.3.126"
+source = "git+https://github.com/tonlabs/ever-abi.git?tag=2.3.126#310ddff3cceecbcab6b827b7cb192af2e3cd3378"
 dependencies = [
  "base64 0.10.1",
  "byteorder",
@@ -2187,8 +2187,8 @@ dependencies = [
 
 [[package]]
 name = "ton_api"
-version = "0.2.200"
-source = "git+https://github.com/tonlabs/ever-tl.git?tag=0.2.200#1ad6faf37768063d08d433f744a5771c778e5e1f"
+version = "0.3.20"
+source = "git+https://github.com/tonlabs/ever-tl.git?tag=0.3.20#ea8a77dd7c208b334efe242b4e291f12dfa12428"
 dependencies = [
  "byteorder",
  "extfmt",
@@ -2207,8 +2207,8 @@ dependencies = [
 
 [[package]]
 name = "ton_block"
-version = "1.9.51"
-source = "git+https://github.com/tonlabs/ever-block.git?tag=1.9.51#6abebeca68439a52ae5117d88257a175890c2262"
+version = "1.9.84"
+source = "git+https://github.com/tonlabs/ever-block.git?tag=1.9.84#2eec36212d613f9fca46c89603504d481507421a"
 dependencies = [
  "base64 0.13.1",
  "crc 3.0.1",
@@ -2225,8 +2225,8 @@ dependencies = [
 
 [[package]]
 name = "ton_block_json"
-version = "0.7.123"
-source = "git+https://github.com/tonlabs/ever-block-json.git?tag=0.7.123#47e0f56ffc71bfb865b35ad527be749a7f3b95a1"
+version = "0.7.163"
+source = "git+https://github.com/tonlabs/ever-block-json.git?tag=0.7.163#85d4ccb1bc06bb025543962af4bf7381ac1c9b45"
 dependencies = [
  "base64 0.13.1",
  "failure",
@@ -2243,7 +2243,7 @@ dependencies = [
 
 [[package]]
 name = "ton_client"
-version = "1.43.2"
+version = "1.43.3"
 dependencies = [
  "aes",
  "api_derive",
@@ -2301,7 +2301,7 @@ dependencies = [
 
 [[package]]
 name = "ton_client_processing"
-version = "1.43.0"
+version = "1.43.3"
 dependencies = [
  "api_derive",
  "api_info",
@@ -2320,8 +2320,8 @@ dependencies = [
 
 [[package]]
 name = "ton_executor"
-version = "1.16.3"
-source = "git+https://github.com/tonlabs/ever-executor.git?tag=1.16.3#32b7325dcf866080fbe8518e668ed6db18d5b60e"
+version = "1.16.53"
+source = "git+https://github.com/tonlabs/ever-executor.git?tag=1.16.53#a48e02544eb6eec16c991406bea43d4a0ba0b49c"
 dependencies = [
  "failure",
  "lazy_static",
@@ -2333,7 +2333,7 @@ dependencies = [
 
 [[package]]
 name = "ton_sdk"
-version = "1.43.2"
+version = "1.43.3"
 dependencies = [
  "api_derive",
  "api_info",
@@ -2357,8 +2357,8 @@ dependencies = [
 
 [[package]]
 name = "ton_tl_codegen"
-version = "0.0.2"
-source = "git+https://github.com/tonlabs/ever-tl.git?tag=0.2.200#1ad6faf37768063d08d433f744a5771c778e5e1f"
+version = "0.1.0"
+source = "git+https://github.com/tonlabs/ever-tl.git?tag=0.3.20#ea8a77dd7c208b334efe242b4e291f12dfa12428"
 dependencies = [
  "crc 1.8.1",
  "failure",
@@ -2372,8 +2372,8 @@ dependencies = [
 
 [[package]]
 name = "ton_types"
-version = "2.0.5"
-source = "git+https://github.com/tonlabs/ever-types.git?tag=2.0.5#f9ec93c2d80a2ea5e86f65cb1dc526e17b2d5630"
+version = "2.0.15"
+source = "git+https://github.com/tonlabs/ever-types.git?tag=2.0.15#466012683d32b4f19563039393c35b362eadb245"
 dependencies = [
  "aes-ctr",
  "base64 0.13.1",
@@ -2399,8 +2399,8 @@ dependencies = [
 
 [[package]]
 name = "ton_vm"
-version = "1.8.139"
-source = "git+https://github.com/tonlabs/ever-vm.git?tag=1.8.139#260daf7eb0f842c81a61d6b8f063aef7d40703f7"
+version = "1.8.184"
+source = "git+https://github.com/tonlabs/ever-vm.git?tag=1.8.184#5bd9fe532efe2599ccea643ea8fd92090e3d0f34"
 dependencies = [
  "diffy",
  "ed25519",
@@ -2412,7 +2412,6 @@ dependencies = [
  "num",
  "num-traits",
  "rand 0.7.3",
- "sha2 0.10.6",
  "similar",
  "ton_block",
  "ton_types",

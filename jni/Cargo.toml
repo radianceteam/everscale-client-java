@@ -1,6 +1,6 @@
 [package]
 name = "everscale-client-jni"
-version = "1.43.2"
+version = "1.43.3"
 authors = ["Igor Vasilev"]
 edition = "2018"
 
