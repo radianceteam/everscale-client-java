@@ -1,6 +1,6 @@
 # Java library for Everscale Client
 
-[![SDK version](https://img.shields.io/badge/Ever%20SDK%20version-1.43.3-green)](https://github.com/tonlabs/TON-SDK/tree/1.43.3)
+[![SDK version](https://img.shields.io/badge/Ever%20SDK%20version-1.44.1-green)](https://github.com/tonlabs/TON-SDK/tree/1.44.1)
 
 The Library is a binding for [Everscale Client](https://github.com/tonlabs/EVER-SDK) written in Java
 that act as a bridge between Everscale Client and a Java application. The library includes original
@@ -42,7 +42,7 @@ Follow installation instructions from https://docs.docker.com/engine/install/
 ```
     $ mvn test
 ```
-- If succeed, you can find "everscale-client-binding-1.43.3-jar-with-dependencies.jar" file located under ${Project_basedir}/binding/target
+- If succeed, you can find "everscale-client-binding-1.44.1-jar-with-dependencies.jar" file located under ${Project_basedir}/binding/target
 
 
 ### Clean
@@ -60,7 +60,7 @@ To use it in your projects, add the dependency to `pom.xml`
     <dependency>
       <groupId>com.radiance.tonclient</groupId>
       <artifactId>everscale-client-binding</artifactId>
-      <version>1.43.3</version>
+      <version>1.44.1</version>
     </dependency>
     ...
 ```
